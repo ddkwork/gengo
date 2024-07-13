@@ -73,7 +73,7 @@ func (r *RecordLayout) UnmarshalString(data string) error {
 		before = strings.TrimSpace(before)
 		if before == "" {
 			after = strings.TrimSpace(after)
-			_, err = fmt.Sscanf(after, "[sizeof=%d, align=%d]", &r.Size, &r.Align)
+			_, err = fmt.Sscanf(after, "[sizeof=%d, align=%d", &r.Size, &r.Align)
 			if err != nil {
 				err = fmt.Errorf("invalid size and align: %w", err)
 			}
@@ -81,9 +81,20 @@ func (r *RecordLayout) UnmarshalString(data string) error {
 		}
 
 		// Parse offset
-		offset, err := strconv.Atoi(strings.TrimSpace(before))
-		if err != nil {
-			return err
+		offset := 0
+		if strings.Contains(before, ":") {
+			split := strings.Split(before, ":")
+			offset, err = strconv.Atoi(strings.TrimSpace(split[0]))
+			if err != nil {
+				println(data)
+				return err
+			}
+		} else {
+			offset, err = strconv.Atoi(strings.TrimSpace(before))
+			if err != nil {
+				println(data)
+				return err
+			}
 		}
 
 		// Determine indentation level
