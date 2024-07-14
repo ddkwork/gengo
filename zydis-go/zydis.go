@@ -4333,7 +4333,7 @@ type OperandAttributes = U8
 type AccessedFlagsMask = U32
 
 // Detailed info about the `EVEX` prefix.
-type DecodedInstructionRawEvex = DecodedInstructionRawEvex
+//type DecodedInstructionRawEvex = DecodedInstructionRawEvex
 
 // Defines the `ZyanStatus` data type.
 type Status = U32
