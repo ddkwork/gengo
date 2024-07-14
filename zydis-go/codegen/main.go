@@ -26,6 +26,7 @@ func main() {
 			gengo.WithRemovePrefix(
 				"glfw",
 				"gl",
+				"sk_",
 				"hyperdbg_u_",
 				"Zydis_", "Zyan_", "Zycore_",
 				"Zydis", "Zyan", "Zycore",
@@ -52,7 +53,7 @@ func main() {
 	}
 	pkg := gengo.NewPackageWithProvider("zydis", prov)
 	err := pkg.Transform("zydis", &clang.Options{
-		Sources: []string{"Zydis.h"},
+		Sources: []string{"ARImpRec.h"},
 		AdditionalParams: []string{
 			"-DZYAN_NO_LIBC",
 			"-DZYAN_STATIC_ASSERT",
