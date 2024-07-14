@@ -3688,7 +3688,7 @@ type DecodedInstructionRawEvex struct {
 	// Vector-length specifier or rounding-control (least significant bit).
 	L U8
 	// Broadcast/RC/SAE context.
-	B U8
+	Br U8
 	// High-16 `NDS`/`VIDX` register specifier.
 	V2 U8
 	// Embedded opmask register specifier.
@@ -4333,7 +4333,7 @@ type OperandAttributes = U8
 type AccessedFlagsMask = U32
 
 // Detailed info about the `EVEX` prefix.
-type DecodedInstructionRawEvex = DecodedInstructionRawEvex
+//type DecodedInstructionRawEvex = DecodedInstructionRawEvex
 
 // Defines the `ZyanStatus` data type.
 type Status = U32
@@ -4645,7 +4645,7 @@ func init() {
 	gengort.Validate((*DecodedInstructionRawRex)(nil), 0x5, 0x1, "W", 0x0, "R", 0x1, "X", 0x2, "B", 0x3, "Offset", 0x4)
 	gengort.Validate((*DecodedInstructionRawXop)(nil), 0x9, 0x1, "R", 0x0, "X", 0x1, "B", 0x2, "MMmmm", 0x3, "W", 0x4, "Vvvv", 0x5, "L", 0x6, "Pp", 0x7, "Offset", 0x8)
 	gengort.Validate((*DecodedInstructionRawVex)(nil), 0xa, 0x1, "R", 0x0, "X", 0x1, "B", 0x2, "MMmmm", 0x3, "W", 0x4, "Vvvv", 0x5, "L", 0x6, "Pp", 0x7, "Offset", 0x8, "Size", 0x9)
-	gengort.Validate((*DecodedInstructionRawEvex)(nil), 0xf, 0x1, "R", 0x0, "X", 0x1, "B", 0x2, "R2", 0x3, "Mmm", 0x4, "W", 0x5, "Vvvv", 0x6, "Pp", 0x7, "Z", 0x8, "L2", 0x9, "L", 0xa, "B", 0xb, "V2", 0xc, "Aaa", 0xd, "Offset", 0xe)
+	gengort.Validate((*DecodedInstructionRawEvex)(nil), 0xf, 0x1, "R", 0x0, "X", 0x1, "B", 0x2, "R2", 0x3, "Mmm", 0x4, "W", 0x5, "Vvvv", 0x6, "Pp", 0x7, "Z", 0x8, "L2", 0x9, "L", 0xa, "Br", 0xb, "V2", 0xc, "Aaa", 0xd, "Offset", 0xe)
 	gengort.Validate((*DecodedInstructionRawMvex)(nil), 0xd, 0x1, "R", 0x0, "X", 0x1, "B", 0x2, "R2", 0x3, "Mmmm", 0x4, "W", 0x5, "Vvvv", 0x6, "Pp", 0x7, "E", 0x8, "Sss", 0x9, "V2", 0xa, "Kkk", 0xb, "Offset", 0xc)
 	gengort.Validate((*DecodedInstructionAvx)(nil), 0x24, 0x4, "VectorLength", 0x0, "Mask", 0x4, "Broadcast", 0xc, "Rounding", 0x14, "Swizzle", 0x18, "Conversion", 0x1c, "HasSae", 0x20, "HasEvictionHint", 0x21)
 	gengort.Validate((*DecodedInstructionAvxMask_)(nil), 0x8, 0x4, "Mode", 0x0, "Reg", 0x4)
