@@ -52,7 +52,7 @@ func main() {
 	}
 	pkg := gengo.NewPackageWithProvider("zydis", prov)
 	err := pkg.Transform("zydis", &clang.Options{
-		Sources: []string{"glfw3.h"},
+		Sources: []string{"Zydis.h"},
 		AdditionalParams: []string{
 			"-DZYAN_NO_LIBC",
 			"-DZYAN_STATIC_ASSERT",

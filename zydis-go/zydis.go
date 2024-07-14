@@ -10,83 +10,4266 @@ const GengoLibraryName = "zydis"
 
 var GengoLibrary = gengort.NewLibrary(GengoLibraryName)
 
-type _CrtLocaleDataPublic struct {
-	_LocalePctype     *uint16
-	_LocaleMbCurMax   int32
-	_LocaleLcCodepage uint32
+// Defines the `ZydisInstructionCategory` enum.
+type InstructionCategory int32
+
+const (
+	CATEGORY_INVALID             InstructionCategory = 0
+	CATEGORY_ADOX_ADCX           InstructionCategory = 1
+	CATEGORY_AES                 InstructionCategory = 2
+	CATEGORY_AMD3DNOW            InstructionCategory = 3
+	CATEGORY_AMX_TILE            InstructionCategory = 4
+	CATEGORY_AVX                 InstructionCategory = 5
+	CATEGORY_AVX2                InstructionCategory = 6
+	CATEGORY_AVX2GATHER          InstructionCategory = 7
+	CATEGORY_AVX512              InstructionCategory = 8
+	CATEGORY_AVX512_4FMAPS       InstructionCategory = 9
+	CATEGORY_AVX512_4VNNIW       InstructionCategory = 10
+	CATEGORY_AVX512_BITALG       InstructionCategory = 11
+	CATEGORY_AVX512_VBMI         InstructionCategory = 12
+	CATEGORY_AVX512_VP2INTERSECT InstructionCategory = 13
+	CATEGORY_AVX_IFMA            InstructionCategory = 14
+	CATEGORY_BINARY              InstructionCategory = 15
+	CATEGORY_BITBYTE             InstructionCategory = 16
+	CATEGORY_BLEND               InstructionCategory = 17
+	CATEGORY_BMI1                InstructionCategory = 18
+	CATEGORY_BMI2                InstructionCategory = 19
+	CATEGORY_BROADCAST           InstructionCategory = 20
+	CATEGORY_CALL                InstructionCategory = 21
+	CATEGORY_CET                 InstructionCategory = 22
+	CATEGORY_CLDEMOTE            InstructionCategory = 23
+	CATEGORY_CLFLUSHOPT          InstructionCategory = 24
+	CATEGORY_CLWB                InstructionCategory = 25
+	CATEGORY_CLZERO              InstructionCategory = 26
+	CATEGORY_CMOV                InstructionCategory = 27
+	CATEGORY_COMPRESS            InstructionCategory = 28
+	CATEGORY_COND_BR             InstructionCategory = 29
+	CATEGORY_CONFLICT            InstructionCategory = 30
+	CATEGORY_CONVERT             InstructionCategory = 31
+	CATEGORY_DATAXFER            InstructionCategory = 32
+	CATEGORY_DECIMAL             InstructionCategory = 33
+	CATEGORY_ENQCMD              InstructionCategory = 34
+	CATEGORY_EXPAND              InstructionCategory = 35
+	CATEGORY_FCMOV               InstructionCategory = 36
+	CATEGORY_FLAGOP              InstructionCategory = 37
+	CATEGORY_FMA4                InstructionCategory = 38
+	CATEGORY_FP16                InstructionCategory = 39
+	CATEGORY_GATHER              InstructionCategory = 40
+	CATEGORY_GFNI                InstructionCategory = 41
+	CATEGORY_HRESET              InstructionCategory = 42
+	CATEGORY_IFMA                InstructionCategory = 43
+	CATEGORY_INTERRUPT           InstructionCategory = 44
+	CATEGORY_IO                  InstructionCategory = 45
+	CATEGORY_IOSTRINGOP          InstructionCategory = 46
+	CATEGORY_KEYLOCKER           InstructionCategory = 47
+	CATEGORY_KEYLOCKER_WIDE      InstructionCategory = 48
+	CATEGORY_KMASK               InstructionCategory = 49
+	CATEGORY_KNC                 InstructionCategory = 50
+	CATEGORY_KNCMASK             InstructionCategory = 51
+	CATEGORY_KNCSCALAR           InstructionCategory = 52
+	CATEGORY_LEGACY              InstructionCategory = 53
+	CATEGORY_LOGICAL             InstructionCategory = 54
+	CATEGORY_LOGICAL_FP          InstructionCategory = 55
+	CATEGORY_LZCNT               InstructionCategory = 56
+	CATEGORY_MISC                InstructionCategory = 57
+	CATEGORY_MMX                 InstructionCategory = 58
+	CATEGORY_MOVDIR              InstructionCategory = 59
+	CATEGORY_MPX                 InstructionCategory = 60
+	CATEGORY_MSRLIST             InstructionCategory = 61
+	CATEGORY_NOP                 InstructionCategory = 62
+	CATEGORY_PADLOCK             InstructionCategory = 63
+	CATEGORY_PBNDKB              InstructionCategory = 64
+	CATEGORY_PCLMULQDQ           InstructionCategory = 65
+	CATEGORY_PCOMMIT             InstructionCategory = 66
+	CATEGORY_PCONFIG             InstructionCategory = 67
+	CATEGORY_PKU                 InstructionCategory = 68
+	CATEGORY_POP                 InstructionCategory = 69
+	CATEGORY_PREFETCH            InstructionCategory = 70
+	CATEGORY_PREFETCHWT1         InstructionCategory = 71
+	CATEGORY_PT                  InstructionCategory = 72
+	CATEGORY_PUSH                InstructionCategory = 73
+	CATEGORY_RDPID               InstructionCategory = 74
+	CATEGORY_RDPRU               InstructionCategory = 75
+	CATEGORY_RDRAND              InstructionCategory = 76
+	CATEGORY_RDSEED              InstructionCategory = 77
+	CATEGORY_RDWRFSGS            InstructionCategory = 78
+	CATEGORY_RET                 InstructionCategory = 79
+	CATEGORY_ROTATE              InstructionCategory = 80
+	CATEGORY_SCATTER             InstructionCategory = 81
+	CATEGORY_SEGOP               InstructionCategory = 82
+	CATEGORY_SEMAPHORE           InstructionCategory = 83
+	CATEGORY_SERIALIZE           InstructionCategory = 84
+	CATEGORY_SETCC               InstructionCategory = 85
+	CATEGORY_SGX                 InstructionCategory = 86
+	CATEGORY_SHA                 InstructionCategory = 87
+	CATEGORY_SHA512              InstructionCategory = 88
+	CATEGORY_SHIFT               InstructionCategory = 89
+	CATEGORY_SMAP                InstructionCategory = 90
+	CATEGORY_SSE                 InstructionCategory = 91
+	CATEGORY_STRINGOP            InstructionCategory = 92
+	CATEGORY_STTNI               InstructionCategory = 93
+	CATEGORY_SYSCALL             InstructionCategory = 94
+	CATEGORY_SYSRET              InstructionCategory = 95
+	CATEGORY_SYSTEM              InstructionCategory = 96
+	CATEGORY_TBM                 InstructionCategory = 97
+	CATEGORY_TSX_LDTRK           InstructionCategory = 98
+	CATEGORY_UFMA                InstructionCategory = 99
+	CATEGORY_UINTR               InstructionCategory = 100
+	CATEGORY_UNCOND_BR           InstructionCategory = 101
+	CATEGORY_VAES                InstructionCategory = 102
+	CATEGORY_VBMI2               InstructionCategory = 103
+	CATEGORY_VEX                 InstructionCategory = 104
+	CATEGORY_VFMA                InstructionCategory = 105
+	CATEGORY_VPCLMULQDQ          InstructionCategory = 106
+	CATEGORY_VTX                 InstructionCategory = 107
+	CATEGORY_WAITPKG             InstructionCategory = 108
+	CATEGORY_WIDENOP             InstructionCategory = 109
+	CATEGORY_WRMSRNS             InstructionCategory = 110
+	CATEGORY_X87_ALU             InstructionCategory = 111
+	CATEGORY_XOP                 InstructionCategory = 112
+	CATEGORY_XSAVE               InstructionCategory = 113
+	CATEGORY_XSAVEOPT            InstructionCategory = 114
+	// Maximum value of this enum.
+	CATEGORY_MAX_VALUE InstructionCategory = 114
+	// The minimum number of bits required to represent all values of this enum.
+	CATEGORY_REQUIRED_BITS InstructionCategory = 7
+)
+
+// Defines the `ZydisISASet` enum.
+type ISASet int32
+
+const (
+	ISA_SET_INVALID                 ISASet = 0
+	ISA_SET_ADOX_ADCX               ISASet = 1
+	ISA_SET_AES                     ISASet = 2
+	ISA_SET_AMD                     ISASet = 3
+	ISA_SET_AMD3DNOW                ISASet = 4
+	ISA_SET_AMD_INVLPGB             ISASet = 5
+	ISA_SET_AMX_BF16                ISASet = 6
+	ISA_SET_AMX_FP16                ISASet = 7
+	ISA_SET_AMX_INT8                ISASet = 8
+	ISA_SET_AMX_TILE                ISASet = 9
+	ISA_SET_AVX                     ISASet = 10
+	ISA_SET_AVX2                    ISASet = 11
+	ISA_SET_AVX2GATHER              ISASet = 12
+	ISA_SET_AVX512BW_128            ISASet = 13
+	ISA_SET_AVX512BW_128N           ISASet = 14
+	ISA_SET_AVX512BW_256            ISASet = 15
+	ISA_SET_AVX512BW_512            ISASet = 16
+	ISA_SET_AVX512BW_KOP            ISASet = 17
+	ISA_SET_AVX512CD_128            ISASet = 18
+	ISA_SET_AVX512CD_256            ISASet = 19
+	ISA_SET_AVX512CD_512            ISASet = 20
+	ISA_SET_AVX512DQ_128            ISASet = 21
+	ISA_SET_AVX512DQ_128N           ISASet = 22
+	ISA_SET_AVX512DQ_256            ISASet = 23
+	ISA_SET_AVX512DQ_512            ISASet = 24
+	ISA_SET_AVX512DQ_KOP            ISASet = 25
+	ISA_SET_AVX512DQ_SCALAR         ISASet = 26
+	ISA_SET_AVX512ER_512            ISASet = 27
+	ISA_SET_AVX512ER_SCALAR         ISASet = 28
+	ISA_SET_AVX512F_128             ISASet = 29
+	ISA_SET_AVX512F_128N            ISASet = 30
+	ISA_SET_AVX512F_256             ISASet = 31
+	ISA_SET_AVX512F_512             ISASet = 32
+	ISA_SET_AVX512F_KOP             ISASet = 33
+	ISA_SET_AVX512F_SCALAR          ISASet = 34
+	ISA_SET_AVX512PF_512            ISASet = 35
+	ISA_SET_AVX512_4FMAPS_512       ISASet = 36
+	ISA_SET_AVX512_4FMAPS_SCALAR    ISASet = 37
+	ISA_SET_AVX512_4VNNIW_512       ISASet = 38
+	ISA_SET_AVX512_BF16_128         ISASet = 39
+	ISA_SET_AVX512_BF16_256         ISASet = 40
+	ISA_SET_AVX512_BF16_512         ISASet = 41
+	ISA_SET_AVX512_BITALG_128       ISASet = 42
+	ISA_SET_AVX512_BITALG_256       ISASet = 43
+	ISA_SET_AVX512_BITALG_512       ISASet = 44
+	ISA_SET_AVX512_FP16_128         ISASet = 45
+	ISA_SET_AVX512_FP16_128N        ISASet = 46
+	ISA_SET_AVX512_FP16_256         ISASet = 47
+	ISA_SET_AVX512_FP16_512         ISASet = 48
+	ISA_SET_AVX512_FP16_SCALAR      ISASet = 49
+	ISA_SET_AVX512_GFNI_128         ISASet = 50
+	ISA_SET_AVX512_GFNI_256         ISASet = 51
+	ISA_SET_AVX512_GFNI_512         ISASet = 52
+	ISA_SET_AVX512_IFMA_128         ISASet = 53
+	ISA_SET_AVX512_IFMA_256         ISASet = 54
+	ISA_SET_AVX512_IFMA_512         ISASet = 55
+	ISA_SET_AVX512_VAES_128         ISASet = 56
+	ISA_SET_AVX512_VAES_256         ISASet = 57
+	ISA_SET_AVX512_VAES_512         ISASet = 58
+	ISA_SET_AVX512_VBMI2_128        ISASet = 59
+	ISA_SET_AVX512_VBMI2_256        ISASet = 60
+	ISA_SET_AVX512_VBMI2_512        ISASet = 61
+	ISA_SET_AVX512_VBMI_128         ISASet = 62
+	ISA_SET_AVX512_VBMI_256         ISASet = 63
+	ISA_SET_AVX512_VBMI_512         ISASet = 64
+	ISA_SET_AVX512_VNNI_128         ISASet = 65
+	ISA_SET_AVX512_VNNI_256         ISASet = 66
+	ISA_SET_AVX512_VNNI_512         ISASet = 67
+	ISA_SET_AVX512_VP2INTERSECT_128 ISASet = 68
+	ISA_SET_AVX512_VP2INTERSECT_256 ISASet = 69
+	ISA_SET_AVX512_VP2INTERSECT_512 ISASet = 70
+	ISA_SET_AVX512_VPCLMULQDQ_128   ISASet = 71
+	ISA_SET_AVX512_VPCLMULQDQ_256   ISASet = 72
+	ISA_SET_AVX512_VPCLMULQDQ_512   ISASet = 73
+	ISA_SET_AVX512_VPOPCNTDQ_128    ISASet = 74
+	ISA_SET_AVX512_VPOPCNTDQ_256    ISASet = 75
+	ISA_SET_AVX512_VPOPCNTDQ_512    ISASet = 76
+	ISA_SET_AVXAES                  ISASet = 77
+	ISA_SET_AVX_GFNI                ISASet = 78
+	ISA_SET_AVX_IFMA                ISASet = 79
+	ISA_SET_AVX_NE_CONVERT          ISASet = 80
+	ISA_SET_AVX_VNNI                ISASet = 81
+	ISA_SET_AVX_VNNI_INT16          ISASet = 82
+	ISA_SET_AVX_VNNI_INT8           ISASet = 83
+	ISA_SET_BMI1                    ISASet = 84
+	ISA_SET_BMI2                    ISASet = 85
+	ISA_SET_CET                     ISASet = 86
+	ISA_SET_CLDEMOTE                ISASet = 87
+	ISA_SET_CLFLUSHOPT              ISASet = 88
+	ISA_SET_CLFSH                   ISASet = 89
+	ISA_SET_CLWB                    ISASet = 90
+	ISA_SET_CLZERO                  ISASet = 91
+	ISA_SET_CMOV                    ISASet = 92
+	ISA_SET_CMPXCHG16B              ISASet = 93
+	ISA_SET_ENQCMD                  ISASet = 94
+	ISA_SET_F16C                    ISASet = 95
+	ISA_SET_FAT_NOP                 ISASet = 96
+	ISA_SET_FCMOV                   ISASet = 97
+	ISA_SET_FCOMI                   ISASet = 98
+	ISA_SET_FMA                     ISASet = 99
+	ISA_SET_FMA4                    ISASet = 100
+	ISA_SET_FXSAVE                  ISASet = 101
+	ISA_SET_FXSAVE64                ISASet = 102
+	ISA_SET_GFNI                    ISASet = 103
+	ISA_SET_HRESET                  ISASet = 104
+	ISA_SET_I186                    ISASet = 105
+	ISA_SET_I286PROTECTED           ISASet = 106
+	ISA_SET_I286REAL                ISASet = 107
+	ISA_SET_I386                    ISASet = 108
+	ISA_SET_I486                    ISASet = 109
+	ISA_SET_I486REAL                ISASet = 110
+	ISA_SET_I86                     ISASet = 111
+	ISA_SET_ICACHE_PREFETCH         ISASet = 112
+	ISA_SET_INVPCID                 ISASet = 113
+	ISA_SET_KEYLOCKER               ISASet = 114
+	ISA_SET_KEYLOCKER_WIDE          ISASet = 115
+	ISA_SET_KNCE                    ISASet = 116
+	ISA_SET_KNCJKBR                 ISASet = 117
+	ISA_SET_KNCSTREAM               ISASet = 118
+	ISA_SET_KNCV                    ISASet = 119
+	ISA_SET_KNC_MISC                ISASet = 120
+	ISA_SET_KNC_PF_HINT             ISASet = 121
+	ISA_SET_LAHF                    ISASet = 122
+	ISA_SET_LONGMODE                ISASet = 123
+	ISA_SET_LWP                     ISASet = 124
+	ISA_SET_LZCNT                   ISASet = 125
+	ISA_SET_MCOMMIT                 ISASet = 126
+	ISA_SET_MONITOR                 ISASet = 127
+	ISA_SET_MONITORX                ISASet = 128
+	ISA_SET_MOVBE                   ISASet = 129
+	ISA_SET_MOVDIR                  ISASet = 130
+	ISA_SET_MPX                     ISASet = 131
+	ISA_SET_MSRLIST                 ISASet = 132
+	ISA_SET_PADLOCK_ACE             ISASet = 133
+	ISA_SET_PADLOCK_PHE             ISASet = 134
+	ISA_SET_PADLOCK_PMM             ISASet = 135
+	ISA_SET_PADLOCK_RNG             ISASet = 136
+	ISA_SET_PAUSE                   ISASet = 137
+	ISA_SET_PBNDKB                  ISASet = 138
+	ISA_SET_PCLMULQDQ               ISASet = 139
+	ISA_SET_PCOMMIT                 ISASet = 140
+	ISA_SET_PCONFIG                 ISASet = 141
+	ISA_SET_PENTIUMMMX              ISASet = 142
+	ISA_SET_PENTIUMREAL             ISASet = 143
+	ISA_SET_PKU                     ISASet = 144
+	ISA_SET_POPCNT                  ISASet = 145
+	ISA_SET_PPRO                    ISASet = 146
+	ISA_SET_PREFETCHWT1             ISASet = 147
+	ISA_SET_PREFETCH_NOP            ISASet = 148
+	ISA_SET_PT                      ISASet = 149
+	ISA_SET_RAO_INT                 ISASet = 150
+	ISA_SET_RDPID                   ISASet = 151
+	ISA_SET_RDPMC                   ISASet = 152
+	ISA_SET_RDPRU                   ISASet = 153
+	ISA_SET_RDRAND                  ISASet = 154
+	ISA_SET_RDSEED                  ISASet = 155
+	ISA_SET_RDTSCP                  ISASet = 156
+	ISA_SET_RDWRFSGS                ISASet = 157
+	ISA_SET_RTM                     ISASet = 158
+	ISA_SET_SERIALIZE               ISASet = 159
+	ISA_SET_SGX                     ISASet = 160
+	ISA_SET_SGX_ENCLV               ISASet = 161
+	ISA_SET_SHA                     ISASet = 162
+	ISA_SET_SHA512                  ISASet = 163
+	ISA_SET_SM3                     ISASet = 164
+	ISA_SET_SM4                     ISASet = 165
+	ISA_SET_SMAP                    ISASet = 166
+	ISA_SET_SMX                     ISASet = 167
+	ISA_SET_SNP                     ISASet = 168
+	ISA_SET_SSE                     ISASet = 169
+	ISA_SET_SSE2                    ISASet = 170
+	ISA_SET_SSE2MMX                 ISASet = 171
+	ISA_SET_SSE3                    ISASet = 172
+	ISA_SET_SSE3X87                 ISASet = 173
+	ISA_SET_SSE4                    ISASet = 174
+	ISA_SET_SSE42                   ISASet = 175
+	ISA_SET_SSE4A                   ISASet = 176
+	ISA_SET_SSEMXCSR                ISASet = 177
+	ISA_SET_SSE_PREFETCH            ISASet = 178
+	ISA_SET_SSSE3                   ISASet = 179
+	ISA_SET_SSSE3MMX                ISASet = 180
+	ISA_SET_SVM                     ISASet = 181
+	ISA_SET_TBM                     ISASet = 182
+	ISA_SET_TDX                     ISASet = 183
+	ISA_SET_TSX_LDTRK               ISASet = 184
+	ISA_SET_UINTR                   ISASet = 185
+	ISA_SET_VAES                    ISASet = 186
+	ISA_SET_VMFUNC                  ISASet = 187
+	ISA_SET_VPCLMULQDQ              ISASet = 188
+	ISA_SET_VTX                     ISASet = 189
+	ISA_SET_WAITPKG                 ISASet = 190
+	ISA_SET_WRMSRNS                 ISASet = 191
+	ISA_SET_X87                     ISASet = 192
+	ISA_SET_XOP                     ISASet = 193
+	ISA_SET_XSAVE                   ISASet = 194
+	ISA_SET_XSAVEC                  ISASet = 195
+	ISA_SET_XSAVEOPT                ISASet = 196
+	ISA_SET_XSAVES                  ISASet = 197
+	// Maximum value of this enum.
+	ISA_SET_MAX_VALUE ISASet = 197
+	// The minimum number of bits required to represent all values of this enum.
+	ISA_SET_REQUIRED_BITS ISASet = 8
+)
+
+// Defines the `ZydisISAExt` enum.
+type ISAExt int32
+
+const (
+	ISA_EXT_INVALID           ISAExt = 0
+	ISA_EXT_ADOX_ADCX         ISAExt = 1
+	ISA_EXT_AES               ISAExt = 2
+	ISA_EXT_AMD3DNOW          ISAExt = 3
+	ISA_EXT_AMD3DNOW_PREFETCH ISAExt = 4
+	ISA_EXT_AMD_INVLPGB       ISAExt = 5
+	ISA_EXT_AMX_BF16          ISAExt = 6
+	ISA_EXT_AMX_FP16          ISAExt = 7
+	ISA_EXT_AMX_INT8          ISAExt = 8
+	ISA_EXT_AMX_TILE          ISAExt = 9
+	ISA_EXT_AVX               ISAExt = 10
+	ISA_EXT_AVX2              ISAExt = 11
+	ISA_EXT_AVX2GATHER        ISAExt = 12
+	ISA_EXT_AVX512EVEX        ISAExt = 13
+	ISA_EXT_AVX512VEX         ISAExt = 14
+	ISA_EXT_AVXAES            ISAExt = 15
+	ISA_EXT_AVX_IFMA          ISAExt = 16
+	ISA_EXT_AVX_NE_CONVERT    ISAExt = 17
+	ISA_EXT_AVX_VNNI          ISAExt = 18
+	ISA_EXT_AVX_VNNI_INT16    ISAExt = 19
+	ISA_EXT_AVX_VNNI_INT8     ISAExt = 20
+	ISA_EXT_BASE              ISAExt = 21
+	ISA_EXT_BMI1              ISAExt = 22
+	ISA_EXT_BMI2              ISAExt = 23
+	ISA_EXT_CET               ISAExt = 24
+	ISA_EXT_CLDEMOTE          ISAExt = 25
+	ISA_EXT_CLFLUSHOPT        ISAExt = 26
+	ISA_EXT_CLFSH             ISAExt = 27
+	ISA_EXT_CLWB              ISAExt = 28
+	ISA_EXT_CLZERO            ISAExt = 29
+	ISA_EXT_ENQCMD            ISAExt = 30
+	ISA_EXT_F16C              ISAExt = 31
+	ISA_EXT_FMA               ISAExt = 32
+	ISA_EXT_FMA4              ISAExt = 33
+	ISA_EXT_GFNI              ISAExt = 34
+	ISA_EXT_HRESET            ISAExt = 35
+	ISA_EXT_ICACHE_PREFETCH   ISAExt = 36
+	ISA_EXT_INVPCID           ISAExt = 37
+	ISA_EXT_KEYLOCKER         ISAExt = 38
+	ISA_EXT_KEYLOCKER_WIDE    ISAExt = 39
+	ISA_EXT_KNC               ISAExt = 40
+	ISA_EXT_KNCE              ISAExt = 41
+	ISA_EXT_KNCV              ISAExt = 42
+	ISA_EXT_LONGMODE          ISAExt = 43
+	ISA_EXT_LZCNT             ISAExt = 44
+	ISA_EXT_MCOMMIT           ISAExt = 45
+	ISA_EXT_MMX               ISAExt = 46
+	ISA_EXT_MONITOR           ISAExt = 47
+	ISA_EXT_MONITORX          ISAExt = 48
+	ISA_EXT_MOVBE             ISAExt = 49
+	ISA_EXT_MOVDIR            ISAExt = 50
+	ISA_EXT_MPX               ISAExt = 51
+	ISA_EXT_MSRLIST           ISAExt = 52
+	ISA_EXT_PADLOCK           ISAExt = 53
+	ISA_EXT_PAUSE             ISAExt = 54
+	ISA_EXT_PBNDKB            ISAExt = 55
+	ISA_EXT_PCLMULQDQ         ISAExt = 56
+	ISA_EXT_PCOMMIT           ISAExt = 57
+	ISA_EXT_PCONFIG           ISAExt = 58
+	ISA_EXT_PKU               ISAExt = 59
+	ISA_EXT_PREFETCHWT1       ISAExt = 60
+	ISA_EXT_PT                ISAExt = 61
+	ISA_EXT_RAO_INT           ISAExt = 62
+	ISA_EXT_RDPID             ISAExt = 63
+	ISA_EXT_RDPRU             ISAExt = 64
+	ISA_EXT_RDRAND            ISAExt = 65
+	ISA_EXT_RDSEED            ISAExt = 66
+	ISA_EXT_RDTSCP            ISAExt = 67
+	ISA_EXT_RDWRFSGS          ISAExt = 68
+	ISA_EXT_RTM               ISAExt = 69
+	ISA_EXT_SERIALIZE         ISAExt = 70
+	ISA_EXT_SGX               ISAExt = 71
+	ISA_EXT_SGX_ENCLV         ISAExt = 72
+	ISA_EXT_SHA               ISAExt = 73
+	ISA_EXT_SHA512            ISAExt = 74
+	ISA_EXT_SM3               ISAExt = 75
+	ISA_EXT_SM4               ISAExt = 76
+	ISA_EXT_SMAP              ISAExt = 77
+	ISA_EXT_SMX               ISAExt = 78
+	ISA_EXT_SNP               ISAExt = 79
+	ISA_EXT_SSE               ISAExt = 80
+	ISA_EXT_SSE2              ISAExt = 81
+	ISA_EXT_SSE3              ISAExt = 82
+	ISA_EXT_SSE4              ISAExt = 83
+	ISA_EXT_SSE4A             ISAExt = 84
+	ISA_EXT_SSSE3             ISAExt = 85
+	ISA_EXT_SVM               ISAExt = 86
+	ISA_EXT_TBM               ISAExt = 87
+	ISA_EXT_TDX               ISAExt = 88
+	ISA_EXT_TSX_LDTRK         ISAExt = 89
+	ISA_EXT_UINTR             ISAExt = 90
+	ISA_EXT_VAES              ISAExt = 91
+	ISA_EXT_VMFUNC            ISAExt = 92
+	ISA_EXT_VPCLMULQDQ        ISAExt = 93
+	ISA_EXT_VTX               ISAExt = 94
+	ISA_EXT_WAITPKG           ISAExt = 95
+	ISA_EXT_WRMSRNS           ISAExt = 96
+	ISA_EXT_X87               ISAExt = 97
+	ISA_EXT_XOP               ISAExt = 98
+	ISA_EXT_XSAVE             ISAExt = 99
+	ISA_EXT_XSAVEC            ISAExt = 100
+	ISA_EXT_XSAVEOPT          ISAExt = 101
+	ISA_EXT_XSAVES            ISAExt = 102
+	// Maximum value of this enum.
+	ISA_EXT_MAX_VALUE ISAExt = 102
+	// The minimum number of bits required to represent all values of this enum.
+	ISA_EXT_REQUIRED_BITS ISAExt = 7
+)
+
+// Defines the `ZydisMnemonic` enum.
+type Mnemonic int32
+
+const (
+	MNEMONIC_INVALID            Mnemonic = 0
+	MNEMONIC_AAA                Mnemonic = 1
+	MNEMONIC_AAD                Mnemonic = 2
+	MNEMONIC_AADD               Mnemonic = 3
+	MNEMONIC_AAM                Mnemonic = 4
+	MNEMONIC_AAND               Mnemonic = 5
+	MNEMONIC_AAS                Mnemonic = 6
+	MNEMONIC_ADC                Mnemonic = 7
+	MNEMONIC_ADCX               Mnemonic = 8
+	MNEMONIC_ADD                Mnemonic = 9
+	MNEMONIC_ADDPD              Mnemonic = 10
+	MNEMONIC_ADDPS              Mnemonic = 11
+	MNEMONIC_ADDSD              Mnemonic = 12
+	MNEMONIC_ADDSS              Mnemonic = 13
+	MNEMONIC_ADDSUBPD           Mnemonic = 14
+	MNEMONIC_ADDSUBPS           Mnemonic = 15
+	MNEMONIC_ADOX               Mnemonic = 16
+	MNEMONIC_AESDEC             Mnemonic = 17
+	MNEMONIC_AESDEC128KL        Mnemonic = 18
+	MNEMONIC_AESDEC256KL        Mnemonic = 19
+	MNEMONIC_AESDECLAST         Mnemonic = 20
+	MNEMONIC_AESDECWIDE128KL    Mnemonic = 21
+	MNEMONIC_AESDECWIDE256KL    Mnemonic = 22
+	MNEMONIC_AESENC             Mnemonic = 23
+	MNEMONIC_AESENC128KL        Mnemonic = 24
+	MNEMONIC_AESENC256KL        Mnemonic = 25
+	MNEMONIC_AESENCLAST         Mnemonic = 26
+	MNEMONIC_AESENCWIDE128KL    Mnemonic = 27
+	MNEMONIC_AESENCWIDE256KL    Mnemonic = 28
+	MNEMONIC_AESIMC             Mnemonic = 29
+	MNEMONIC_AESKEYGENASSIST    Mnemonic = 30
+	MNEMONIC_AND                Mnemonic = 31
+	MNEMONIC_ANDN               Mnemonic = 32
+	MNEMONIC_ANDNPD             Mnemonic = 33
+	MNEMONIC_ANDNPS             Mnemonic = 34
+	MNEMONIC_ANDPD              Mnemonic = 35
+	MNEMONIC_ANDPS              Mnemonic = 36
+	MNEMONIC_AOR                Mnemonic = 37
+	MNEMONIC_ARPL               Mnemonic = 38
+	MNEMONIC_AXOR               Mnemonic = 39
+	MNEMONIC_BEXTR              Mnemonic = 40
+	MNEMONIC_BLCFILL            Mnemonic = 41
+	MNEMONIC_BLCI               Mnemonic = 42
+	MNEMONIC_BLCIC              Mnemonic = 43
+	MNEMONIC_BLCMSK             Mnemonic = 44
+	MNEMONIC_BLCS               Mnemonic = 45
+	MNEMONIC_BLENDPD            Mnemonic = 46
+	MNEMONIC_BLENDPS            Mnemonic = 47
+	MNEMONIC_BLENDVPD           Mnemonic = 48
+	MNEMONIC_BLENDVPS           Mnemonic = 49
+	MNEMONIC_BLSFILL            Mnemonic = 50
+	MNEMONIC_BLSI               Mnemonic = 51
+	MNEMONIC_BLSIC              Mnemonic = 52
+	MNEMONIC_BLSMSK             Mnemonic = 53
+	MNEMONIC_BLSR               Mnemonic = 54
+	MNEMONIC_BNDCL              Mnemonic = 55
+	MNEMONIC_BNDCN              Mnemonic = 56
+	MNEMONIC_BNDCU              Mnemonic = 57
+	MNEMONIC_BNDLDX             Mnemonic = 58
+	MNEMONIC_BNDMK              Mnemonic = 59
+	MNEMONIC_BNDMOV             Mnemonic = 60
+	MNEMONIC_BNDSTX             Mnemonic = 61
+	MNEMONIC_BOUND              Mnemonic = 62
+	MNEMONIC_BSF                Mnemonic = 63
+	MNEMONIC_BSR                Mnemonic = 64
+	MNEMONIC_BSWAP              Mnemonic = 65
+	MNEMONIC_BT                 Mnemonic = 66
+	MNEMONIC_BTC                Mnemonic = 67
+	MNEMONIC_BTR                Mnemonic = 68
+	MNEMONIC_BTS                Mnemonic = 69
+	MNEMONIC_BZHI               Mnemonic = 70
+	MNEMONIC_CALL               Mnemonic = 71
+	MNEMONIC_CBW                Mnemonic = 72
+	MNEMONIC_CDQ                Mnemonic = 73
+	MNEMONIC_CDQE               Mnemonic = 74
+	MNEMONIC_CLAC               Mnemonic = 75
+	MNEMONIC_CLC                Mnemonic = 76
+	MNEMONIC_CLD                Mnemonic = 77
+	MNEMONIC_CLDEMOTE           Mnemonic = 78
+	MNEMONIC_CLEVICT0           Mnemonic = 79
+	MNEMONIC_CLEVICT1           Mnemonic = 80
+	MNEMONIC_CLFLUSH            Mnemonic = 81
+	MNEMONIC_CLFLUSHOPT         Mnemonic = 82
+	MNEMONIC_CLGI               Mnemonic = 83
+	MNEMONIC_CLI                Mnemonic = 84
+	MNEMONIC_CLRSSBSY           Mnemonic = 85
+	MNEMONIC_CLTS               Mnemonic = 86
+	MNEMONIC_CLUI               Mnemonic = 87
+	MNEMONIC_CLWB               Mnemonic = 88
+	MNEMONIC_CLZERO             Mnemonic = 89
+	MNEMONIC_CMC                Mnemonic = 90
+	MNEMONIC_CMOVB              Mnemonic = 91
+	MNEMONIC_CMOVBE             Mnemonic = 92
+	MNEMONIC_CMOVL              Mnemonic = 93
+	MNEMONIC_CMOVLE             Mnemonic = 94
+	MNEMONIC_CMOVNB             Mnemonic = 95
+	MNEMONIC_CMOVNBE            Mnemonic = 96
+	MNEMONIC_CMOVNL             Mnemonic = 97
+	MNEMONIC_CMOVNLE            Mnemonic = 98
+	MNEMONIC_CMOVNO             Mnemonic = 99
+	MNEMONIC_CMOVNP             Mnemonic = 100
+	MNEMONIC_CMOVNS             Mnemonic = 101
+	MNEMONIC_CMOVNZ             Mnemonic = 102
+	MNEMONIC_CMOVO              Mnemonic = 103
+	MNEMONIC_CMOVP              Mnemonic = 104
+	MNEMONIC_CMOVS              Mnemonic = 105
+	MNEMONIC_CMOVZ              Mnemonic = 106
+	MNEMONIC_CMP                Mnemonic = 107
+	MNEMONIC_CMPPD              Mnemonic = 108
+	MNEMONIC_CMPPS              Mnemonic = 109
+	MNEMONIC_CMPSB              Mnemonic = 110
+	MNEMONIC_CMPSD              Mnemonic = 111
+	MNEMONIC_CMPSQ              Mnemonic = 112
+	MNEMONIC_CMPSS              Mnemonic = 113
+	MNEMONIC_CMPSW              Mnemonic = 114
+	MNEMONIC_CMPXCHG            Mnemonic = 115
+	MNEMONIC_CMPXCHG16B         Mnemonic = 116
+	MNEMONIC_CMPXCHG8B          Mnemonic = 117
+	MNEMONIC_COMISD             Mnemonic = 118
+	MNEMONIC_COMISS             Mnemonic = 119
+	MNEMONIC_CPUID              Mnemonic = 120
+	MNEMONIC_CQO                Mnemonic = 121
+	MNEMONIC_CRC32              Mnemonic = 122
+	MNEMONIC_CVTDQ2PD           Mnemonic = 123
+	MNEMONIC_CVTDQ2PS           Mnemonic = 124
+	MNEMONIC_CVTPD2DQ           Mnemonic = 125
+	MNEMONIC_CVTPD2PI           Mnemonic = 126
+	MNEMONIC_CVTPD2PS           Mnemonic = 127
+	MNEMONIC_CVTPI2PD           Mnemonic = 128
+	MNEMONIC_CVTPI2PS           Mnemonic = 129
+	MNEMONIC_CVTPS2DQ           Mnemonic = 130
+	MNEMONIC_CVTPS2PD           Mnemonic = 131
+	MNEMONIC_CVTPS2PI           Mnemonic = 132
+	MNEMONIC_CVTSD2SI           Mnemonic = 133
+	MNEMONIC_CVTSD2SS           Mnemonic = 134
+	MNEMONIC_CVTSI2SD           Mnemonic = 135
+	MNEMONIC_CVTSI2SS           Mnemonic = 136
+	MNEMONIC_CVTSS2SD           Mnemonic = 137
+	MNEMONIC_CVTSS2SI           Mnemonic = 138
+	MNEMONIC_CVTTPD2DQ          Mnemonic = 139
+	MNEMONIC_CVTTPD2PI          Mnemonic = 140
+	MNEMONIC_CVTTPS2DQ          Mnemonic = 141
+	MNEMONIC_CVTTPS2PI          Mnemonic = 142
+	MNEMONIC_CVTTSD2SI          Mnemonic = 143
+	MNEMONIC_CVTTSS2SI          Mnemonic = 144
+	MNEMONIC_CWD                Mnemonic = 145
+	MNEMONIC_CWDE               Mnemonic = 146
+	MNEMONIC_DAA                Mnemonic = 147
+	MNEMONIC_DAS                Mnemonic = 148
+	MNEMONIC_DEC                Mnemonic = 149
+	MNEMONIC_DELAY              Mnemonic = 150
+	MNEMONIC_DIV                Mnemonic = 151
+	MNEMONIC_DIVPD              Mnemonic = 152
+	MNEMONIC_DIVPS              Mnemonic = 153
+	MNEMONIC_DIVSD              Mnemonic = 154
+	MNEMONIC_DIVSS              Mnemonic = 155
+	MNEMONIC_DPPD               Mnemonic = 156
+	MNEMONIC_DPPS               Mnemonic = 157
+	MNEMONIC_EMMS               Mnemonic = 158
+	MNEMONIC_ENCLS              Mnemonic = 159
+	MNEMONIC_ENCLU              Mnemonic = 160
+	MNEMONIC_ENCLV              Mnemonic = 161
+	MNEMONIC_ENCODEKEY128       Mnemonic = 162
+	MNEMONIC_ENCODEKEY256       Mnemonic = 163
+	MNEMONIC_ENDBR32            Mnemonic = 164
+	MNEMONIC_ENDBR64            Mnemonic = 165
+	MNEMONIC_ENQCMD             Mnemonic = 166
+	MNEMONIC_ENQCMDS            Mnemonic = 167
+	MNEMONIC_ENTER              Mnemonic = 168
+	MNEMONIC_EXTRACTPS          Mnemonic = 169
+	MNEMONIC_EXTRQ              Mnemonic = 170
+	MNEMONIC_F2XM1              Mnemonic = 171
+	MNEMONIC_FABS               Mnemonic = 172
+	MNEMONIC_FADD               Mnemonic = 173
+	MNEMONIC_FADDP              Mnemonic = 174
+	MNEMONIC_FBLD               Mnemonic = 175
+	MNEMONIC_FBSTP              Mnemonic = 176
+	MNEMONIC_FCHS               Mnemonic = 177
+	MNEMONIC_FCMOVB             Mnemonic = 178
+	MNEMONIC_FCMOVBE            Mnemonic = 179
+	MNEMONIC_FCMOVE             Mnemonic = 180
+	MNEMONIC_FCMOVNB            Mnemonic = 181
+	MNEMONIC_FCMOVNBE           Mnemonic = 182
+	MNEMONIC_FCMOVNE            Mnemonic = 183
+	MNEMONIC_FCMOVNU            Mnemonic = 184
+	MNEMONIC_FCMOVU             Mnemonic = 185
+	MNEMONIC_FCOM               Mnemonic = 186
+	MNEMONIC_FCOMI              Mnemonic = 187
+	MNEMONIC_FCOMIP             Mnemonic = 188
+	MNEMONIC_FCOMP              Mnemonic = 189
+	MNEMONIC_FCOMPP             Mnemonic = 190
+	MNEMONIC_FCOS               Mnemonic = 191
+	MNEMONIC_FDECSTP            Mnemonic = 192
+	MNEMONIC_FDISI8087_NOP      Mnemonic = 193
+	MNEMONIC_FDIV               Mnemonic = 194
+	MNEMONIC_FDIVP              Mnemonic = 195
+	MNEMONIC_FDIVR              Mnemonic = 196
+	MNEMONIC_FDIVRP             Mnemonic = 197
+	MNEMONIC_FEMMS              Mnemonic = 198
+	MNEMONIC_FENI8087_NOP       Mnemonic = 199
+	MNEMONIC_FFREE              Mnemonic = 200
+	MNEMONIC_FFREEP             Mnemonic = 201
+	MNEMONIC_FIADD              Mnemonic = 202
+	MNEMONIC_FICOM              Mnemonic = 203
+	MNEMONIC_FICOMP             Mnemonic = 204
+	MNEMONIC_FIDIV              Mnemonic = 205
+	MNEMONIC_FIDIVR             Mnemonic = 206
+	MNEMONIC_FILD               Mnemonic = 207
+	MNEMONIC_FIMUL              Mnemonic = 208
+	MNEMONIC_FINCSTP            Mnemonic = 209
+	MNEMONIC_FIST               Mnemonic = 210
+	MNEMONIC_FISTP              Mnemonic = 211
+	MNEMONIC_FISTTP             Mnemonic = 212
+	MNEMONIC_FISUB              Mnemonic = 213
+	MNEMONIC_FISUBR             Mnemonic = 214
+	MNEMONIC_FLD                Mnemonic = 215
+	MNEMONIC_FLD1               Mnemonic = 216
+	MNEMONIC_FLDCW              Mnemonic = 217
+	MNEMONIC_FLDENV             Mnemonic = 218
+	MNEMONIC_FLDL2E             Mnemonic = 219
+	MNEMONIC_FLDL2T             Mnemonic = 220
+	MNEMONIC_FLDLG2             Mnemonic = 221
+	MNEMONIC_FLDLN2             Mnemonic = 222
+	MNEMONIC_FLDPI              Mnemonic = 223
+	MNEMONIC_FLDZ               Mnemonic = 224
+	MNEMONIC_FMUL               Mnemonic = 225
+	MNEMONIC_FMULP              Mnemonic = 226
+	MNEMONIC_FNCLEX             Mnemonic = 227
+	MNEMONIC_FNINIT             Mnemonic = 228
+	MNEMONIC_FNOP               Mnemonic = 229
+	MNEMONIC_FNSAVE             Mnemonic = 230
+	MNEMONIC_FNSTCW             Mnemonic = 231
+	MNEMONIC_FNSTENV            Mnemonic = 232
+	MNEMONIC_FNSTSW             Mnemonic = 233
+	MNEMONIC_FPATAN             Mnemonic = 234
+	MNEMONIC_FPREM              Mnemonic = 235
+	MNEMONIC_FPREM1             Mnemonic = 236
+	MNEMONIC_FPTAN              Mnemonic = 237
+	MNEMONIC_FRNDINT            Mnemonic = 238
+	MNEMONIC_FRSTOR             Mnemonic = 239
+	MNEMONIC_FSCALE             Mnemonic = 240
+	MNEMONIC_FSETPM287_NOP      Mnemonic = 241
+	MNEMONIC_FSIN               Mnemonic = 242
+	MNEMONIC_FSINCOS            Mnemonic = 243
+	MNEMONIC_FSQRT              Mnemonic = 244
+	MNEMONIC_FST                Mnemonic = 245
+	MNEMONIC_FSTP               Mnemonic = 246
+	MNEMONIC_FSTPNCE            Mnemonic = 247
+	MNEMONIC_FSUB               Mnemonic = 248
+	MNEMONIC_FSUBP              Mnemonic = 249
+	MNEMONIC_FSUBR              Mnemonic = 250
+	MNEMONIC_FSUBRP             Mnemonic = 251
+	MNEMONIC_FTST               Mnemonic = 252
+	MNEMONIC_FUCOM              Mnemonic = 253
+	MNEMONIC_FUCOMI             Mnemonic = 254
+	MNEMONIC_FUCOMIP            Mnemonic = 255
+	MNEMONIC_FUCOMP             Mnemonic = 256
+	MNEMONIC_FUCOMPP            Mnemonic = 257
+	MNEMONIC_FWAIT              Mnemonic = 258
+	MNEMONIC_FXAM               Mnemonic = 259
+	MNEMONIC_FXCH               Mnemonic = 260
+	MNEMONIC_FXRSTOR            Mnemonic = 261
+	MNEMONIC_FXRSTOR64          Mnemonic = 262
+	MNEMONIC_FXSAVE             Mnemonic = 263
+	MNEMONIC_FXSAVE64           Mnemonic = 264
+	MNEMONIC_FXTRACT            Mnemonic = 265
+	MNEMONIC_FYL2X              Mnemonic = 266
+	MNEMONIC_FYL2XP1            Mnemonic = 267
+	MNEMONIC_GETSEC             Mnemonic = 268
+	MNEMONIC_GF2P8AFFINEINVQB   Mnemonic = 269
+	MNEMONIC_GF2P8AFFINEQB      Mnemonic = 270
+	MNEMONIC_GF2P8MULB          Mnemonic = 271
+	MNEMONIC_HADDPD             Mnemonic = 272
+	MNEMONIC_HADDPS             Mnemonic = 273
+	MNEMONIC_HLT                Mnemonic = 274
+	MNEMONIC_HRESET             Mnemonic = 275
+	MNEMONIC_HSUBPD             Mnemonic = 276
+	MNEMONIC_HSUBPS             Mnemonic = 277
+	MNEMONIC_IDIV               Mnemonic = 278
+	MNEMONIC_IMUL               Mnemonic = 279
+	MNEMONIC_IN                 Mnemonic = 280
+	MNEMONIC_INC                Mnemonic = 281
+	MNEMONIC_INCSSPD            Mnemonic = 282
+	MNEMONIC_INCSSPQ            Mnemonic = 283
+	MNEMONIC_INSB               Mnemonic = 284
+	MNEMONIC_INSD               Mnemonic = 285
+	MNEMONIC_INSERTPS           Mnemonic = 286
+	MNEMONIC_INSERTQ            Mnemonic = 287
+	MNEMONIC_INSW               Mnemonic = 288
+	MNEMONIC_INT                Mnemonic = 289
+	MNEMONIC_INT1               Mnemonic = 290
+	MNEMONIC_INT3               Mnemonic = 291
+	MNEMONIC_INTO               Mnemonic = 292
+	MNEMONIC_INVD               Mnemonic = 293
+	MNEMONIC_INVEPT             Mnemonic = 294
+	MNEMONIC_INVLPG             Mnemonic = 295
+	MNEMONIC_INVLPGA            Mnemonic = 296
+	MNEMONIC_INVLPGB            Mnemonic = 297
+	MNEMONIC_INVPCID            Mnemonic = 298
+	MNEMONIC_INVVPID            Mnemonic = 299
+	MNEMONIC_IRET               Mnemonic = 300
+	MNEMONIC_IRETD              Mnemonic = 301
+	MNEMONIC_IRETQ              Mnemonic = 302
+	MNEMONIC_JB                 Mnemonic = 303
+	MNEMONIC_JBE                Mnemonic = 304
+	MNEMONIC_JCXZ               Mnemonic = 305
+	MNEMONIC_JECXZ              Mnemonic = 306
+	MNEMONIC_JKNZD              Mnemonic = 307
+	MNEMONIC_JKZD               Mnemonic = 308
+	MNEMONIC_JL                 Mnemonic = 309
+	MNEMONIC_JLE                Mnemonic = 310
+	MNEMONIC_JMP                Mnemonic = 311
+	MNEMONIC_JNB                Mnemonic = 312
+	MNEMONIC_JNBE               Mnemonic = 313
+	MNEMONIC_JNL                Mnemonic = 314
+	MNEMONIC_JNLE               Mnemonic = 315
+	MNEMONIC_JNO                Mnemonic = 316
+	MNEMONIC_JNP                Mnemonic = 317
+	MNEMONIC_JNS                Mnemonic = 318
+	MNEMONIC_JNZ                Mnemonic = 319
+	MNEMONIC_JO                 Mnemonic = 320
+	MNEMONIC_JP                 Mnemonic = 321
+	MNEMONIC_JRCXZ              Mnemonic = 322
+	MNEMONIC_JS                 Mnemonic = 323
+	MNEMONIC_JZ                 Mnemonic = 324
+	MNEMONIC_KADDB              Mnemonic = 325
+	MNEMONIC_KADDD              Mnemonic = 326
+	MNEMONIC_KADDQ              Mnemonic = 327
+	MNEMONIC_KADDW              Mnemonic = 328
+	MNEMONIC_KAND               Mnemonic = 329
+	MNEMONIC_KANDB              Mnemonic = 330
+	MNEMONIC_KANDD              Mnemonic = 331
+	MNEMONIC_KANDN              Mnemonic = 332
+	MNEMONIC_KANDNB             Mnemonic = 333
+	MNEMONIC_KANDND             Mnemonic = 334
+	MNEMONIC_KANDNQ             Mnemonic = 335
+	MNEMONIC_KANDNR             Mnemonic = 336
+	MNEMONIC_KANDNW             Mnemonic = 337
+	MNEMONIC_KANDQ              Mnemonic = 338
+	MNEMONIC_KANDW              Mnemonic = 339
+	MNEMONIC_KCONCATH           Mnemonic = 340
+	MNEMONIC_KCONCATL           Mnemonic = 341
+	MNEMONIC_KEXTRACT           Mnemonic = 342
+	MNEMONIC_KMERGE2L1H         Mnemonic = 343
+	MNEMONIC_KMERGE2L1L         Mnemonic = 344
+	MNEMONIC_KMOV               Mnemonic = 345
+	MNEMONIC_KMOVB              Mnemonic = 346
+	MNEMONIC_KMOVD              Mnemonic = 347
+	MNEMONIC_KMOVQ              Mnemonic = 348
+	MNEMONIC_KMOVW              Mnemonic = 349
+	MNEMONIC_KNOT               Mnemonic = 350
+	MNEMONIC_KNOTB              Mnemonic = 351
+	MNEMONIC_KNOTD              Mnemonic = 352
+	MNEMONIC_KNOTQ              Mnemonic = 353
+	MNEMONIC_KNOTW              Mnemonic = 354
+	MNEMONIC_KOR                Mnemonic = 355
+	MNEMONIC_KORB               Mnemonic = 356
+	MNEMONIC_KORD               Mnemonic = 357
+	MNEMONIC_KORQ               Mnemonic = 358
+	MNEMONIC_KORTEST            Mnemonic = 359
+	MNEMONIC_KORTESTB           Mnemonic = 360
+	MNEMONIC_KORTESTD           Mnemonic = 361
+	MNEMONIC_KORTESTQ           Mnemonic = 362
+	MNEMONIC_KORTESTW           Mnemonic = 363
+	MNEMONIC_KORW               Mnemonic = 364
+	MNEMONIC_KSHIFTLB           Mnemonic = 365
+	MNEMONIC_KSHIFTLD           Mnemonic = 366
+	MNEMONIC_KSHIFTLQ           Mnemonic = 367
+	MNEMONIC_KSHIFTLW           Mnemonic = 368
+	MNEMONIC_KSHIFTRB           Mnemonic = 369
+	MNEMONIC_KSHIFTRD           Mnemonic = 370
+	MNEMONIC_KSHIFTRQ           Mnemonic = 371
+	MNEMONIC_KSHIFTRW           Mnemonic = 372
+	MNEMONIC_KTESTB             Mnemonic = 373
+	MNEMONIC_KTESTD             Mnemonic = 374
+	MNEMONIC_KTESTQ             Mnemonic = 375
+	MNEMONIC_KTESTW             Mnemonic = 376
+	MNEMONIC_KUNPCKBW           Mnemonic = 377
+	MNEMONIC_KUNPCKDQ           Mnemonic = 378
+	MNEMONIC_KUNPCKWD           Mnemonic = 379
+	MNEMONIC_KXNOR              Mnemonic = 380
+	MNEMONIC_KXNORB             Mnemonic = 381
+	MNEMONIC_KXNORD             Mnemonic = 382
+	MNEMONIC_KXNORQ             Mnemonic = 383
+	MNEMONIC_KXNORW             Mnemonic = 384
+	MNEMONIC_KXOR               Mnemonic = 385
+	MNEMONIC_KXORB              Mnemonic = 386
+	MNEMONIC_KXORD              Mnemonic = 387
+	MNEMONIC_KXORQ              Mnemonic = 388
+	MNEMONIC_KXORW              Mnemonic = 389
+	MNEMONIC_LAHF               Mnemonic = 390
+	MNEMONIC_LAR                Mnemonic = 391
+	MNEMONIC_LDDQU              Mnemonic = 392
+	MNEMONIC_LDMXCSR            Mnemonic = 393
+	MNEMONIC_LDS                Mnemonic = 394
+	MNEMONIC_LDTILECFG          Mnemonic = 395
+	MNEMONIC_LEA                Mnemonic = 396
+	MNEMONIC_LEAVE              Mnemonic = 397
+	MNEMONIC_LES                Mnemonic = 398
+	MNEMONIC_LFENCE             Mnemonic = 399
+	MNEMONIC_LFS                Mnemonic = 400
+	MNEMONIC_LGDT               Mnemonic = 401
+	MNEMONIC_LGS                Mnemonic = 402
+	MNEMONIC_LIDT               Mnemonic = 403
+	MNEMONIC_LLDT               Mnemonic = 404
+	MNEMONIC_LLWPCB             Mnemonic = 405
+	MNEMONIC_LMSW               Mnemonic = 406
+	MNEMONIC_LOADIWKEY          Mnemonic = 407
+	MNEMONIC_LODSB              Mnemonic = 408
+	MNEMONIC_LODSD              Mnemonic = 409
+	MNEMONIC_LODSQ              Mnemonic = 410
+	MNEMONIC_LODSW              Mnemonic = 411
+	MNEMONIC_LOOP               Mnemonic = 412
+	MNEMONIC_LOOPE              Mnemonic = 413
+	MNEMONIC_LOOPNE             Mnemonic = 414
+	MNEMONIC_LSL                Mnemonic = 415
+	MNEMONIC_LSS                Mnemonic = 416
+	MNEMONIC_LTR                Mnemonic = 417
+	MNEMONIC_LWPINS             Mnemonic = 418
+	MNEMONIC_LWPVAL             Mnemonic = 419
+	MNEMONIC_LZCNT              Mnemonic = 420
+	MNEMONIC_MASKMOVDQU         Mnemonic = 421
+	MNEMONIC_MASKMOVQ           Mnemonic = 422
+	MNEMONIC_MAXPD              Mnemonic = 423
+	MNEMONIC_MAXPS              Mnemonic = 424
+	MNEMONIC_MAXSD              Mnemonic = 425
+	MNEMONIC_MAXSS              Mnemonic = 426
+	MNEMONIC_MCOMMIT            Mnemonic = 427
+	MNEMONIC_MFENCE             Mnemonic = 428
+	MNEMONIC_MINPD              Mnemonic = 429
+	MNEMONIC_MINPS              Mnemonic = 430
+	MNEMONIC_MINSD              Mnemonic = 431
+	MNEMONIC_MINSS              Mnemonic = 432
+	MNEMONIC_MONITOR            Mnemonic = 433
+	MNEMONIC_MONITORX           Mnemonic = 434
+	MNEMONIC_MONTMUL            Mnemonic = 435
+	MNEMONIC_MOV                Mnemonic = 436
+	MNEMONIC_MOVAPD             Mnemonic = 437
+	MNEMONIC_MOVAPS             Mnemonic = 438
+	MNEMONIC_MOVBE              Mnemonic = 439
+	MNEMONIC_MOVD               Mnemonic = 440
+	MNEMONIC_MOVDDUP            Mnemonic = 441
+	MNEMONIC_MOVDIR64B          Mnemonic = 442
+	MNEMONIC_MOVDIRI            Mnemonic = 443
+	MNEMONIC_MOVDQ2Q            Mnemonic = 444
+	MNEMONIC_MOVDQA             Mnemonic = 445
+	MNEMONIC_MOVDQU             Mnemonic = 446
+	MNEMONIC_MOVHLPS            Mnemonic = 447
+	MNEMONIC_MOVHPD             Mnemonic = 448
+	MNEMONIC_MOVHPS             Mnemonic = 449
+	MNEMONIC_MOVLHPS            Mnemonic = 450
+	MNEMONIC_MOVLPD             Mnemonic = 451
+	MNEMONIC_MOVLPS             Mnemonic = 452
+	MNEMONIC_MOVMSKPD           Mnemonic = 453
+	MNEMONIC_MOVMSKPS           Mnemonic = 454
+	MNEMONIC_MOVNTDQ            Mnemonic = 455
+	MNEMONIC_MOVNTDQA           Mnemonic = 456
+	MNEMONIC_MOVNTI             Mnemonic = 457
+	MNEMONIC_MOVNTPD            Mnemonic = 458
+	MNEMONIC_MOVNTPS            Mnemonic = 459
+	MNEMONIC_MOVNTQ             Mnemonic = 460
+	MNEMONIC_MOVNTSD            Mnemonic = 461
+	MNEMONIC_MOVNTSS            Mnemonic = 462
+	MNEMONIC_MOVQ               Mnemonic = 463
+	MNEMONIC_MOVQ2DQ            Mnemonic = 464
+	MNEMONIC_MOVSB              Mnemonic = 465
+	MNEMONIC_MOVSD              Mnemonic = 466
+	MNEMONIC_MOVSHDUP           Mnemonic = 467
+	MNEMONIC_MOVSLDUP           Mnemonic = 468
+	MNEMONIC_MOVSQ              Mnemonic = 469
+	MNEMONIC_MOVSS              Mnemonic = 470
+	MNEMONIC_MOVSW              Mnemonic = 471
+	MNEMONIC_MOVSX              Mnemonic = 472
+	MNEMONIC_MOVSXD             Mnemonic = 473
+	MNEMONIC_MOVUPD             Mnemonic = 474
+	MNEMONIC_MOVUPS             Mnemonic = 475
+	MNEMONIC_MOVZX              Mnemonic = 476
+	MNEMONIC_MPSADBW            Mnemonic = 477
+	MNEMONIC_MUL                Mnemonic = 478
+	MNEMONIC_MULPD              Mnemonic = 479
+	MNEMONIC_MULPS              Mnemonic = 480
+	MNEMONIC_MULSD              Mnemonic = 481
+	MNEMONIC_MULSS              Mnemonic = 482
+	MNEMONIC_MULX               Mnemonic = 483
+	MNEMONIC_MWAIT              Mnemonic = 484
+	MNEMONIC_MWAITX             Mnemonic = 485
+	MNEMONIC_NEG                Mnemonic = 486
+	MNEMONIC_NOP                Mnemonic = 487
+	MNEMONIC_NOT                Mnemonic = 488
+	MNEMONIC_OR                 Mnemonic = 489
+	MNEMONIC_ORPD               Mnemonic = 490
+	MNEMONIC_ORPS               Mnemonic = 491
+	MNEMONIC_OUT                Mnemonic = 492
+	MNEMONIC_OUTSB              Mnemonic = 493
+	MNEMONIC_OUTSD              Mnemonic = 494
+	MNEMONIC_OUTSW              Mnemonic = 495
+	MNEMONIC_PABSB              Mnemonic = 496
+	MNEMONIC_PABSD              Mnemonic = 497
+	MNEMONIC_PABSW              Mnemonic = 498
+	MNEMONIC_PACKSSDW           Mnemonic = 499
+	MNEMONIC_PACKSSWB           Mnemonic = 500
+	MNEMONIC_PACKUSDW           Mnemonic = 501
+	MNEMONIC_PACKUSWB           Mnemonic = 502
+	MNEMONIC_PADDB              Mnemonic = 503
+	MNEMONIC_PADDD              Mnemonic = 504
+	MNEMONIC_PADDQ              Mnemonic = 505
+	MNEMONIC_PADDSB             Mnemonic = 506
+	MNEMONIC_PADDSW             Mnemonic = 507
+	MNEMONIC_PADDUSB            Mnemonic = 508
+	MNEMONIC_PADDUSW            Mnemonic = 509
+	MNEMONIC_PADDW              Mnemonic = 510
+	MNEMONIC_PALIGNR            Mnemonic = 511
+	MNEMONIC_PAND               Mnemonic = 512
+	MNEMONIC_PANDN              Mnemonic = 513
+	MNEMONIC_PAUSE              Mnemonic = 514
+	MNEMONIC_PAVGB              Mnemonic = 515
+	MNEMONIC_PAVGUSB            Mnemonic = 516
+	MNEMONIC_PAVGW              Mnemonic = 517
+	MNEMONIC_PBLENDVB           Mnemonic = 518
+	MNEMONIC_PBLENDW            Mnemonic = 519
+	MNEMONIC_PBNDKB             Mnemonic = 520
+	MNEMONIC_PCLMULQDQ          Mnemonic = 521
+	MNEMONIC_PCMPEQB            Mnemonic = 522
+	MNEMONIC_PCMPEQD            Mnemonic = 523
+	MNEMONIC_PCMPEQQ            Mnemonic = 524
+	MNEMONIC_PCMPEQW            Mnemonic = 525
+	MNEMONIC_PCMPESTRI          Mnemonic = 526
+	MNEMONIC_PCMPESTRM          Mnemonic = 527
+	MNEMONIC_PCMPGTB            Mnemonic = 528
+	MNEMONIC_PCMPGTD            Mnemonic = 529
+	MNEMONIC_PCMPGTQ            Mnemonic = 530
+	MNEMONIC_PCMPGTW            Mnemonic = 531
+	MNEMONIC_PCMPISTRI          Mnemonic = 532
+	MNEMONIC_PCMPISTRM          Mnemonic = 533
+	MNEMONIC_PCOMMIT            Mnemonic = 534
+	MNEMONIC_PCONFIG            Mnemonic = 535
+	MNEMONIC_PDEP               Mnemonic = 536
+	MNEMONIC_PEXT               Mnemonic = 537
+	MNEMONIC_PEXTRB             Mnemonic = 538
+	MNEMONIC_PEXTRD             Mnemonic = 539
+	MNEMONIC_PEXTRQ             Mnemonic = 540
+	MNEMONIC_PEXTRW             Mnemonic = 541
+	MNEMONIC_PF2ID              Mnemonic = 542
+	MNEMONIC_PF2IW              Mnemonic = 543
+	MNEMONIC_PFACC              Mnemonic = 544
+	MNEMONIC_PFADD              Mnemonic = 545
+	MNEMONIC_PFCMPEQ            Mnemonic = 546
+	MNEMONIC_PFCMPGE            Mnemonic = 547
+	MNEMONIC_PFCMPGT            Mnemonic = 548
+	MNEMONIC_PFCPIT1            Mnemonic = 549
+	MNEMONIC_PFMAX              Mnemonic = 550
+	MNEMONIC_PFMIN              Mnemonic = 551
+	MNEMONIC_PFMUL              Mnemonic = 552
+	MNEMONIC_PFNACC             Mnemonic = 553
+	MNEMONIC_PFPNACC            Mnemonic = 554
+	MNEMONIC_PFRCP              Mnemonic = 555
+	MNEMONIC_PFRCPIT2           Mnemonic = 556
+	MNEMONIC_PFRSQIT1           Mnemonic = 557
+	MNEMONIC_PFSQRT             Mnemonic = 558
+	MNEMONIC_PFSUB              Mnemonic = 559
+	MNEMONIC_PFSUBR             Mnemonic = 560
+	MNEMONIC_PHADDD             Mnemonic = 561
+	MNEMONIC_PHADDSW            Mnemonic = 562
+	MNEMONIC_PHADDW             Mnemonic = 563
+	MNEMONIC_PHMINPOSUW         Mnemonic = 564
+	MNEMONIC_PHSUBD             Mnemonic = 565
+	MNEMONIC_PHSUBSW            Mnemonic = 566
+	MNEMONIC_PHSUBW             Mnemonic = 567
+	MNEMONIC_PI2FD              Mnemonic = 568
+	MNEMONIC_PI2FW              Mnemonic = 569
+	MNEMONIC_PINSRB             Mnemonic = 570
+	MNEMONIC_PINSRD             Mnemonic = 571
+	MNEMONIC_PINSRQ             Mnemonic = 572
+	MNEMONIC_PINSRW             Mnemonic = 573
+	MNEMONIC_PMADDUBSW          Mnemonic = 574
+	MNEMONIC_PMADDWD            Mnemonic = 575
+	MNEMONIC_PMAXSB             Mnemonic = 576
+	MNEMONIC_PMAXSD             Mnemonic = 577
+	MNEMONIC_PMAXSW             Mnemonic = 578
+	MNEMONIC_PMAXUB             Mnemonic = 579
+	MNEMONIC_PMAXUD             Mnemonic = 580
+	MNEMONIC_PMAXUW             Mnemonic = 581
+	MNEMONIC_PMINSB             Mnemonic = 582
+	MNEMONIC_PMINSD             Mnemonic = 583
+	MNEMONIC_PMINSW             Mnemonic = 584
+	MNEMONIC_PMINUB             Mnemonic = 585
+	MNEMONIC_PMINUD             Mnemonic = 586
+	MNEMONIC_PMINUW             Mnemonic = 587
+	MNEMONIC_PMOVMSKB           Mnemonic = 588
+	MNEMONIC_PMOVSXBD           Mnemonic = 589
+	MNEMONIC_PMOVSXBQ           Mnemonic = 590
+	MNEMONIC_PMOVSXBW           Mnemonic = 591
+	MNEMONIC_PMOVSXDQ           Mnemonic = 592
+	MNEMONIC_PMOVSXWD           Mnemonic = 593
+	MNEMONIC_PMOVSXWQ           Mnemonic = 594
+	MNEMONIC_PMOVZXBD           Mnemonic = 595
+	MNEMONIC_PMOVZXBQ           Mnemonic = 596
+	MNEMONIC_PMOVZXBW           Mnemonic = 597
+	MNEMONIC_PMOVZXDQ           Mnemonic = 598
+	MNEMONIC_PMOVZXWD           Mnemonic = 599
+	MNEMONIC_PMOVZXWQ           Mnemonic = 600
+	MNEMONIC_PMULDQ             Mnemonic = 601
+	MNEMONIC_PMULHRSW           Mnemonic = 602
+	MNEMONIC_PMULHRW            Mnemonic = 603
+	MNEMONIC_PMULHUW            Mnemonic = 604
+	MNEMONIC_PMULHW             Mnemonic = 605
+	MNEMONIC_PMULLD             Mnemonic = 606
+	MNEMONIC_PMULLW             Mnemonic = 607
+	MNEMONIC_PMULUDQ            Mnemonic = 608
+	MNEMONIC_POP                Mnemonic = 609
+	MNEMONIC_POPA               Mnemonic = 610
+	MNEMONIC_POPAD              Mnemonic = 611
+	MNEMONIC_POPCNT             Mnemonic = 612
+	MNEMONIC_POPF               Mnemonic = 613
+	MNEMONIC_POPFD              Mnemonic = 614
+	MNEMONIC_POPFQ              Mnemonic = 615
+	MNEMONIC_POR                Mnemonic = 616
+	MNEMONIC_PREFETCH           Mnemonic = 617
+	MNEMONIC_PREFETCHIT0        Mnemonic = 618
+	MNEMONIC_PREFETCHIT1        Mnemonic = 619
+	MNEMONIC_PREFETCHNTA        Mnemonic = 620
+	MNEMONIC_PREFETCHT0         Mnemonic = 621
+	MNEMONIC_PREFETCHT1         Mnemonic = 622
+	MNEMONIC_PREFETCHT2         Mnemonic = 623
+	MNEMONIC_PREFETCHW          Mnemonic = 624
+	MNEMONIC_PREFETCHWT1        Mnemonic = 625
+	MNEMONIC_PSADBW             Mnemonic = 626
+	MNEMONIC_PSHUFB             Mnemonic = 627
+	MNEMONIC_PSHUFD             Mnemonic = 628
+	MNEMONIC_PSHUFHW            Mnemonic = 629
+	MNEMONIC_PSHUFLW            Mnemonic = 630
+	MNEMONIC_PSHUFW             Mnemonic = 631
+	MNEMONIC_PSIGNB             Mnemonic = 632
+	MNEMONIC_PSIGND             Mnemonic = 633
+	MNEMONIC_PSIGNW             Mnemonic = 634
+	MNEMONIC_PSLLD              Mnemonic = 635
+	MNEMONIC_PSLLDQ             Mnemonic = 636
+	MNEMONIC_PSLLQ              Mnemonic = 637
+	MNEMONIC_PSLLW              Mnemonic = 638
+	MNEMONIC_PSMASH             Mnemonic = 639
+	MNEMONIC_PSRAD              Mnemonic = 640
+	MNEMONIC_PSRAW              Mnemonic = 641
+	MNEMONIC_PSRLD              Mnemonic = 642
+	MNEMONIC_PSRLDQ             Mnemonic = 643
+	MNEMONIC_PSRLQ              Mnemonic = 644
+	MNEMONIC_PSRLW              Mnemonic = 645
+	MNEMONIC_PSUBB              Mnemonic = 646
+	MNEMONIC_PSUBD              Mnemonic = 647
+	MNEMONIC_PSUBQ              Mnemonic = 648
+	MNEMONIC_PSUBSB             Mnemonic = 649
+	MNEMONIC_PSUBSW             Mnemonic = 650
+	MNEMONIC_PSUBUSB            Mnemonic = 651
+	MNEMONIC_PSUBUSW            Mnemonic = 652
+	MNEMONIC_PSUBW              Mnemonic = 653
+	MNEMONIC_PSWAPD             Mnemonic = 654
+	MNEMONIC_PTEST              Mnemonic = 655
+	MNEMONIC_PTWRITE            Mnemonic = 656
+	MNEMONIC_PUNPCKHBW          Mnemonic = 657
+	MNEMONIC_PUNPCKHDQ          Mnemonic = 658
+	MNEMONIC_PUNPCKHQDQ         Mnemonic = 659
+	MNEMONIC_PUNPCKHWD          Mnemonic = 660
+	MNEMONIC_PUNPCKLBW          Mnemonic = 661
+	MNEMONIC_PUNPCKLDQ          Mnemonic = 662
+	MNEMONIC_PUNPCKLQDQ         Mnemonic = 663
+	MNEMONIC_PUNPCKLWD          Mnemonic = 664
+	MNEMONIC_PUSH               Mnemonic = 665
+	MNEMONIC_PUSHA              Mnemonic = 666
+	MNEMONIC_PUSHAD             Mnemonic = 667
+	MNEMONIC_PUSHF              Mnemonic = 668
+	MNEMONIC_PUSHFD             Mnemonic = 669
+	MNEMONIC_PUSHFQ             Mnemonic = 670
+	MNEMONIC_PVALIDATE          Mnemonic = 671
+	MNEMONIC_PXOR               Mnemonic = 672
+	MNEMONIC_RCL                Mnemonic = 673
+	MNEMONIC_RCPPS              Mnemonic = 674
+	MNEMONIC_RCPSS              Mnemonic = 675
+	MNEMONIC_RCR                Mnemonic = 676
+	MNEMONIC_RDFSBASE           Mnemonic = 677
+	MNEMONIC_RDGSBASE           Mnemonic = 678
+	MNEMONIC_RDMSR              Mnemonic = 679
+	MNEMONIC_RDMSRLIST          Mnemonic = 680
+	MNEMONIC_RDPID              Mnemonic = 681
+	MNEMONIC_RDPKRU             Mnemonic = 682
+	MNEMONIC_RDPMC              Mnemonic = 683
+	MNEMONIC_RDPRU              Mnemonic = 684
+	MNEMONIC_RDRAND             Mnemonic = 685
+	MNEMONIC_RDSEED             Mnemonic = 686
+	MNEMONIC_RDSSPD             Mnemonic = 687
+	MNEMONIC_RDSSPQ             Mnemonic = 688
+	MNEMONIC_RDTSC              Mnemonic = 689
+	MNEMONIC_RDTSCP             Mnemonic = 690
+	MNEMONIC_RET                Mnemonic = 691
+	MNEMONIC_RMPADJUST          Mnemonic = 692
+	MNEMONIC_RMPUPDATE          Mnemonic = 693
+	MNEMONIC_ROL                Mnemonic = 694
+	MNEMONIC_ROR                Mnemonic = 695
+	MNEMONIC_RORX               Mnemonic = 696
+	MNEMONIC_ROUNDPD            Mnemonic = 697
+	MNEMONIC_ROUNDPS            Mnemonic = 698
+	MNEMONIC_ROUNDSD            Mnemonic = 699
+	MNEMONIC_ROUNDSS            Mnemonic = 700
+	MNEMONIC_RSM                Mnemonic = 701
+	MNEMONIC_RSQRTPS            Mnemonic = 702
+	MNEMONIC_RSQRTSS            Mnemonic = 703
+	MNEMONIC_RSTORSSP           Mnemonic = 704
+	MNEMONIC_SAHF               Mnemonic = 705
+	MNEMONIC_SALC               Mnemonic = 706
+	MNEMONIC_SAR                Mnemonic = 707
+	MNEMONIC_SARX               Mnemonic = 708
+	MNEMONIC_SAVEPREVSSP        Mnemonic = 709
+	MNEMONIC_SBB                Mnemonic = 710
+	MNEMONIC_SCASB              Mnemonic = 711
+	MNEMONIC_SCASD              Mnemonic = 712
+	MNEMONIC_SCASQ              Mnemonic = 713
+	MNEMONIC_SCASW              Mnemonic = 714
+	MNEMONIC_SEAMCALL           Mnemonic = 715
+	MNEMONIC_SEAMOPS            Mnemonic = 716
+	MNEMONIC_SEAMRET            Mnemonic = 717
+	MNEMONIC_SENDUIPI           Mnemonic = 718
+	MNEMONIC_SERIALIZE          Mnemonic = 719
+	MNEMONIC_SETB               Mnemonic = 720
+	MNEMONIC_SETBE              Mnemonic = 721
+	MNEMONIC_SETL               Mnemonic = 722
+	MNEMONIC_SETLE              Mnemonic = 723
+	MNEMONIC_SETNB              Mnemonic = 724
+	MNEMONIC_SETNBE             Mnemonic = 725
+	MNEMONIC_SETNL              Mnemonic = 726
+	MNEMONIC_SETNLE             Mnemonic = 727
+	MNEMONIC_SETNO              Mnemonic = 728
+	MNEMONIC_SETNP              Mnemonic = 729
+	MNEMONIC_SETNS              Mnemonic = 730
+	MNEMONIC_SETNZ              Mnemonic = 731
+	MNEMONIC_SETO               Mnemonic = 732
+	MNEMONIC_SETP               Mnemonic = 733
+	MNEMONIC_SETS               Mnemonic = 734
+	MNEMONIC_SETSSBSY           Mnemonic = 735
+	MNEMONIC_SETZ               Mnemonic = 736
+	MNEMONIC_SFENCE             Mnemonic = 737
+	MNEMONIC_SGDT               Mnemonic = 738
+	MNEMONIC_SHA1MSG1           Mnemonic = 739
+	MNEMONIC_SHA1MSG2           Mnemonic = 740
+	MNEMONIC_SHA1NEXTE          Mnemonic = 741
+	MNEMONIC_SHA1RNDS4          Mnemonic = 742
+	MNEMONIC_SHA256MSG1         Mnemonic = 743
+	MNEMONIC_SHA256MSG2         Mnemonic = 744
+	MNEMONIC_SHA256RNDS2        Mnemonic = 745
+	MNEMONIC_SHL                Mnemonic = 746
+	MNEMONIC_SHLD               Mnemonic = 747
+	MNEMONIC_SHLX               Mnemonic = 748
+	MNEMONIC_SHR                Mnemonic = 749
+	MNEMONIC_SHRD               Mnemonic = 750
+	MNEMONIC_SHRX               Mnemonic = 751
+	MNEMONIC_SHUFPD             Mnemonic = 752
+	MNEMONIC_SHUFPS             Mnemonic = 753
+	MNEMONIC_SIDT               Mnemonic = 754
+	MNEMONIC_SKINIT             Mnemonic = 755
+	MNEMONIC_SLDT               Mnemonic = 756
+	MNEMONIC_SLWPCB             Mnemonic = 757
+	MNEMONIC_SMSW               Mnemonic = 758
+	MNEMONIC_SPFLT              Mnemonic = 759
+	MNEMONIC_SQRTPD             Mnemonic = 760
+	MNEMONIC_SQRTPS             Mnemonic = 761
+	MNEMONIC_SQRTSD             Mnemonic = 762
+	MNEMONIC_SQRTSS             Mnemonic = 763
+	MNEMONIC_STAC               Mnemonic = 764
+	MNEMONIC_STC                Mnemonic = 765
+	MNEMONIC_STD                Mnemonic = 766
+	MNEMONIC_STGI               Mnemonic = 767
+	MNEMONIC_STI                Mnemonic = 768
+	MNEMONIC_STMXCSR            Mnemonic = 769
+	MNEMONIC_STOSB              Mnemonic = 770
+	MNEMONIC_STOSD              Mnemonic = 771
+	MNEMONIC_STOSQ              Mnemonic = 772
+	MNEMONIC_STOSW              Mnemonic = 773
+	MNEMONIC_STR                Mnemonic = 774
+	MNEMONIC_STTILECFG          Mnemonic = 775
+	MNEMONIC_STUI               Mnemonic = 776
+	MNEMONIC_SUB                Mnemonic = 777
+	MNEMONIC_SUBPD              Mnemonic = 778
+	MNEMONIC_SUBPS              Mnemonic = 779
+	MNEMONIC_SUBSD              Mnemonic = 780
+	MNEMONIC_SUBSS              Mnemonic = 781
+	MNEMONIC_SWAPGS             Mnemonic = 782
+	MNEMONIC_SYSCALL            Mnemonic = 783
+	MNEMONIC_SYSENTER           Mnemonic = 784
+	MNEMONIC_SYSEXIT            Mnemonic = 785
+	MNEMONIC_SYSRET             Mnemonic = 786
+	MNEMONIC_T1MSKC             Mnemonic = 787
+	MNEMONIC_TDCALL             Mnemonic = 788
+	MNEMONIC_TDPBF16PS          Mnemonic = 789
+	MNEMONIC_TDPBSSD            Mnemonic = 790
+	MNEMONIC_TDPBSUD            Mnemonic = 791
+	MNEMONIC_TDPBUSD            Mnemonic = 792
+	MNEMONIC_TDPBUUD            Mnemonic = 793
+	MNEMONIC_TDPFP16PS          Mnemonic = 794
+	MNEMONIC_TEST               Mnemonic = 795
+	MNEMONIC_TESTUI             Mnemonic = 796
+	MNEMONIC_TILELOADD          Mnemonic = 797
+	MNEMONIC_TILELOADDT1        Mnemonic = 798
+	MNEMONIC_TILERELEASE        Mnemonic = 799
+	MNEMONIC_TILESTORED         Mnemonic = 800
+	MNEMONIC_TILEZERO           Mnemonic = 801
+	MNEMONIC_TLBSYNC            Mnemonic = 802
+	MNEMONIC_TPAUSE             Mnemonic = 803
+	MNEMONIC_TZCNT              Mnemonic = 804
+	MNEMONIC_TZCNTI             Mnemonic = 805
+	MNEMONIC_TZMSK              Mnemonic = 806
+	MNEMONIC_UCOMISD            Mnemonic = 807
+	MNEMONIC_UCOMISS            Mnemonic = 808
+	MNEMONIC_UD0                Mnemonic = 809
+	MNEMONIC_UD1                Mnemonic = 810
+	MNEMONIC_UD2                Mnemonic = 811
+	MNEMONIC_UIRET              Mnemonic = 812
+	MNEMONIC_UMONITOR           Mnemonic = 813
+	MNEMONIC_UMWAIT             Mnemonic = 814
+	MNEMONIC_UNPCKHPD           Mnemonic = 815
+	MNEMONIC_UNPCKHPS           Mnemonic = 816
+	MNEMONIC_UNPCKLPD           Mnemonic = 817
+	MNEMONIC_UNPCKLPS           Mnemonic = 818
+	MNEMONIC_V4FMADDPS          Mnemonic = 819
+	MNEMONIC_V4FMADDSS          Mnemonic = 820
+	MNEMONIC_V4FNMADDPS         Mnemonic = 821
+	MNEMONIC_V4FNMADDSS         Mnemonic = 822
+	MNEMONIC_VADDNPD            Mnemonic = 823
+	MNEMONIC_VADDNPS            Mnemonic = 824
+	MNEMONIC_VADDPD             Mnemonic = 825
+	MNEMONIC_VADDPH             Mnemonic = 826
+	MNEMONIC_VADDPS             Mnemonic = 827
+	MNEMONIC_VADDSD             Mnemonic = 828
+	MNEMONIC_VADDSETSPS         Mnemonic = 829
+	MNEMONIC_VADDSH             Mnemonic = 830
+	MNEMONIC_VADDSS             Mnemonic = 831
+	MNEMONIC_VADDSUBPD          Mnemonic = 832
+	MNEMONIC_VADDSUBPS          Mnemonic = 833
+	MNEMONIC_VAESDEC            Mnemonic = 834
+	MNEMONIC_VAESDECLAST        Mnemonic = 835
+	MNEMONIC_VAESENC            Mnemonic = 836
+	MNEMONIC_VAESENCLAST        Mnemonic = 837
+	MNEMONIC_VAESIMC            Mnemonic = 838
+	MNEMONIC_VAESKEYGENASSIST   Mnemonic = 839
+	MNEMONIC_VALIGND            Mnemonic = 840
+	MNEMONIC_VALIGNQ            Mnemonic = 841
+	MNEMONIC_VANDNPD            Mnemonic = 842
+	MNEMONIC_VANDNPS            Mnemonic = 843
+	MNEMONIC_VANDPD             Mnemonic = 844
+	MNEMONIC_VANDPS             Mnemonic = 845
+	MNEMONIC_VBCSTNEBF162PS     Mnemonic = 846
+	MNEMONIC_VBCSTNESH2PS       Mnemonic = 847
+	MNEMONIC_VBLENDMPD          Mnemonic = 848
+	MNEMONIC_VBLENDMPS          Mnemonic = 849
+	MNEMONIC_VBLENDPD           Mnemonic = 850
+	MNEMONIC_VBLENDPS           Mnemonic = 851
+	MNEMONIC_VBLENDVPD          Mnemonic = 852
+	MNEMONIC_VBLENDVPS          Mnemonic = 853
+	MNEMONIC_VBROADCASTF128     Mnemonic = 854
+	MNEMONIC_VBROADCASTF32X2    Mnemonic = 855
+	MNEMONIC_VBROADCASTF32X4    Mnemonic = 856
+	MNEMONIC_VBROADCASTF32X8    Mnemonic = 857
+	MNEMONIC_VBROADCASTF64X2    Mnemonic = 858
+	MNEMONIC_VBROADCASTF64X4    Mnemonic = 859
+	MNEMONIC_VBROADCASTI128     Mnemonic = 860
+	MNEMONIC_VBROADCASTI32X2    Mnemonic = 861
+	MNEMONIC_VBROADCASTI32X4    Mnemonic = 862
+	MNEMONIC_VBROADCASTI32X8    Mnemonic = 863
+	MNEMONIC_VBROADCASTI64X2    Mnemonic = 864
+	MNEMONIC_VBROADCASTI64X4    Mnemonic = 865
+	MNEMONIC_VBROADCASTSD       Mnemonic = 866
+	MNEMONIC_VBROADCASTSS       Mnemonic = 867
+	MNEMONIC_VCMPPD             Mnemonic = 868
+	MNEMONIC_VCMPPH             Mnemonic = 869
+	MNEMONIC_VCMPPS             Mnemonic = 870
+	MNEMONIC_VCMPSD             Mnemonic = 871
+	MNEMONIC_VCMPSH             Mnemonic = 872
+	MNEMONIC_VCMPSS             Mnemonic = 873
+	MNEMONIC_VCOMISD            Mnemonic = 874
+	MNEMONIC_VCOMISH            Mnemonic = 875
+	MNEMONIC_VCOMISS            Mnemonic = 876
+	MNEMONIC_VCOMPRESSPD        Mnemonic = 877
+	MNEMONIC_VCOMPRESSPS        Mnemonic = 878
+	MNEMONIC_VCVTDQ2PD          Mnemonic = 879
+	MNEMONIC_VCVTDQ2PH          Mnemonic = 880
+	MNEMONIC_VCVTDQ2PS          Mnemonic = 881
+	MNEMONIC_VCVTFXPNTDQ2PS     Mnemonic = 882
+	MNEMONIC_VCVTFXPNTPD2DQ     Mnemonic = 883
+	MNEMONIC_VCVTFXPNTPD2UDQ    Mnemonic = 884
+	MNEMONIC_VCVTFXPNTPS2DQ     Mnemonic = 885
+	MNEMONIC_VCVTFXPNTPS2UDQ    Mnemonic = 886
+	MNEMONIC_VCVTFXPNTUDQ2PS    Mnemonic = 887
+	MNEMONIC_VCVTNE2PS2BF16     Mnemonic = 888
+	MNEMONIC_VCVTNEEBF162PS     Mnemonic = 889
+	MNEMONIC_VCVTNEEPH2PS       Mnemonic = 890
+	MNEMONIC_VCVTNEOBF162PS     Mnemonic = 891
+	MNEMONIC_VCVTNEOPH2PS       Mnemonic = 892
+	MNEMONIC_VCVTNEPS2BF16      Mnemonic = 893
+	MNEMONIC_VCVTPD2DQ          Mnemonic = 894
+	MNEMONIC_VCVTPD2PH          Mnemonic = 895
+	MNEMONIC_VCVTPD2PS          Mnemonic = 896
+	MNEMONIC_VCVTPD2QQ          Mnemonic = 897
+	MNEMONIC_VCVTPD2UDQ         Mnemonic = 898
+	MNEMONIC_VCVTPD2UQQ         Mnemonic = 899
+	MNEMONIC_VCVTPH2DQ          Mnemonic = 900
+	MNEMONIC_VCVTPH2PD          Mnemonic = 901
+	MNEMONIC_VCVTPH2PS          Mnemonic = 902
+	MNEMONIC_VCVTPH2PSX         Mnemonic = 903
+	MNEMONIC_VCVTPH2QQ          Mnemonic = 904
+	MNEMONIC_VCVTPH2UDQ         Mnemonic = 905
+	MNEMONIC_VCVTPH2UQQ         Mnemonic = 906
+	MNEMONIC_VCVTPH2UW          Mnemonic = 907
+	MNEMONIC_VCVTPH2W           Mnemonic = 908
+	MNEMONIC_VCVTPS2DQ          Mnemonic = 909
+	MNEMONIC_VCVTPS2PD          Mnemonic = 910
+	MNEMONIC_VCVTPS2PH          Mnemonic = 911
+	MNEMONIC_VCVTPS2PHX         Mnemonic = 912
+	MNEMONIC_VCVTPS2QQ          Mnemonic = 913
+	MNEMONIC_VCVTPS2UDQ         Mnemonic = 914
+	MNEMONIC_VCVTPS2UQQ         Mnemonic = 915
+	MNEMONIC_VCVTQQ2PD          Mnemonic = 916
+	MNEMONIC_VCVTQQ2PH          Mnemonic = 917
+	MNEMONIC_VCVTQQ2PS          Mnemonic = 918
+	MNEMONIC_VCVTSD2SH          Mnemonic = 919
+	MNEMONIC_VCVTSD2SI          Mnemonic = 920
+	MNEMONIC_VCVTSD2SS          Mnemonic = 921
+	MNEMONIC_VCVTSD2USI         Mnemonic = 922
+	MNEMONIC_VCVTSH2SD          Mnemonic = 923
+	MNEMONIC_VCVTSH2SI          Mnemonic = 924
+	MNEMONIC_VCVTSH2SS          Mnemonic = 925
+	MNEMONIC_VCVTSH2USI         Mnemonic = 926
+	MNEMONIC_VCVTSI2SD          Mnemonic = 927
+	MNEMONIC_VCVTSI2SH          Mnemonic = 928
+	MNEMONIC_VCVTSI2SS          Mnemonic = 929
+	MNEMONIC_VCVTSS2SD          Mnemonic = 930
+	MNEMONIC_VCVTSS2SH          Mnemonic = 931
+	MNEMONIC_VCVTSS2SI          Mnemonic = 932
+	MNEMONIC_VCVTSS2USI         Mnemonic = 933
+	MNEMONIC_VCVTTPD2DQ         Mnemonic = 934
+	MNEMONIC_VCVTTPD2QQ         Mnemonic = 935
+	MNEMONIC_VCVTTPD2UDQ        Mnemonic = 936
+	MNEMONIC_VCVTTPD2UQQ        Mnemonic = 937
+	MNEMONIC_VCVTTPH2DQ         Mnemonic = 938
+	MNEMONIC_VCVTTPH2QQ         Mnemonic = 939
+	MNEMONIC_VCVTTPH2UDQ        Mnemonic = 940
+	MNEMONIC_VCVTTPH2UQQ        Mnemonic = 941
+	MNEMONIC_VCVTTPH2UW         Mnemonic = 942
+	MNEMONIC_VCVTTPH2W          Mnemonic = 943
+	MNEMONIC_VCVTTPS2DQ         Mnemonic = 944
+	MNEMONIC_VCVTTPS2QQ         Mnemonic = 945
+	MNEMONIC_VCVTTPS2UDQ        Mnemonic = 946
+	MNEMONIC_VCVTTPS2UQQ        Mnemonic = 947
+	MNEMONIC_VCVTTSD2SI         Mnemonic = 948
+	MNEMONIC_VCVTTSD2USI        Mnemonic = 949
+	MNEMONIC_VCVTTSH2SI         Mnemonic = 950
+	MNEMONIC_VCVTTSH2USI        Mnemonic = 951
+	MNEMONIC_VCVTTSS2SI         Mnemonic = 952
+	MNEMONIC_VCVTTSS2USI        Mnemonic = 953
+	MNEMONIC_VCVTUDQ2PD         Mnemonic = 954
+	MNEMONIC_VCVTUDQ2PH         Mnemonic = 955
+	MNEMONIC_VCVTUDQ2PS         Mnemonic = 956
+	MNEMONIC_VCVTUQQ2PD         Mnemonic = 957
+	MNEMONIC_VCVTUQQ2PH         Mnemonic = 958
+	MNEMONIC_VCVTUQQ2PS         Mnemonic = 959
+	MNEMONIC_VCVTUSI2SD         Mnemonic = 960
+	MNEMONIC_VCVTUSI2SH         Mnemonic = 961
+	MNEMONIC_VCVTUSI2SS         Mnemonic = 962
+	MNEMONIC_VCVTUW2PH          Mnemonic = 963
+	MNEMONIC_VCVTW2PH           Mnemonic = 964
+	MNEMONIC_VDBPSADBW          Mnemonic = 965
+	MNEMONIC_VDIVPD             Mnemonic = 966
+	MNEMONIC_VDIVPH             Mnemonic = 967
+	MNEMONIC_VDIVPS             Mnemonic = 968
+	MNEMONIC_VDIVSD             Mnemonic = 969
+	MNEMONIC_VDIVSH             Mnemonic = 970
+	MNEMONIC_VDIVSS             Mnemonic = 971
+	MNEMONIC_VDPBF16PS          Mnemonic = 972
+	MNEMONIC_VDPPD              Mnemonic = 973
+	MNEMONIC_VDPPS              Mnemonic = 974
+	MNEMONIC_VERR               Mnemonic = 975
+	MNEMONIC_VERW               Mnemonic = 976
+	MNEMONIC_VEXP223PS          Mnemonic = 977
+	MNEMONIC_VEXP2PD            Mnemonic = 978
+	MNEMONIC_VEXP2PS            Mnemonic = 979
+	MNEMONIC_VEXPANDPD          Mnemonic = 980
+	MNEMONIC_VEXPANDPS          Mnemonic = 981
+	MNEMONIC_VEXTRACTF128       Mnemonic = 982
+	MNEMONIC_VEXTRACTF32X4      Mnemonic = 983
+	MNEMONIC_VEXTRACTF32X8      Mnemonic = 984
+	MNEMONIC_VEXTRACTF64X2      Mnemonic = 985
+	MNEMONIC_VEXTRACTF64X4      Mnemonic = 986
+	MNEMONIC_VEXTRACTI128       Mnemonic = 987
+	MNEMONIC_VEXTRACTI32X4      Mnemonic = 988
+	MNEMONIC_VEXTRACTI32X8      Mnemonic = 989
+	MNEMONIC_VEXTRACTI64X2      Mnemonic = 990
+	MNEMONIC_VEXTRACTI64X4      Mnemonic = 991
+	MNEMONIC_VEXTRACTPS         Mnemonic = 992
+	MNEMONIC_VFCMADDCPH         Mnemonic = 993
+	MNEMONIC_VFCMADDCSH         Mnemonic = 994
+	MNEMONIC_VFCMULCPH          Mnemonic = 995
+	MNEMONIC_VFCMULCSH          Mnemonic = 996
+	MNEMONIC_VFIXUPIMMPD        Mnemonic = 997
+	MNEMONIC_VFIXUPIMMPS        Mnemonic = 998
+	MNEMONIC_VFIXUPIMMSD        Mnemonic = 999
+	MNEMONIC_VFIXUPIMMSS        Mnemonic = 1000
+	MNEMONIC_VFIXUPNANPD        Mnemonic = 1001
+	MNEMONIC_VFIXUPNANPS        Mnemonic = 1002
+	MNEMONIC_VFMADD132PD        Mnemonic = 1003
+	MNEMONIC_VFMADD132PH        Mnemonic = 1004
+	MNEMONIC_VFMADD132PS        Mnemonic = 1005
+	MNEMONIC_VFMADD132SD        Mnemonic = 1006
+	MNEMONIC_VFMADD132SH        Mnemonic = 1007
+	MNEMONIC_VFMADD132SS        Mnemonic = 1008
+	MNEMONIC_VFMADD213PD        Mnemonic = 1009
+	MNEMONIC_VFMADD213PH        Mnemonic = 1010
+	MNEMONIC_VFMADD213PS        Mnemonic = 1011
+	MNEMONIC_VFMADD213SD        Mnemonic = 1012
+	MNEMONIC_VFMADD213SH        Mnemonic = 1013
+	MNEMONIC_VFMADD213SS        Mnemonic = 1014
+	MNEMONIC_VFMADD231PD        Mnemonic = 1015
+	MNEMONIC_VFMADD231PH        Mnemonic = 1016
+	MNEMONIC_VFMADD231PS        Mnemonic = 1017
+	MNEMONIC_VFMADD231SD        Mnemonic = 1018
+	MNEMONIC_VFMADD231SH        Mnemonic = 1019
+	MNEMONIC_VFMADD231SS        Mnemonic = 1020
+	MNEMONIC_VFMADD233PS        Mnemonic = 1021
+	MNEMONIC_VFMADDCPH          Mnemonic = 1022
+	MNEMONIC_VFMADDCSH          Mnemonic = 1023
+	MNEMONIC_VFMADDPD           Mnemonic = 1024
+	MNEMONIC_VFMADDPS           Mnemonic = 1025
+	MNEMONIC_VFMADDSD           Mnemonic = 1026
+	MNEMONIC_VFMADDSS           Mnemonic = 1027
+	MNEMONIC_VFMADDSUB132PD     Mnemonic = 1028
+	MNEMONIC_VFMADDSUB132PH     Mnemonic = 1029
+	MNEMONIC_VFMADDSUB132PS     Mnemonic = 1030
+	MNEMONIC_VFMADDSUB213PD     Mnemonic = 1031
+	MNEMONIC_VFMADDSUB213PH     Mnemonic = 1032
+	MNEMONIC_VFMADDSUB213PS     Mnemonic = 1033
+	MNEMONIC_VFMADDSUB231PD     Mnemonic = 1034
+	MNEMONIC_VFMADDSUB231PH     Mnemonic = 1035
+	MNEMONIC_VFMADDSUB231PS     Mnemonic = 1036
+	MNEMONIC_VFMADDSUBPD        Mnemonic = 1037
+	MNEMONIC_VFMADDSUBPS        Mnemonic = 1038
+	MNEMONIC_VFMSUB132PD        Mnemonic = 1039
+	MNEMONIC_VFMSUB132PH        Mnemonic = 1040
+	MNEMONIC_VFMSUB132PS        Mnemonic = 1041
+	MNEMONIC_VFMSUB132SD        Mnemonic = 1042
+	MNEMONIC_VFMSUB132SH        Mnemonic = 1043
+	MNEMONIC_VFMSUB132SS        Mnemonic = 1044
+	MNEMONIC_VFMSUB213PD        Mnemonic = 1045
+	MNEMONIC_VFMSUB213PH        Mnemonic = 1046
+	MNEMONIC_VFMSUB213PS        Mnemonic = 1047
+	MNEMONIC_VFMSUB213SD        Mnemonic = 1048
+	MNEMONIC_VFMSUB213SH        Mnemonic = 1049
+	MNEMONIC_VFMSUB213SS        Mnemonic = 1050
+	MNEMONIC_VFMSUB231PD        Mnemonic = 1051
+	MNEMONIC_VFMSUB231PH        Mnemonic = 1052
+	MNEMONIC_VFMSUB231PS        Mnemonic = 1053
+	MNEMONIC_VFMSUB231SD        Mnemonic = 1054
+	MNEMONIC_VFMSUB231SH        Mnemonic = 1055
+	MNEMONIC_VFMSUB231SS        Mnemonic = 1056
+	MNEMONIC_VFMSUBADD132PD     Mnemonic = 1057
+	MNEMONIC_VFMSUBADD132PH     Mnemonic = 1058
+	MNEMONIC_VFMSUBADD132PS     Mnemonic = 1059
+	MNEMONIC_VFMSUBADD213PD     Mnemonic = 1060
+	MNEMONIC_VFMSUBADD213PH     Mnemonic = 1061
+	MNEMONIC_VFMSUBADD213PS     Mnemonic = 1062
+	MNEMONIC_VFMSUBADD231PD     Mnemonic = 1063
+	MNEMONIC_VFMSUBADD231PH     Mnemonic = 1064
+	MNEMONIC_VFMSUBADD231PS     Mnemonic = 1065
+	MNEMONIC_VFMSUBADDPD        Mnemonic = 1066
+	MNEMONIC_VFMSUBADDPS        Mnemonic = 1067
+	MNEMONIC_VFMSUBPD           Mnemonic = 1068
+	MNEMONIC_VFMSUBPS           Mnemonic = 1069
+	MNEMONIC_VFMSUBSD           Mnemonic = 1070
+	MNEMONIC_VFMSUBSS           Mnemonic = 1071
+	MNEMONIC_VFMULCPH           Mnemonic = 1072
+	MNEMONIC_VFMULCSH           Mnemonic = 1073
+	MNEMONIC_VFNMADD132PD       Mnemonic = 1074
+	MNEMONIC_VFNMADD132PH       Mnemonic = 1075
+	MNEMONIC_VFNMADD132PS       Mnemonic = 1076
+	MNEMONIC_VFNMADD132SD       Mnemonic = 1077
+	MNEMONIC_VFNMADD132SH       Mnemonic = 1078
+	MNEMONIC_VFNMADD132SS       Mnemonic = 1079
+	MNEMONIC_VFNMADD213PD       Mnemonic = 1080
+	MNEMONIC_VFNMADD213PH       Mnemonic = 1081
+	MNEMONIC_VFNMADD213PS       Mnemonic = 1082
+	MNEMONIC_VFNMADD213SD       Mnemonic = 1083
+	MNEMONIC_VFNMADD213SH       Mnemonic = 1084
+	MNEMONIC_VFNMADD213SS       Mnemonic = 1085
+	MNEMONIC_VFNMADD231PD       Mnemonic = 1086
+	MNEMONIC_VFNMADD231PH       Mnemonic = 1087
+	MNEMONIC_VFNMADD231PS       Mnemonic = 1088
+	MNEMONIC_VFNMADD231SD       Mnemonic = 1089
+	MNEMONIC_VFNMADD231SH       Mnemonic = 1090
+	MNEMONIC_VFNMADD231SS       Mnemonic = 1091
+	MNEMONIC_VFNMADDPD          Mnemonic = 1092
+	MNEMONIC_VFNMADDPS          Mnemonic = 1093
+	MNEMONIC_VFNMADDSD          Mnemonic = 1094
+	MNEMONIC_VFNMADDSS          Mnemonic = 1095
+	MNEMONIC_VFNMSUB132PD       Mnemonic = 1096
+	MNEMONIC_VFNMSUB132PH       Mnemonic = 1097
+	MNEMONIC_VFNMSUB132PS       Mnemonic = 1098
+	MNEMONIC_VFNMSUB132SD       Mnemonic = 1099
+	MNEMONIC_VFNMSUB132SH       Mnemonic = 1100
+	MNEMONIC_VFNMSUB132SS       Mnemonic = 1101
+	MNEMONIC_VFNMSUB213PD       Mnemonic = 1102
+	MNEMONIC_VFNMSUB213PH       Mnemonic = 1103
+	MNEMONIC_VFNMSUB213PS       Mnemonic = 1104
+	MNEMONIC_VFNMSUB213SD       Mnemonic = 1105
+	MNEMONIC_VFNMSUB213SH       Mnemonic = 1106
+	MNEMONIC_VFNMSUB213SS       Mnemonic = 1107
+	MNEMONIC_VFNMSUB231PD       Mnemonic = 1108
+	MNEMONIC_VFNMSUB231PH       Mnemonic = 1109
+	MNEMONIC_VFNMSUB231PS       Mnemonic = 1110
+	MNEMONIC_VFNMSUB231SD       Mnemonic = 1111
+	MNEMONIC_VFNMSUB231SH       Mnemonic = 1112
+	MNEMONIC_VFNMSUB231SS       Mnemonic = 1113
+	MNEMONIC_VFNMSUBPD          Mnemonic = 1114
+	MNEMONIC_VFNMSUBPS          Mnemonic = 1115
+	MNEMONIC_VFNMSUBSD          Mnemonic = 1116
+	MNEMONIC_VFNMSUBSS          Mnemonic = 1117
+	MNEMONIC_VFPCLASSPD         Mnemonic = 1118
+	MNEMONIC_VFPCLASSPH         Mnemonic = 1119
+	MNEMONIC_VFPCLASSPS         Mnemonic = 1120
+	MNEMONIC_VFPCLASSSD         Mnemonic = 1121
+	MNEMONIC_VFPCLASSSH         Mnemonic = 1122
+	MNEMONIC_VFPCLASSSS         Mnemonic = 1123
+	MNEMONIC_VFRCZPD            Mnemonic = 1124
+	MNEMONIC_VFRCZPS            Mnemonic = 1125
+	MNEMONIC_VFRCZSD            Mnemonic = 1126
+	MNEMONIC_VFRCZSS            Mnemonic = 1127
+	MNEMONIC_VGATHERDPD         Mnemonic = 1128
+	MNEMONIC_VGATHERDPS         Mnemonic = 1129
+	MNEMONIC_VGATHERPF0DPD      Mnemonic = 1130
+	MNEMONIC_VGATHERPF0DPS      Mnemonic = 1131
+	MNEMONIC_VGATHERPF0HINTDPD  Mnemonic = 1132
+	MNEMONIC_VGATHERPF0HINTDPS  Mnemonic = 1133
+	MNEMONIC_VGATHERPF0QPD      Mnemonic = 1134
+	MNEMONIC_VGATHERPF0QPS      Mnemonic = 1135
+	MNEMONIC_VGATHERPF1DPD      Mnemonic = 1136
+	MNEMONIC_VGATHERPF1DPS      Mnemonic = 1137
+	MNEMONIC_VGATHERPF1QPD      Mnemonic = 1138
+	MNEMONIC_VGATHERPF1QPS      Mnemonic = 1139
+	MNEMONIC_VGATHERQPD         Mnemonic = 1140
+	MNEMONIC_VGATHERQPS         Mnemonic = 1141
+	MNEMONIC_VGETEXPPD          Mnemonic = 1142
+	MNEMONIC_VGETEXPPH          Mnemonic = 1143
+	MNEMONIC_VGETEXPPS          Mnemonic = 1144
+	MNEMONIC_VGETEXPSD          Mnemonic = 1145
+	MNEMONIC_VGETEXPSH          Mnemonic = 1146
+	MNEMONIC_VGETEXPSS          Mnemonic = 1147
+	MNEMONIC_VGETMANTPD         Mnemonic = 1148
+	MNEMONIC_VGETMANTPH         Mnemonic = 1149
+	MNEMONIC_VGETMANTPS         Mnemonic = 1150
+	MNEMONIC_VGETMANTSD         Mnemonic = 1151
+	MNEMONIC_VGETMANTSH         Mnemonic = 1152
+	MNEMONIC_VGETMANTSS         Mnemonic = 1153
+	MNEMONIC_VGF2P8AFFINEINVQB  Mnemonic = 1154
+	MNEMONIC_VGF2P8AFFINEQB     Mnemonic = 1155
+	MNEMONIC_VGF2P8MULB         Mnemonic = 1156
+	MNEMONIC_VGMAXABSPS         Mnemonic = 1157
+	MNEMONIC_VGMAXPD            Mnemonic = 1158
+	MNEMONIC_VGMAXPS            Mnemonic = 1159
+	MNEMONIC_VGMINPD            Mnemonic = 1160
+	MNEMONIC_VGMINPS            Mnemonic = 1161
+	MNEMONIC_VHADDPD            Mnemonic = 1162
+	MNEMONIC_VHADDPS            Mnemonic = 1163
+	MNEMONIC_VHSUBPD            Mnemonic = 1164
+	MNEMONIC_VHSUBPS            Mnemonic = 1165
+	MNEMONIC_VINSERTF128        Mnemonic = 1166
+	MNEMONIC_VINSERTF32X4       Mnemonic = 1167
+	MNEMONIC_VINSERTF32X8       Mnemonic = 1168
+	MNEMONIC_VINSERTF64X2       Mnemonic = 1169
+	MNEMONIC_VINSERTF64X4       Mnemonic = 1170
+	MNEMONIC_VINSERTI128        Mnemonic = 1171
+	MNEMONIC_VINSERTI32X4       Mnemonic = 1172
+	MNEMONIC_VINSERTI32X8       Mnemonic = 1173
+	MNEMONIC_VINSERTI64X2       Mnemonic = 1174
+	MNEMONIC_VINSERTI64X4       Mnemonic = 1175
+	MNEMONIC_VINSERTPS          Mnemonic = 1176
+	MNEMONIC_VLDDQU             Mnemonic = 1177
+	MNEMONIC_VLDMXCSR           Mnemonic = 1178
+	MNEMONIC_VLOADUNPACKHD      Mnemonic = 1179
+	MNEMONIC_VLOADUNPACKHPD     Mnemonic = 1180
+	MNEMONIC_VLOADUNPACKHPS     Mnemonic = 1181
+	MNEMONIC_VLOADUNPACKHQ      Mnemonic = 1182
+	MNEMONIC_VLOADUNPACKLD      Mnemonic = 1183
+	MNEMONIC_VLOADUNPACKLPD     Mnemonic = 1184
+	MNEMONIC_VLOADUNPACKLPS     Mnemonic = 1185
+	MNEMONIC_VLOADUNPACKLQ      Mnemonic = 1186
+	MNEMONIC_VLOG2PS            Mnemonic = 1187
+	MNEMONIC_VMASKMOVDQU        Mnemonic = 1188
+	MNEMONIC_VMASKMOVPD         Mnemonic = 1189
+	MNEMONIC_VMASKMOVPS         Mnemonic = 1190
+	MNEMONIC_VMAXPD             Mnemonic = 1191
+	MNEMONIC_VMAXPH             Mnemonic = 1192
+	MNEMONIC_VMAXPS             Mnemonic = 1193
+	MNEMONIC_VMAXSD             Mnemonic = 1194
+	MNEMONIC_VMAXSH             Mnemonic = 1195
+	MNEMONIC_VMAXSS             Mnemonic = 1196
+	MNEMONIC_VMCALL             Mnemonic = 1197
+	MNEMONIC_VMCLEAR            Mnemonic = 1198
+	MNEMONIC_VMFUNC             Mnemonic = 1199
+	MNEMONIC_VMINPD             Mnemonic = 1200
+	MNEMONIC_VMINPH             Mnemonic = 1201
+	MNEMONIC_VMINPS             Mnemonic = 1202
+	MNEMONIC_VMINSD             Mnemonic = 1203
+	MNEMONIC_VMINSH             Mnemonic = 1204
+	MNEMONIC_VMINSS             Mnemonic = 1205
+	MNEMONIC_VMLAUNCH           Mnemonic = 1206
+	MNEMONIC_VMLOAD             Mnemonic = 1207
+	MNEMONIC_VMMCALL            Mnemonic = 1208
+	MNEMONIC_VMOVAPD            Mnemonic = 1209
+	MNEMONIC_VMOVAPS            Mnemonic = 1210
+	MNEMONIC_VMOVD              Mnemonic = 1211
+	MNEMONIC_VMOVDDUP           Mnemonic = 1212
+	MNEMONIC_VMOVDQA            Mnemonic = 1213
+	MNEMONIC_VMOVDQA32          Mnemonic = 1214
+	MNEMONIC_VMOVDQA64          Mnemonic = 1215
+	MNEMONIC_VMOVDQU            Mnemonic = 1216
+	MNEMONIC_VMOVDQU16          Mnemonic = 1217
+	MNEMONIC_VMOVDQU32          Mnemonic = 1218
+	MNEMONIC_VMOVDQU64          Mnemonic = 1219
+	MNEMONIC_VMOVDQU8           Mnemonic = 1220
+	MNEMONIC_VMOVHLPS           Mnemonic = 1221
+	MNEMONIC_VMOVHPD            Mnemonic = 1222
+	MNEMONIC_VMOVHPS            Mnemonic = 1223
+	MNEMONIC_VMOVLHPS           Mnemonic = 1224
+	MNEMONIC_VMOVLPD            Mnemonic = 1225
+	MNEMONIC_VMOVLPS            Mnemonic = 1226
+	MNEMONIC_VMOVMSKPD          Mnemonic = 1227
+	MNEMONIC_VMOVMSKPS          Mnemonic = 1228
+	MNEMONIC_VMOVNRAPD          Mnemonic = 1229
+	MNEMONIC_VMOVNRAPS          Mnemonic = 1230
+	MNEMONIC_VMOVNRNGOAPD       Mnemonic = 1231
+	MNEMONIC_VMOVNRNGOAPS       Mnemonic = 1232
+	MNEMONIC_VMOVNTDQ           Mnemonic = 1233
+	MNEMONIC_VMOVNTDQA          Mnemonic = 1234
+	MNEMONIC_VMOVNTPD           Mnemonic = 1235
+	MNEMONIC_VMOVNTPS           Mnemonic = 1236
+	MNEMONIC_VMOVQ              Mnemonic = 1237
+	MNEMONIC_VMOVSD             Mnemonic = 1238
+	MNEMONIC_VMOVSH             Mnemonic = 1239
+	MNEMONIC_VMOVSHDUP          Mnemonic = 1240
+	MNEMONIC_VMOVSLDUP          Mnemonic = 1241
+	MNEMONIC_VMOVSS             Mnemonic = 1242
+	MNEMONIC_VMOVUPD            Mnemonic = 1243
+	MNEMONIC_VMOVUPS            Mnemonic = 1244
+	MNEMONIC_VMOVW              Mnemonic = 1245
+	MNEMONIC_VMPSADBW           Mnemonic = 1246
+	MNEMONIC_VMPTRLD            Mnemonic = 1247
+	MNEMONIC_VMPTRST            Mnemonic = 1248
+	MNEMONIC_VMREAD             Mnemonic = 1249
+	MNEMONIC_VMRESUME           Mnemonic = 1250
+	MNEMONIC_VMRUN              Mnemonic = 1251
+	MNEMONIC_VMSAVE             Mnemonic = 1252
+	MNEMONIC_VMULPD             Mnemonic = 1253
+	MNEMONIC_VMULPH             Mnemonic = 1254
+	MNEMONIC_VMULPS             Mnemonic = 1255
+	MNEMONIC_VMULSD             Mnemonic = 1256
+	MNEMONIC_VMULSH             Mnemonic = 1257
+	MNEMONIC_VMULSS             Mnemonic = 1258
+	MNEMONIC_VMWRITE            Mnemonic = 1259
+	MNEMONIC_VMXOFF             Mnemonic = 1260
+	MNEMONIC_VMXON              Mnemonic = 1261
+	MNEMONIC_VORPD              Mnemonic = 1262
+	MNEMONIC_VORPS              Mnemonic = 1263
+	MNEMONIC_VP2INTERSECTD      Mnemonic = 1264
+	MNEMONIC_VP2INTERSECTQ      Mnemonic = 1265
+	MNEMONIC_VP4DPWSSD          Mnemonic = 1266
+	MNEMONIC_VP4DPWSSDS         Mnemonic = 1267
+	MNEMONIC_VPABSB             Mnemonic = 1268
+	MNEMONIC_VPABSD             Mnemonic = 1269
+	MNEMONIC_VPABSQ             Mnemonic = 1270
+	MNEMONIC_VPABSW             Mnemonic = 1271
+	MNEMONIC_VPACKSSDW          Mnemonic = 1272
+	MNEMONIC_VPACKSSWB          Mnemonic = 1273
+	MNEMONIC_VPACKSTOREHD       Mnemonic = 1274
+	MNEMONIC_VPACKSTOREHPD      Mnemonic = 1275
+	MNEMONIC_VPACKSTOREHPS      Mnemonic = 1276
+	MNEMONIC_VPACKSTOREHQ       Mnemonic = 1277
+	MNEMONIC_VPACKSTORELD       Mnemonic = 1278
+	MNEMONIC_VPACKSTORELPD      Mnemonic = 1279
+	MNEMONIC_VPACKSTORELPS      Mnemonic = 1280
+	MNEMONIC_VPACKSTORELQ       Mnemonic = 1281
+	MNEMONIC_VPACKUSDW          Mnemonic = 1282
+	MNEMONIC_VPACKUSWB          Mnemonic = 1283
+	MNEMONIC_VPADCD             Mnemonic = 1284
+	MNEMONIC_VPADDB             Mnemonic = 1285
+	MNEMONIC_VPADDD             Mnemonic = 1286
+	MNEMONIC_VPADDQ             Mnemonic = 1287
+	MNEMONIC_VPADDSB            Mnemonic = 1288
+	MNEMONIC_VPADDSETCD         Mnemonic = 1289
+	MNEMONIC_VPADDSETSD         Mnemonic = 1290
+	MNEMONIC_VPADDSW            Mnemonic = 1291
+	MNEMONIC_VPADDUSB           Mnemonic = 1292
+	MNEMONIC_VPADDUSW           Mnemonic = 1293
+	MNEMONIC_VPADDW             Mnemonic = 1294
+	MNEMONIC_VPALIGNR           Mnemonic = 1295
+	MNEMONIC_VPAND              Mnemonic = 1296
+	MNEMONIC_VPANDD             Mnemonic = 1297
+	MNEMONIC_VPANDN             Mnemonic = 1298
+	MNEMONIC_VPANDND            Mnemonic = 1299
+	MNEMONIC_VPANDNQ            Mnemonic = 1300
+	MNEMONIC_VPANDQ             Mnemonic = 1301
+	MNEMONIC_VPAVGB             Mnemonic = 1302
+	MNEMONIC_VPAVGW             Mnemonic = 1303
+	MNEMONIC_VPBLENDD           Mnemonic = 1304
+	MNEMONIC_VPBLENDMB          Mnemonic = 1305
+	MNEMONIC_VPBLENDMD          Mnemonic = 1306
+	MNEMONIC_VPBLENDMQ          Mnemonic = 1307
+	MNEMONIC_VPBLENDMW          Mnemonic = 1308
+	MNEMONIC_VPBLENDVB          Mnemonic = 1309
+	MNEMONIC_VPBLENDW           Mnemonic = 1310
+	MNEMONIC_VPBROADCASTB       Mnemonic = 1311
+	MNEMONIC_VPBROADCASTD       Mnemonic = 1312
+	MNEMONIC_VPBROADCASTMB2Q    Mnemonic = 1313
+	MNEMONIC_VPBROADCASTMW2D    Mnemonic = 1314
+	MNEMONIC_VPBROADCASTQ       Mnemonic = 1315
+	MNEMONIC_VPBROADCASTW       Mnemonic = 1316
+	MNEMONIC_VPCLMULQDQ         Mnemonic = 1317
+	MNEMONIC_VPCMOV             Mnemonic = 1318
+	MNEMONIC_VPCMPB             Mnemonic = 1319
+	MNEMONIC_VPCMPD             Mnemonic = 1320
+	MNEMONIC_VPCMPEQB           Mnemonic = 1321
+	MNEMONIC_VPCMPEQD           Mnemonic = 1322
+	MNEMONIC_VPCMPEQQ           Mnemonic = 1323
+	MNEMONIC_VPCMPEQW           Mnemonic = 1324
+	MNEMONIC_VPCMPESTRI         Mnemonic = 1325
+	MNEMONIC_VPCMPESTRM         Mnemonic = 1326
+	MNEMONIC_VPCMPGTB           Mnemonic = 1327
+	MNEMONIC_VPCMPGTD           Mnemonic = 1328
+	MNEMONIC_VPCMPGTQ           Mnemonic = 1329
+	MNEMONIC_VPCMPGTW           Mnemonic = 1330
+	MNEMONIC_VPCMPISTRI         Mnemonic = 1331
+	MNEMONIC_VPCMPISTRM         Mnemonic = 1332
+	MNEMONIC_VPCMPLTD           Mnemonic = 1333
+	MNEMONIC_VPCMPQ             Mnemonic = 1334
+	MNEMONIC_VPCMPUB            Mnemonic = 1335
+	MNEMONIC_VPCMPUD            Mnemonic = 1336
+	MNEMONIC_VPCMPUQ            Mnemonic = 1337
+	MNEMONIC_VPCMPUW            Mnemonic = 1338
+	MNEMONIC_VPCMPW             Mnemonic = 1339
+	MNEMONIC_VPCOMB             Mnemonic = 1340
+	MNEMONIC_VPCOMD             Mnemonic = 1341
+	MNEMONIC_VPCOMPRESSB        Mnemonic = 1342
+	MNEMONIC_VPCOMPRESSD        Mnemonic = 1343
+	MNEMONIC_VPCOMPRESSQ        Mnemonic = 1344
+	MNEMONIC_VPCOMPRESSW        Mnemonic = 1345
+	MNEMONIC_VPCOMQ             Mnemonic = 1346
+	MNEMONIC_VPCOMUB            Mnemonic = 1347
+	MNEMONIC_VPCOMUD            Mnemonic = 1348
+	MNEMONIC_VPCOMUQ            Mnemonic = 1349
+	MNEMONIC_VPCOMUW            Mnemonic = 1350
+	MNEMONIC_VPCOMW             Mnemonic = 1351
+	MNEMONIC_VPCONFLICTD        Mnemonic = 1352
+	MNEMONIC_VPCONFLICTQ        Mnemonic = 1353
+	MNEMONIC_VPDPBSSD           Mnemonic = 1354
+	MNEMONIC_VPDPBSSDS          Mnemonic = 1355
+	MNEMONIC_VPDPBSUD           Mnemonic = 1356
+	MNEMONIC_VPDPBSUDS          Mnemonic = 1357
+	MNEMONIC_VPDPBUSD           Mnemonic = 1358
+	MNEMONIC_VPDPBUSDS          Mnemonic = 1359
+	MNEMONIC_VPDPBUUD           Mnemonic = 1360
+	MNEMONIC_VPDPBUUDS          Mnemonic = 1361
+	MNEMONIC_VPDPWSSD           Mnemonic = 1362
+	MNEMONIC_VPDPWSSDS          Mnemonic = 1363
+	MNEMONIC_VPDPWSUD           Mnemonic = 1364
+	MNEMONIC_VPDPWSUDS          Mnemonic = 1365
+	MNEMONIC_VPDPWUSD           Mnemonic = 1366
+	MNEMONIC_VPDPWUSDS          Mnemonic = 1367
+	MNEMONIC_VPDPWUUD           Mnemonic = 1368
+	MNEMONIC_VPDPWUUDS          Mnemonic = 1369
+	MNEMONIC_VPERM2F128         Mnemonic = 1370
+	MNEMONIC_VPERM2I128         Mnemonic = 1371
+	MNEMONIC_VPERMB             Mnemonic = 1372
+	MNEMONIC_VPERMD             Mnemonic = 1373
+	MNEMONIC_VPERMF32X4         Mnemonic = 1374
+	MNEMONIC_VPERMI2B           Mnemonic = 1375
+	MNEMONIC_VPERMI2D           Mnemonic = 1376
+	MNEMONIC_VPERMI2PD          Mnemonic = 1377
+	MNEMONIC_VPERMI2PS          Mnemonic = 1378
+	MNEMONIC_VPERMI2Q           Mnemonic = 1379
+	MNEMONIC_VPERMI2W           Mnemonic = 1380
+	MNEMONIC_VPERMIL2PD         Mnemonic = 1381
+	MNEMONIC_VPERMIL2PS         Mnemonic = 1382
+	MNEMONIC_VPERMILPD          Mnemonic = 1383
+	MNEMONIC_VPERMILPS          Mnemonic = 1384
+	MNEMONIC_VPERMPD            Mnemonic = 1385
+	MNEMONIC_VPERMPS            Mnemonic = 1386
+	MNEMONIC_VPERMQ             Mnemonic = 1387
+	MNEMONIC_VPERMT2B           Mnemonic = 1388
+	MNEMONIC_VPERMT2D           Mnemonic = 1389
+	MNEMONIC_VPERMT2PD          Mnemonic = 1390
+	MNEMONIC_VPERMT2PS          Mnemonic = 1391
+	MNEMONIC_VPERMT2Q           Mnemonic = 1392
+	MNEMONIC_VPERMT2W           Mnemonic = 1393
+	MNEMONIC_VPERMW             Mnemonic = 1394
+	MNEMONIC_VPEXPANDB          Mnemonic = 1395
+	MNEMONIC_VPEXPANDD          Mnemonic = 1396
+	MNEMONIC_VPEXPANDQ          Mnemonic = 1397
+	MNEMONIC_VPEXPANDW          Mnemonic = 1398
+	MNEMONIC_VPEXTRB            Mnemonic = 1399
+	MNEMONIC_VPEXTRD            Mnemonic = 1400
+	MNEMONIC_VPEXTRQ            Mnemonic = 1401
+	MNEMONIC_VPEXTRW            Mnemonic = 1402
+	MNEMONIC_VPGATHERDD         Mnemonic = 1403
+	MNEMONIC_VPGATHERDQ         Mnemonic = 1404
+	MNEMONIC_VPGATHERQD         Mnemonic = 1405
+	MNEMONIC_VPGATHERQQ         Mnemonic = 1406
+	MNEMONIC_VPHADDBD           Mnemonic = 1407
+	MNEMONIC_VPHADDBQ           Mnemonic = 1408
+	MNEMONIC_VPHADDBW           Mnemonic = 1409
+	MNEMONIC_VPHADDD            Mnemonic = 1410
+	MNEMONIC_VPHADDDQ           Mnemonic = 1411
+	MNEMONIC_VPHADDSW           Mnemonic = 1412
+	MNEMONIC_VPHADDUBD          Mnemonic = 1413
+	MNEMONIC_VPHADDUBQ          Mnemonic = 1414
+	MNEMONIC_VPHADDUBW          Mnemonic = 1415
+	MNEMONIC_VPHADDUDQ          Mnemonic = 1416
+	MNEMONIC_VPHADDUWD          Mnemonic = 1417
+	MNEMONIC_VPHADDUWQ          Mnemonic = 1418
+	MNEMONIC_VPHADDW            Mnemonic = 1419
+	MNEMONIC_VPHADDWD           Mnemonic = 1420
+	MNEMONIC_VPHADDWQ           Mnemonic = 1421
+	MNEMONIC_VPHMINPOSUW        Mnemonic = 1422
+	MNEMONIC_VPHSUBBW           Mnemonic = 1423
+	MNEMONIC_VPHSUBD            Mnemonic = 1424
+	MNEMONIC_VPHSUBDQ           Mnemonic = 1425
+	MNEMONIC_VPHSUBSW           Mnemonic = 1426
+	MNEMONIC_VPHSUBW            Mnemonic = 1427
+	MNEMONIC_VPHSUBWD           Mnemonic = 1428
+	MNEMONIC_VPINSRB            Mnemonic = 1429
+	MNEMONIC_VPINSRD            Mnemonic = 1430
+	MNEMONIC_VPINSRQ            Mnemonic = 1431
+	MNEMONIC_VPINSRW            Mnemonic = 1432
+	MNEMONIC_VPLZCNTD           Mnemonic = 1433
+	MNEMONIC_VPLZCNTQ           Mnemonic = 1434
+	MNEMONIC_VPMACSDD           Mnemonic = 1435
+	MNEMONIC_VPMACSDQH          Mnemonic = 1436
+	MNEMONIC_VPMACSDQL          Mnemonic = 1437
+	MNEMONIC_VPMACSSDD          Mnemonic = 1438
+	MNEMONIC_VPMACSSDQH         Mnemonic = 1439
+	MNEMONIC_VPMACSSDQL         Mnemonic = 1440
+	MNEMONIC_VPMACSSWD          Mnemonic = 1441
+	MNEMONIC_VPMACSSWW          Mnemonic = 1442
+	MNEMONIC_VPMACSWD           Mnemonic = 1443
+	MNEMONIC_VPMACSWW           Mnemonic = 1444
+	MNEMONIC_VPMADCSSWD         Mnemonic = 1445
+	MNEMONIC_VPMADCSWD          Mnemonic = 1446
+	MNEMONIC_VPMADD231D         Mnemonic = 1447
+	MNEMONIC_VPMADD233D         Mnemonic = 1448
+	MNEMONIC_VPMADD52HUQ        Mnemonic = 1449
+	MNEMONIC_VPMADD52LUQ        Mnemonic = 1450
+	MNEMONIC_VPMADDUBSW         Mnemonic = 1451
+	MNEMONIC_VPMADDWD           Mnemonic = 1452
+	MNEMONIC_VPMASKMOVD         Mnemonic = 1453
+	MNEMONIC_VPMASKMOVQ         Mnemonic = 1454
+	MNEMONIC_VPMAXSB            Mnemonic = 1455
+	MNEMONIC_VPMAXSD            Mnemonic = 1456
+	MNEMONIC_VPMAXSQ            Mnemonic = 1457
+	MNEMONIC_VPMAXSW            Mnemonic = 1458
+	MNEMONIC_VPMAXUB            Mnemonic = 1459
+	MNEMONIC_VPMAXUD            Mnemonic = 1460
+	MNEMONIC_VPMAXUQ            Mnemonic = 1461
+	MNEMONIC_VPMAXUW            Mnemonic = 1462
+	MNEMONIC_VPMINSB            Mnemonic = 1463
+	MNEMONIC_VPMINSD            Mnemonic = 1464
+	MNEMONIC_VPMINSQ            Mnemonic = 1465
+	MNEMONIC_VPMINSW            Mnemonic = 1466
+	MNEMONIC_VPMINUB            Mnemonic = 1467
+	MNEMONIC_VPMINUD            Mnemonic = 1468
+	MNEMONIC_VPMINUQ            Mnemonic = 1469
+	MNEMONIC_VPMINUW            Mnemonic = 1470
+	MNEMONIC_VPMOVB2M           Mnemonic = 1471
+	MNEMONIC_VPMOVD2M           Mnemonic = 1472
+	MNEMONIC_VPMOVDB            Mnemonic = 1473
+	MNEMONIC_VPMOVDW            Mnemonic = 1474
+	MNEMONIC_VPMOVM2B           Mnemonic = 1475
+	MNEMONIC_VPMOVM2D           Mnemonic = 1476
+	MNEMONIC_VPMOVM2Q           Mnemonic = 1477
+	MNEMONIC_VPMOVM2W           Mnemonic = 1478
+	MNEMONIC_VPMOVMSKB          Mnemonic = 1479
+	MNEMONIC_VPMOVQ2M           Mnemonic = 1480
+	MNEMONIC_VPMOVQB            Mnemonic = 1481
+	MNEMONIC_VPMOVQD            Mnemonic = 1482
+	MNEMONIC_VPMOVQW            Mnemonic = 1483
+	MNEMONIC_VPMOVSDB           Mnemonic = 1484
+	MNEMONIC_VPMOVSDW           Mnemonic = 1485
+	MNEMONIC_VPMOVSQB           Mnemonic = 1486
+	MNEMONIC_VPMOVSQD           Mnemonic = 1487
+	MNEMONIC_VPMOVSQW           Mnemonic = 1488
+	MNEMONIC_VPMOVSWB           Mnemonic = 1489
+	MNEMONIC_VPMOVSXBD          Mnemonic = 1490
+	MNEMONIC_VPMOVSXBQ          Mnemonic = 1491
+	MNEMONIC_VPMOVSXBW          Mnemonic = 1492
+	MNEMONIC_VPMOVSXDQ          Mnemonic = 1493
+	MNEMONIC_VPMOVSXWD          Mnemonic = 1494
+	MNEMONIC_VPMOVSXWQ          Mnemonic = 1495
+	MNEMONIC_VPMOVUSDB          Mnemonic = 1496
+	MNEMONIC_VPMOVUSDW          Mnemonic = 1497
+	MNEMONIC_VPMOVUSQB          Mnemonic = 1498
+	MNEMONIC_VPMOVUSQD          Mnemonic = 1499
+	MNEMONIC_VPMOVUSQW          Mnemonic = 1500
+	MNEMONIC_VPMOVUSWB          Mnemonic = 1501
+	MNEMONIC_VPMOVW2M           Mnemonic = 1502
+	MNEMONIC_VPMOVWB            Mnemonic = 1503
+	MNEMONIC_VPMOVZXBD          Mnemonic = 1504
+	MNEMONIC_VPMOVZXBQ          Mnemonic = 1505
+	MNEMONIC_VPMOVZXBW          Mnemonic = 1506
+	MNEMONIC_VPMOVZXDQ          Mnemonic = 1507
+	MNEMONIC_VPMOVZXWD          Mnemonic = 1508
+	MNEMONIC_VPMOVZXWQ          Mnemonic = 1509
+	MNEMONIC_VPMULDQ            Mnemonic = 1510
+	MNEMONIC_VPMULHD            Mnemonic = 1511
+	MNEMONIC_VPMULHRSW          Mnemonic = 1512
+	MNEMONIC_VPMULHUD           Mnemonic = 1513
+	MNEMONIC_VPMULHUW           Mnemonic = 1514
+	MNEMONIC_VPMULHW            Mnemonic = 1515
+	MNEMONIC_VPMULLD            Mnemonic = 1516
+	MNEMONIC_VPMULLQ            Mnemonic = 1517
+	MNEMONIC_VPMULLW            Mnemonic = 1518
+	MNEMONIC_VPMULTISHIFTQB     Mnemonic = 1519
+	MNEMONIC_VPMULUDQ           Mnemonic = 1520
+	MNEMONIC_VPOPCNTB           Mnemonic = 1521
+	MNEMONIC_VPOPCNTD           Mnemonic = 1522
+	MNEMONIC_VPOPCNTQ           Mnemonic = 1523
+	MNEMONIC_VPOPCNTW           Mnemonic = 1524
+	MNEMONIC_VPOR               Mnemonic = 1525
+	MNEMONIC_VPORD              Mnemonic = 1526
+	MNEMONIC_VPORQ              Mnemonic = 1527
+	MNEMONIC_VPPERM             Mnemonic = 1528
+	MNEMONIC_VPREFETCH0         Mnemonic = 1529
+	MNEMONIC_VPREFETCH1         Mnemonic = 1530
+	MNEMONIC_VPREFETCH2         Mnemonic = 1531
+	MNEMONIC_VPREFETCHE0        Mnemonic = 1532
+	MNEMONIC_VPREFETCHE1        Mnemonic = 1533
+	MNEMONIC_VPREFETCHE2        Mnemonic = 1534
+	MNEMONIC_VPREFETCHENTA      Mnemonic = 1535
+	MNEMONIC_VPREFETCHNTA       Mnemonic = 1536
+	MNEMONIC_VPROLD             Mnemonic = 1537
+	MNEMONIC_VPROLQ             Mnemonic = 1538
+	MNEMONIC_VPROLVD            Mnemonic = 1539
+	MNEMONIC_VPROLVQ            Mnemonic = 1540
+	MNEMONIC_VPRORD             Mnemonic = 1541
+	MNEMONIC_VPRORQ             Mnemonic = 1542
+	MNEMONIC_VPRORVD            Mnemonic = 1543
+	MNEMONIC_VPRORVQ            Mnemonic = 1544
+	MNEMONIC_VPROTB             Mnemonic = 1545
+	MNEMONIC_VPROTD             Mnemonic = 1546
+	MNEMONIC_VPROTQ             Mnemonic = 1547
+	MNEMONIC_VPROTW             Mnemonic = 1548
+	MNEMONIC_VPSADBW            Mnemonic = 1549
+	MNEMONIC_VPSBBD             Mnemonic = 1550
+	MNEMONIC_VPSBBRD            Mnemonic = 1551
+	MNEMONIC_VPSCATTERDD        Mnemonic = 1552
+	MNEMONIC_VPSCATTERDQ        Mnemonic = 1553
+	MNEMONIC_VPSCATTERQD        Mnemonic = 1554
+	MNEMONIC_VPSCATTERQQ        Mnemonic = 1555
+	MNEMONIC_VPSHAB             Mnemonic = 1556
+	MNEMONIC_VPSHAD             Mnemonic = 1557
+	MNEMONIC_VPSHAQ             Mnemonic = 1558
+	MNEMONIC_VPSHAW             Mnemonic = 1559
+	MNEMONIC_VPSHLB             Mnemonic = 1560
+	MNEMONIC_VPSHLD             Mnemonic = 1561
+	MNEMONIC_VPSHLDD            Mnemonic = 1562
+	MNEMONIC_VPSHLDQ            Mnemonic = 1563
+	MNEMONIC_VPSHLDVD           Mnemonic = 1564
+	MNEMONIC_VPSHLDVQ           Mnemonic = 1565
+	MNEMONIC_VPSHLDVW           Mnemonic = 1566
+	MNEMONIC_VPSHLDW            Mnemonic = 1567
+	MNEMONIC_VPSHLQ             Mnemonic = 1568
+	MNEMONIC_VPSHLW             Mnemonic = 1569
+	MNEMONIC_VPSHRDD            Mnemonic = 1570
+	MNEMONIC_VPSHRDQ            Mnemonic = 1571
+	MNEMONIC_VPSHRDVD           Mnemonic = 1572
+	MNEMONIC_VPSHRDVQ           Mnemonic = 1573
+	MNEMONIC_VPSHRDVW           Mnemonic = 1574
+	MNEMONIC_VPSHRDW            Mnemonic = 1575
+	MNEMONIC_VPSHUFB            Mnemonic = 1576
+	MNEMONIC_VPSHUFBITQMB       Mnemonic = 1577
+	MNEMONIC_VPSHUFD            Mnemonic = 1578
+	MNEMONIC_VPSHUFHW           Mnemonic = 1579
+	MNEMONIC_VPSHUFLW           Mnemonic = 1580
+	MNEMONIC_VPSIGNB            Mnemonic = 1581
+	MNEMONIC_VPSIGND            Mnemonic = 1582
+	MNEMONIC_VPSIGNW            Mnemonic = 1583
+	MNEMONIC_VPSLLD             Mnemonic = 1584
+	MNEMONIC_VPSLLDQ            Mnemonic = 1585
+	MNEMONIC_VPSLLQ             Mnemonic = 1586
+	MNEMONIC_VPSLLVD            Mnemonic = 1587
+	MNEMONIC_VPSLLVQ            Mnemonic = 1588
+	MNEMONIC_VPSLLVW            Mnemonic = 1589
+	MNEMONIC_VPSLLW             Mnemonic = 1590
+	MNEMONIC_VPSRAD             Mnemonic = 1591
+	MNEMONIC_VPSRAQ             Mnemonic = 1592
+	MNEMONIC_VPSRAVD            Mnemonic = 1593
+	MNEMONIC_VPSRAVQ            Mnemonic = 1594
+	MNEMONIC_VPSRAVW            Mnemonic = 1595
+	MNEMONIC_VPSRAW             Mnemonic = 1596
+	MNEMONIC_VPSRLD             Mnemonic = 1597
+	MNEMONIC_VPSRLDQ            Mnemonic = 1598
+	MNEMONIC_VPSRLQ             Mnemonic = 1599
+	MNEMONIC_VPSRLVD            Mnemonic = 1600
+	MNEMONIC_VPSRLVQ            Mnemonic = 1601
+	MNEMONIC_VPSRLVW            Mnemonic = 1602
+	MNEMONIC_VPSRLW             Mnemonic = 1603
+	MNEMONIC_VPSUBB             Mnemonic = 1604
+	MNEMONIC_VPSUBD             Mnemonic = 1605
+	MNEMONIC_VPSUBQ             Mnemonic = 1606
+	MNEMONIC_VPSUBRD            Mnemonic = 1607
+	MNEMONIC_VPSUBRSETBD        Mnemonic = 1608
+	MNEMONIC_VPSUBSB            Mnemonic = 1609
+	MNEMONIC_VPSUBSETBD         Mnemonic = 1610
+	MNEMONIC_VPSUBSW            Mnemonic = 1611
+	MNEMONIC_VPSUBUSB           Mnemonic = 1612
+	MNEMONIC_VPSUBUSW           Mnemonic = 1613
+	MNEMONIC_VPSUBW             Mnemonic = 1614
+	MNEMONIC_VPTERNLOGD         Mnemonic = 1615
+	MNEMONIC_VPTERNLOGQ         Mnemonic = 1616
+	MNEMONIC_VPTEST             Mnemonic = 1617
+	MNEMONIC_VPTESTMB           Mnemonic = 1618
+	MNEMONIC_VPTESTMD           Mnemonic = 1619
+	MNEMONIC_VPTESTMQ           Mnemonic = 1620
+	MNEMONIC_VPTESTMW           Mnemonic = 1621
+	MNEMONIC_VPTESTNMB          Mnemonic = 1622
+	MNEMONIC_VPTESTNMD          Mnemonic = 1623
+	MNEMONIC_VPTESTNMQ          Mnemonic = 1624
+	MNEMONIC_VPTESTNMW          Mnemonic = 1625
+	MNEMONIC_VPUNPCKHBW         Mnemonic = 1626
+	MNEMONIC_VPUNPCKHDQ         Mnemonic = 1627
+	MNEMONIC_VPUNPCKHQDQ        Mnemonic = 1628
+	MNEMONIC_VPUNPCKHWD         Mnemonic = 1629
+	MNEMONIC_VPUNPCKLBW         Mnemonic = 1630
+	MNEMONIC_VPUNPCKLDQ         Mnemonic = 1631
+	MNEMONIC_VPUNPCKLQDQ        Mnemonic = 1632
+	MNEMONIC_VPUNPCKLWD         Mnemonic = 1633
+	MNEMONIC_VPXOR              Mnemonic = 1634
+	MNEMONIC_VPXORD             Mnemonic = 1635
+	MNEMONIC_VPXORQ             Mnemonic = 1636
+	MNEMONIC_VRANGEPD           Mnemonic = 1637
+	MNEMONIC_VRANGEPS           Mnemonic = 1638
+	MNEMONIC_VRANGESD           Mnemonic = 1639
+	MNEMONIC_VRANGESS           Mnemonic = 1640
+	MNEMONIC_VRCP14PD           Mnemonic = 1641
+	MNEMONIC_VRCP14PS           Mnemonic = 1642
+	MNEMONIC_VRCP14SD           Mnemonic = 1643
+	MNEMONIC_VRCP14SS           Mnemonic = 1644
+	MNEMONIC_VRCP23PS           Mnemonic = 1645
+	MNEMONIC_VRCP28PD           Mnemonic = 1646
+	MNEMONIC_VRCP28PS           Mnemonic = 1647
+	MNEMONIC_VRCP28SD           Mnemonic = 1648
+	MNEMONIC_VRCP28SS           Mnemonic = 1649
+	MNEMONIC_VRCPPH             Mnemonic = 1650
+	MNEMONIC_VRCPPS             Mnemonic = 1651
+	MNEMONIC_VRCPSH             Mnemonic = 1652
+	MNEMONIC_VRCPSS             Mnemonic = 1653
+	MNEMONIC_VREDUCEPD          Mnemonic = 1654
+	MNEMONIC_VREDUCEPH          Mnemonic = 1655
+	MNEMONIC_VREDUCEPS          Mnemonic = 1656
+	MNEMONIC_VREDUCESD          Mnemonic = 1657
+	MNEMONIC_VREDUCESH          Mnemonic = 1658
+	MNEMONIC_VREDUCESS          Mnemonic = 1659
+	MNEMONIC_VRNDFXPNTPD        Mnemonic = 1660
+	MNEMONIC_VRNDFXPNTPS        Mnemonic = 1661
+	MNEMONIC_VRNDSCALEPD        Mnemonic = 1662
+	MNEMONIC_VRNDSCALEPH        Mnemonic = 1663
+	MNEMONIC_VRNDSCALEPS        Mnemonic = 1664
+	MNEMONIC_VRNDSCALESD        Mnemonic = 1665
+	MNEMONIC_VRNDSCALESH        Mnemonic = 1666
+	MNEMONIC_VRNDSCALESS        Mnemonic = 1667
+	MNEMONIC_VROUNDPD           Mnemonic = 1668
+	MNEMONIC_VROUNDPS           Mnemonic = 1669
+	MNEMONIC_VROUNDSD           Mnemonic = 1670
+	MNEMONIC_VROUNDSS           Mnemonic = 1671
+	MNEMONIC_VRSQRT14PD         Mnemonic = 1672
+	MNEMONIC_VRSQRT14PS         Mnemonic = 1673
+	MNEMONIC_VRSQRT14SD         Mnemonic = 1674
+	MNEMONIC_VRSQRT14SS         Mnemonic = 1675
+	MNEMONIC_VRSQRT23PS         Mnemonic = 1676
+	MNEMONIC_VRSQRT28PD         Mnemonic = 1677
+	MNEMONIC_VRSQRT28PS         Mnemonic = 1678
+	MNEMONIC_VRSQRT28SD         Mnemonic = 1679
+	MNEMONIC_VRSQRT28SS         Mnemonic = 1680
+	MNEMONIC_VRSQRTPH           Mnemonic = 1681
+	MNEMONIC_VRSQRTPS           Mnemonic = 1682
+	MNEMONIC_VRSQRTSH           Mnemonic = 1683
+	MNEMONIC_VRSQRTSS           Mnemonic = 1684
+	MNEMONIC_VSCALEFPD          Mnemonic = 1685
+	MNEMONIC_VSCALEFPH          Mnemonic = 1686
+	MNEMONIC_VSCALEFPS          Mnemonic = 1687
+	MNEMONIC_VSCALEFSD          Mnemonic = 1688
+	MNEMONIC_VSCALEFSH          Mnemonic = 1689
+	MNEMONIC_VSCALEFSS          Mnemonic = 1690
+	MNEMONIC_VSCALEPS           Mnemonic = 1691
+	MNEMONIC_VSCATTERDPD        Mnemonic = 1692
+	MNEMONIC_VSCATTERDPS        Mnemonic = 1693
+	MNEMONIC_VSCATTERPF0DPD     Mnemonic = 1694
+	MNEMONIC_VSCATTERPF0DPS     Mnemonic = 1695
+	MNEMONIC_VSCATTERPF0HINTDPD Mnemonic = 1696
+	MNEMONIC_VSCATTERPF0HINTDPS Mnemonic = 1697
+	MNEMONIC_VSCATTERPF0QPD     Mnemonic = 1698
+	MNEMONIC_VSCATTERPF0QPS     Mnemonic = 1699
+	MNEMONIC_VSCATTERPF1DPD     Mnemonic = 1700
+	MNEMONIC_VSCATTERPF1DPS     Mnemonic = 1701
+	MNEMONIC_VSCATTERPF1QPD     Mnemonic = 1702
+	MNEMONIC_VSCATTERPF1QPS     Mnemonic = 1703
+	MNEMONIC_VSCATTERQPD        Mnemonic = 1704
+	MNEMONIC_VSCATTERQPS        Mnemonic = 1705
+	MNEMONIC_VSHA512MSG1        Mnemonic = 1706
+	MNEMONIC_VSHA512MSG2        Mnemonic = 1707
+	MNEMONIC_VSHA512RNDS2       Mnemonic = 1708
+	MNEMONIC_VSHUFF32X4         Mnemonic = 1709
+	MNEMONIC_VSHUFF64X2         Mnemonic = 1710
+	MNEMONIC_VSHUFI32X4         Mnemonic = 1711
+	MNEMONIC_VSHUFI64X2         Mnemonic = 1712
+	MNEMONIC_VSHUFPD            Mnemonic = 1713
+	MNEMONIC_VSHUFPS            Mnemonic = 1714
+	MNEMONIC_VSM3MSG1           Mnemonic = 1715
+	MNEMONIC_VSM3MSG2           Mnemonic = 1716
+	MNEMONIC_VSM3RNDS2          Mnemonic = 1717
+	MNEMONIC_VSM4KEY4           Mnemonic = 1718
+	MNEMONIC_VSM4RNDS4          Mnemonic = 1719
+	MNEMONIC_VSQRTPD            Mnemonic = 1720
+	MNEMONIC_VSQRTPH            Mnemonic = 1721
+	MNEMONIC_VSQRTPS            Mnemonic = 1722
+	MNEMONIC_VSQRTSD            Mnemonic = 1723
+	MNEMONIC_VSQRTSH            Mnemonic = 1724
+	MNEMONIC_VSQRTSS            Mnemonic = 1725
+	MNEMONIC_VSTMXCSR           Mnemonic = 1726
+	MNEMONIC_VSUBPD             Mnemonic = 1727
+	MNEMONIC_VSUBPH             Mnemonic = 1728
+	MNEMONIC_VSUBPS             Mnemonic = 1729
+	MNEMONIC_VSUBRPD            Mnemonic = 1730
+	MNEMONIC_VSUBRPS            Mnemonic = 1731
+	MNEMONIC_VSUBSD             Mnemonic = 1732
+	MNEMONIC_VSUBSH             Mnemonic = 1733
+	MNEMONIC_VSUBSS             Mnemonic = 1734
+	MNEMONIC_VTESTPD            Mnemonic = 1735
+	MNEMONIC_VTESTPS            Mnemonic = 1736
+	MNEMONIC_VUCOMISD           Mnemonic = 1737
+	MNEMONIC_VUCOMISH           Mnemonic = 1738
+	MNEMONIC_VUCOMISS           Mnemonic = 1739
+	MNEMONIC_VUNPCKHPD          Mnemonic = 1740
+	MNEMONIC_VUNPCKHPS          Mnemonic = 1741
+	MNEMONIC_VUNPCKLPD          Mnemonic = 1742
+	MNEMONIC_VUNPCKLPS          Mnemonic = 1743
+	MNEMONIC_VXORPD             Mnemonic = 1744
+	MNEMONIC_VXORPS             Mnemonic = 1745
+	MNEMONIC_VZEROALL           Mnemonic = 1746
+	MNEMONIC_VZEROUPPER         Mnemonic = 1747
+	MNEMONIC_WBINVD             Mnemonic = 1748
+	MNEMONIC_WRFSBASE           Mnemonic = 1749
+	MNEMONIC_WRGSBASE           Mnemonic = 1750
+	MNEMONIC_WRMSR              Mnemonic = 1751
+	MNEMONIC_WRMSRLIST          Mnemonic = 1752
+	MNEMONIC_WRMSRNS            Mnemonic = 1753
+	MNEMONIC_WRPKRU             Mnemonic = 1754
+	MNEMONIC_WRSSD              Mnemonic = 1755
+	MNEMONIC_WRSSQ              Mnemonic = 1756
+	MNEMONIC_WRUSSD             Mnemonic = 1757
+	MNEMONIC_WRUSSQ             Mnemonic = 1758
+	MNEMONIC_XABORT             Mnemonic = 1759
+	MNEMONIC_XADD               Mnemonic = 1760
+	MNEMONIC_XBEGIN             Mnemonic = 1761
+	MNEMONIC_XCHG               Mnemonic = 1762
+	MNEMONIC_XCRYPT_CBC         Mnemonic = 1763
+	MNEMONIC_XCRYPT_CFB         Mnemonic = 1764
+	MNEMONIC_XCRYPT_CTR         Mnemonic = 1765
+	MNEMONIC_XCRYPT_ECB         Mnemonic = 1766
+	MNEMONIC_XCRYPT_OFB         Mnemonic = 1767
+	MNEMONIC_XEND               Mnemonic = 1768
+	MNEMONIC_XGETBV             Mnemonic = 1769
+	MNEMONIC_XLAT               Mnemonic = 1770
+	MNEMONIC_XOR                Mnemonic = 1771
+	MNEMONIC_XORPD              Mnemonic = 1772
+	MNEMONIC_XORPS              Mnemonic = 1773
+	MNEMONIC_XRESLDTRK          Mnemonic = 1774
+	MNEMONIC_XRSTOR             Mnemonic = 1775
+	MNEMONIC_XRSTOR64           Mnemonic = 1776
+	MNEMONIC_XRSTORS            Mnemonic = 1777
+	MNEMONIC_XRSTORS64          Mnemonic = 1778
+	MNEMONIC_XSAVE              Mnemonic = 1779
+	MNEMONIC_XSAVE64            Mnemonic = 1780
+	MNEMONIC_XSAVEC             Mnemonic = 1781
+	MNEMONIC_XSAVEC64           Mnemonic = 1782
+	MNEMONIC_XSAVEOPT           Mnemonic = 1783
+	MNEMONIC_XSAVEOPT64         Mnemonic = 1784
+	MNEMONIC_XSAVES             Mnemonic = 1785
+	MNEMONIC_XSAVES64           Mnemonic = 1786
+	MNEMONIC_XSETBV             Mnemonic = 1787
+	MNEMONIC_XSHA1              Mnemonic = 1788
+	MNEMONIC_XSHA256            Mnemonic = 1789
+	MNEMONIC_XSTORE             Mnemonic = 1790
+	MNEMONIC_XSUSLDTRK          Mnemonic = 1791
+	MNEMONIC_XTEST              Mnemonic = 1792
+	// Maximum value of this enum.
+	MNEMONIC_MAX_VALUE Mnemonic = 1792
+	// The minimum number of bits required to represent all values of this enum.
+	MNEMONIC_REQUIRED_BITS Mnemonic = 11
+)
+
+// Defines the `ZydisMachineMode` enum.
+type MachineMode int32
+
+const (
+	// 64 bit mode.
+	MACHINE_MODE_LONG_64 MachineMode = 0
+	// 32 bit protected mode.
+	MACHINE_MODE_LONG_COMPAT_32 MachineMode = 1
+	// 16 bit protected mode.
+	MACHINE_MODE_LONG_COMPAT_16 MachineMode = 2
+	// 32 bit protected mode.
+	MACHINE_MODE_LEGACY_32 MachineMode = 3
+	// 16 bit protected mode.
+	MACHINE_MODE_LEGACY_16 MachineMode = 4
+	// 16 bit real mode.
+	MACHINE_MODE_REAL_16 MachineMode = 5
+	// Maximum value of this enum.
+	MACHINE_MODE_MAX_VALUE MachineMode = 5
+	// The minimum number of bits required to represent all values of this enum.
+	MACHINE_MODE_REQUIRED_BITS MachineMode = 3
+)
+
+// Defines the `ZydisStackWidth` enum.
+type StackWidth int32
+
+const (
+	STACK_WIDTH_16 StackWidth = 0
+	STACK_WIDTH_32 StackWidth = 1
+	STACK_WIDTH_64 StackWidth = 2
+	// Maximum value of this enum.
+	STACK_WIDTH_MAX_VALUE StackWidth = 2
+	// The minimum number of bits required to represent all values of this enum.
+	STACK_WIDTH_REQUIRED_BITS StackWidth = 2
+)
+
+// Defines the `ZydisElementType` enum.
+type ElementType int32
+
+const (
+	ELEMENT_TYPE_INVALID ElementType = 0
+	// A struct type.
+	ELEMENT_TYPE_STRUCT ElementType = 1
+	// Unsigned integer value.
+	ELEMENT_TYPE_UINT ElementType = 2
+	// Signed integer value.
+	ELEMENT_TYPE_INT ElementType = 3
+	// 16-bit floating point value (`half`).
+	ELEMENT_TYPE_FLOAT16 ElementType = 4
+	// 32-bit floating point value (`single`).
+	ELEMENT_TYPE_FLOAT32 ElementType = 5
+	// 64-bit floating point value (`double`).
+	ELEMENT_TYPE_FLOAT64 ElementType = 6
+	// 80-bit floating point value (`extended`).
+	ELEMENT_TYPE_FLOAT80 ElementType = 7
+	// 16-bit brain floating point value.
+	ELEMENT_TYPE_BFLOAT16 ElementType = 8
+	// Binary coded decimal value.
+	ELEMENT_TYPE_LONGBCD ElementType = 9
+	// A condition code (e.g. used by `CMPPD`, `VCMPPD`, ...).
+	ELEMENT_TYPE_CC ElementType = 10
+	// Maximum value of this enum.
+	ELEMENT_TYPE_MAX_VALUE ElementType = 10
+	// The minimum number of bits required to represent all values of this enum.
+	ELEMENT_TYPE_REQUIRED_BITS ElementType = 4
+)
+
+// Defines the `ZydisOperandType` enum.
+type OperandType int32
+
+const (
+	// The operand is not used.
+	OPERAND_TYPE_UNUSED OperandType = 0
+	// The operand is a register operand.
+	OPERAND_TYPE_REGISTER OperandType = 1
+	// The operand is a memory operand.
+	OPERAND_TYPE_MEMORY OperandType = 2
+	// The operand is a pointer operand with a segment:offset lvalue.
+	OPERAND_TYPE_POINTER OperandType = 3
+	// The operand is an immediate operand.
+	OPERAND_TYPE_IMMEDIATE OperandType = 4
+	// Maximum value of this enum.
+	OPERAND_TYPE_MAX_VALUE OperandType = 4
+	// The minimum number of bits required to represent all values of this enum.
+	OPERAND_TYPE_REQUIRED_BITS OperandType = 3
+)
+
+// Defines the `ZydisOperandEncoding` enum.
+type OperandEncoding int32
+
+const (
+	OPERAND_ENCODING_NONE         OperandEncoding = 0
+	OPERAND_ENCODING_MODRM_REG    OperandEncoding = 1
+	OPERAND_ENCODING_MODRM_RM     OperandEncoding = 2
+	OPERAND_ENCODING_OPCODE       OperandEncoding = 3
+	OPERAND_ENCODING_NDSNDD       OperandEncoding = 4
+	OPERAND_ENCODING_IS4          OperandEncoding = 5
+	OPERAND_ENCODING_MASK         OperandEncoding = 6
+	OPERAND_ENCODING_DISP8        OperandEncoding = 7
+	OPERAND_ENCODING_DISP16       OperandEncoding = 8
+	OPERAND_ENCODING_DISP32       OperandEncoding = 9
+	OPERAND_ENCODING_DISP64       OperandEncoding = 10
+	OPERAND_ENCODING_DISP16_32_64 OperandEncoding = 11
+	OPERAND_ENCODING_DISP32_32_64 OperandEncoding = 12
+	OPERAND_ENCODING_DISP16_32_32 OperandEncoding = 13
+	OPERAND_ENCODING_UIMM8        OperandEncoding = 14
+	OPERAND_ENCODING_UIMM16       OperandEncoding = 15
+	OPERAND_ENCODING_UIMM32       OperandEncoding = 16
+	OPERAND_ENCODING_UIMM64       OperandEncoding = 17
+	OPERAND_ENCODING_UIMM16_32_64 OperandEncoding = 18
+	OPERAND_ENCODING_UIMM32_32_64 OperandEncoding = 19
+	OPERAND_ENCODING_UIMM16_32_32 OperandEncoding = 20
+	OPERAND_ENCODING_SIMM8        OperandEncoding = 21
+	OPERAND_ENCODING_SIMM16       OperandEncoding = 22
+	OPERAND_ENCODING_SIMM32       OperandEncoding = 23
+	OPERAND_ENCODING_SIMM64       OperandEncoding = 24
+	OPERAND_ENCODING_SIMM16_32_64 OperandEncoding = 25
+	OPERAND_ENCODING_SIMM32_32_64 OperandEncoding = 26
+	OPERAND_ENCODING_SIMM16_32_32 OperandEncoding = 27
+	OPERAND_ENCODING_JIMM8        OperandEncoding = 28
+	OPERAND_ENCODING_JIMM16       OperandEncoding = 29
+	OPERAND_ENCODING_JIMM32       OperandEncoding = 30
+	OPERAND_ENCODING_JIMM64       OperandEncoding = 31
+	OPERAND_ENCODING_JIMM16_32_64 OperandEncoding = 32
+	OPERAND_ENCODING_JIMM32_32_64 OperandEncoding = 33
+	OPERAND_ENCODING_JIMM16_32_32 OperandEncoding = 34
+	// Maximum value of this enum.
+	OPERAND_ENCODING_MAX_VALUE OperandEncoding = 34
+	// The minimum number of bits required to represent all values of this enum.
+	OPERAND_ENCODING_REQUIRED_BITS OperandEncoding = 6
+)
+
+// Defines the `ZydisOperandVisibility` enum.
+type OperandVisibility int32
+
+const (
+	OPERAND_VISIBILITY_INVALID OperandVisibility = 0
+	// The operand is explicitly encoded in the instruction.
+	OPERAND_VISIBILITY_EXPLICIT OperandVisibility = 1
+	// The operand is part of the opcode, but listed as an operand.
+	OPERAND_VISIBILITY_IMPLICIT OperandVisibility = 2
+	// The operand is part of the opcode, and not typically listed as an operand.
+	OPERAND_VISIBILITY_HIDDEN OperandVisibility = 3
+	// Maximum value of this enum.
+	OPERAND_VISIBILITY_MAX_VALUE OperandVisibility = 3
+	// The minimum number of bits required to represent all values of this enum.
+	OPERAND_VISIBILITY_REQUIRED_BITS OperandVisibility = 2
+)
+
+// Defines the `ZydisOperandAction` enum.
+type OperandAction int32
+
+const (
+	// The operand is read by the instruction.
+	OPERAND_ACTION_READ OperandAction = 1
+	// The operand is written by the instruction (must write).
+	OPERAND_ACTION_WRITE OperandAction = 2
+	// The operand is conditionally read by the instruction.
+	OPERAND_ACTION_CONDREAD OperandAction = 4
+	// The operand is conditionally written by the instruction (may write).
+	OPERAND_ACTION_CONDWRITE OperandAction = 8
+	// The operand is read (must read) and written by the instruction (must write).
+	OPERAND_ACTION_READWRITE OperandAction = 3
+	// The operand is conditionally read (may read) and conditionally written by
+	// the instruction (may write).
+	OPERAND_ACTION_CONDREAD_CONDWRITE OperandAction = 12
+	// The operand is read (must read) and conditionally written by the
+	// instruction (may write).
+	OPERAND_ACTION_READ_CONDWRITE OperandAction = 9
+	// The operand is written (must write) and conditionally read by the
+	// instruction (may read).
+	OPERAND_ACTION_CONDREAD_WRITE OperandAction = 6
+	// Mask combining all reading access flags.
+	OPERAND_ACTION_MASK_READ OperandAction = 5
+	// Mask combining all writing access flags.
+	OPERAND_ACTION_MASK_WRITE OperandAction = 10
+	// The minimum number of bits required to represent all values of this bitset.
+	OPERAND_ACTION_REQUIRED_BITS OperandAction = 4
+)
+
+// Defines the `ZydisInstructionEncoding` enum.
+type InstructionEncoding int32
+
+const (
+	// The instruction uses the legacy encoding.
+	INSTRUCTION_ENCODING_LEGACY InstructionEncoding = 0
+	// The instruction uses the AMD 3DNow-encoding.
+	INSTRUCTION_ENCODING_3DNOW InstructionEncoding = 1
+	// The instruction uses the AMD XOP-encoding.
+	INSTRUCTION_ENCODING_XOP InstructionEncoding = 2
+	// The instruction uses the VEX-encoding.
+	INSTRUCTION_ENCODING_VEX InstructionEncoding = 3
+	// The instruction uses the EVEX-encoding.
+	INSTRUCTION_ENCODING_EVEX InstructionEncoding = 4
+	// The instruction uses the MVEX-encoding.
+	INSTRUCTION_ENCODING_MVEX InstructionEncoding = 5
+	// Maximum value of this enum.
+	INSTRUCTION_ENCODING_MAX_VALUE InstructionEncoding = 5
+	// The minimum number of bits required to represent all values of this enum.
+	INSTRUCTION_ENCODING_REQUIRED_BITS InstructionEncoding = 3
+)
+
+// Defines the `ZydisOpcodeMap` enum.
+type OpcodeMap int32
+
+const (
+	OPCODE_MAP_DEFAULT OpcodeMap = 0
+	OPCODE_MAP_0F      OpcodeMap = 1
+	OPCODE_MAP_0F38    OpcodeMap = 2
+	OPCODE_MAP_0F3A    OpcodeMap = 3
+	OPCODE_MAP_MAP4    OpcodeMap = 4
+	OPCODE_MAP_MAP5    OpcodeMap = 5
+	OPCODE_MAP_MAP6    OpcodeMap = 6
+	OPCODE_MAP_MAP7    OpcodeMap = 7
+	OPCODE_MAP_0F0F    OpcodeMap = 8
+	OPCODE_MAP_XOP8    OpcodeMap = 9
+	OPCODE_MAP_XOP9    OpcodeMap = 10
+	OPCODE_MAP_XOPA    OpcodeMap = 11
+	// Maximum value of this enum.
+	OPCODE_MAP_MAX_VALUE OpcodeMap = 11
+	// The minimum number of bits required to represent all values of this enum.
+	OPCODE_MAP_REQUIRED_BITS OpcodeMap = 4
+)
+
+// Defines the `ZydisRegister` enum.
+type Register int32
+
+const (
+	REGISTER_NONE       Register = 0
+	REGISTER_AL         Register = 1
+	REGISTER_CL         Register = 2
+	REGISTER_DL         Register = 3
+	REGISTER_BL         Register = 4
+	REGISTER_AH         Register = 5
+	REGISTER_CH         Register = 6
+	REGISTER_DH         Register = 7
+	REGISTER_BH         Register = 8
+	REGISTER_SPL        Register = 9
+	REGISTER_BPL        Register = 10
+	REGISTER_SIL        Register = 11
+	REGISTER_DIL        Register = 12
+	REGISTER_R8B        Register = 13
+	REGISTER_R9B        Register = 14
+	REGISTER_R10B       Register = 15
+	REGISTER_R11B       Register = 16
+	REGISTER_R12B       Register = 17
+	REGISTER_R13B       Register = 18
+	REGISTER_R14B       Register = 19
+	REGISTER_R15B       Register = 20
+	REGISTER_AX         Register = 21
+	REGISTER_CX         Register = 22
+	REGISTER_DX         Register = 23
+	REGISTER_BX         Register = 24
+	REGISTER_SP         Register = 25
+	REGISTER_BP         Register = 26
+	REGISTER_SI         Register = 27
+	REGISTER_DI         Register = 28
+	REGISTER_R8W        Register = 29
+	REGISTER_R9W        Register = 30
+	REGISTER_R10W       Register = 31
+	REGISTER_R11W       Register = 32
+	REGISTER_R12W       Register = 33
+	REGISTER_R13W       Register = 34
+	REGISTER_R14W       Register = 35
+	REGISTER_R15W       Register = 36
+	REGISTER_EAX        Register = 37
+	REGISTER_ECX        Register = 38
+	REGISTER_EDX        Register = 39
+	REGISTER_EBX        Register = 40
+	REGISTER_ESP        Register = 41
+	REGISTER_EBP        Register = 42
+	REGISTER_ESI        Register = 43
+	REGISTER_EDI        Register = 44
+	REGISTER_R8D        Register = 45
+	REGISTER_R9D        Register = 46
+	REGISTER_R10D       Register = 47
+	REGISTER_R11D       Register = 48
+	REGISTER_R12D       Register = 49
+	REGISTER_R13D       Register = 50
+	REGISTER_R14D       Register = 51
+	REGISTER_R15D       Register = 52
+	REGISTER_RAX        Register = 53
+	REGISTER_RCX        Register = 54
+	REGISTER_RDX        Register = 55
+	REGISTER_RBX        Register = 56
+	REGISTER_RSP        Register = 57
+	REGISTER_RBP        Register = 58
+	REGISTER_RSI        Register = 59
+	REGISTER_RDI        Register = 60
+	REGISTER_R8         Register = 61
+	REGISTER_R9         Register = 62
+	REGISTER_R10        Register = 63
+	REGISTER_R11        Register = 64
+	REGISTER_R12        Register = 65
+	REGISTER_R13        Register = 66
+	REGISTER_R14        Register = 67
+	REGISTER_R15        Register = 68
+	REGISTER_ST0        Register = 69
+	REGISTER_ST1        Register = 70
+	REGISTER_ST2        Register = 71
+	REGISTER_ST3        Register = 72
+	REGISTER_ST4        Register = 73
+	REGISTER_ST5        Register = 74
+	REGISTER_ST6        Register = 75
+	REGISTER_ST7        Register = 76
+	REGISTER_X87CONTROL Register = 77
+	REGISTER_X87STATUS  Register = 78
+	REGISTER_X87TAG     Register = 79
+	REGISTER_MM0        Register = 80
+	REGISTER_MM1        Register = 81
+	REGISTER_MM2        Register = 82
+	REGISTER_MM3        Register = 83
+	REGISTER_MM4        Register = 84
+	REGISTER_MM5        Register = 85
+	REGISTER_MM6        Register = 86
+	REGISTER_MM7        Register = 87
+	REGISTER_XMM0       Register = 88
+	REGISTER_XMM1       Register = 89
+	REGISTER_XMM2       Register = 90
+	REGISTER_XMM3       Register = 91
+	REGISTER_XMM4       Register = 92
+	REGISTER_XMM5       Register = 93
+	REGISTER_XMM6       Register = 94
+	REGISTER_XMM7       Register = 95
+	REGISTER_XMM8       Register = 96
+	REGISTER_XMM9       Register = 97
+	REGISTER_XMM10      Register = 98
+	REGISTER_XMM11      Register = 99
+	REGISTER_XMM12      Register = 100
+	REGISTER_XMM13      Register = 101
+	REGISTER_XMM14      Register = 102
+	REGISTER_XMM15      Register = 103
+	REGISTER_XMM16      Register = 104
+	REGISTER_XMM17      Register = 105
+	REGISTER_XMM18      Register = 106
+	REGISTER_XMM19      Register = 107
+	REGISTER_XMM20      Register = 108
+	REGISTER_XMM21      Register = 109
+	REGISTER_XMM22      Register = 110
+	REGISTER_XMM23      Register = 111
+	REGISTER_XMM24      Register = 112
+	REGISTER_XMM25      Register = 113
+	REGISTER_XMM26      Register = 114
+	REGISTER_XMM27      Register = 115
+	REGISTER_XMM28      Register = 116
+	REGISTER_XMM29      Register = 117
+	REGISTER_XMM30      Register = 118
+	REGISTER_XMM31      Register = 119
+	REGISTER_YMM0       Register = 120
+	REGISTER_YMM1       Register = 121
+	REGISTER_YMM2       Register = 122
+	REGISTER_YMM3       Register = 123
+	REGISTER_YMM4       Register = 124
+	REGISTER_YMM5       Register = 125
+	REGISTER_YMM6       Register = 126
+	REGISTER_YMM7       Register = 127
+	REGISTER_YMM8       Register = 128
+	REGISTER_YMM9       Register = 129
+	REGISTER_YMM10      Register = 130
+	REGISTER_YMM11      Register = 131
+	REGISTER_YMM12      Register = 132
+	REGISTER_YMM13      Register = 133
+	REGISTER_YMM14      Register = 134
+	REGISTER_YMM15      Register = 135
+	REGISTER_YMM16      Register = 136
+	REGISTER_YMM17      Register = 137
+	REGISTER_YMM18      Register = 138
+	REGISTER_YMM19      Register = 139
+	REGISTER_YMM20      Register = 140
+	REGISTER_YMM21      Register = 141
+	REGISTER_YMM22      Register = 142
+	REGISTER_YMM23      Register = 143
+	REGISTER_YMM24      Register = 144
+	REGISTER_YMM25      Register = 145
+	REGISTER_YMM26      Register = 146
+	REGISTER_YMM27      Register = 147
+	REGISTER_YMM28      Register = 148
+	REGISTER_YMM29      Register = 149
+	REGISTER_YMM30      Register = 150
+	REGISTER_YMM31      Register = 151
+	REGISTER_ZMM0       Register = 152
+	REGISTER_ZMM1       Register = 153
+	REGISTER_ZMM2       Register = 154
+	REGISTER_ZMM3       Register = 155
+	REGISTER_ZMM4       Register = 156
+	REGISTER_ZMM5       Register = 157
+	REGISTER_ZMM6       Register = 158
+	REGISTER_ZMM7       Register = 159
+	REGISTER_ZMM8       Register = 160
+	REGISTER_ZMM9       Register = 161
+	REGISTER_ZMM10      Register = 162
+	REGISTER_ZMM11      Register = 163
+	REGISTER_ZMM12      Register = 164
+	REGISTER_ZMM13      Register = 165
+	REGISTER_ZMM14      Register = 166
+	REGISTER_ZMM15      Register = 167
+	REGISTER_ZMM16      Register = 168
+	REGISTER_ZMM17      Register = 169
+	REGISTER_ZMM18      Register = 170
+	REGISTER_ZMM19      Register = 171
+	REGISTER_ZMM20      Register = 172
+	REGISTER_ZMM21      Register = 173
+	REGISTER_ZMM22      Register = 174
+	REGISTER_ZMM23      Register = 175
+	REGISTER_ZMM24      Register = 176
+	REGISTER_ZMM25      Register = 177
+	REGISTER_ZMM26      Register = 178
+	REGISTER_ZMM27      Register = 179
+	REGISTER_ZMM28      Register = 180
+	REGISTER_ZMM29      Register = 181
+	REGISTER_ZMM30      Register = 182
+	REGISTER_ZMM31      Register = 183
+	REGISTER_TMM0       Register = 184
+	REGISTER_TMM1       Register = 185
+	REGISTER_TMM2       Register = 186
+	REGISTER_TMM3       Register = 187
+	REGISTER_TMM4       Register = 188
+	REGISTER_TMM5       Register = 189
+	REGISTER_TMM6       Register = 190
+	REGISTER_TMM7       Register = 191
+	REGISTER_FLAGS      Register = 192
+	REGISTER_EFLAGS     Register = 193
+	REGISTER_RFLAGS     Register = 194
+	REGISTER_IP         Register = 195
+	REGISTER_EIP        Register = 196
+	REGISTER_RIP        Register = 197
+	REGISTER_ES         Register = 198
+	REGISTER_CS         Register = 199
+	REGISTER_SS         Register = 200
+	REGISTER_DS         Register = 201
+	REGISTER_FS         Register = 202
+	REGISTER_GS         Register = 203
+	REGISTER_GDTR       Register = 204
+	REGISTER_LDTR       Register = 205
+	REGISTER_IDTR       Register = 206
+	REGISTER_TR         Register = 207
+	REGISTER_TR0        Register = 208
+	REGISTER_TR1        Register = 209
+	REGISTER_TR2        Register = 210
+	REGISTER_TR3        Register = 211
+	REGISTER_TR4        Register = 212
+	REGISTER_TR5        Register = 213
+	REGISTER_TR6        Register = 214
+	REGISTER_TR7        Register = 215
+	REGISTER_CR0        Register = 216
+	REGISTER_CR1        Register = 217
+	REGISTER_CR2        Register = 218
+	REGISTER_CR3        Register = 219
+	REGISTER_CR4        Register = 220
+	REGISTER_CR5        Register = 221
+	REGISTER_CR6        Register = 222
+	REGISTER_CR7        Register = 223
+	REGISTER_CR8        Register = 224
+	REGISTER_CR9        Register = 225
+	REGISTER_CR10       Register = 226
+	REGISTER_CR11       Register = 227
+	REGISTER_CR12       Register = 228
+	REGISTER_CR13       Register = 229
+	REGISTER_CR14       Register = 230
+	REGISTER_CR15       Register = 231
+	REGISTER_DR0        Register = 232
+	REGISTER_DR1        Register = 233
+	REGISTER_DR2        Register = 234
+	REGISTER_DR3        Register = 235
+	REGISTER_DR4        Register = 236
+	REGISTER_DR5        Register = 237
+	REGISTER_DR6        Register = 238
+	REGISTER_DR7        Register = 239
+	REGISTER_DR8        Register = 240
+	REGISTER_DR9        Register = 241
+	REGISTER_DR10       Register = 242
+	REGISTER_DR11       Register = 243
+	REGISTER_DR12       Register = 244
+	REGISTER_DR13       Register = 245
+	REGISTER_DR14       Register = 246
+	REGISTER_DR15       Register = 247
+	REGISTER_K0         Register = 248
+	REGISTER_K1         Register = 249
+	REGISTER_K2         Register = 250
+	REGISTER_K3         Register = 251
+	REGISTER_K4         Register = 252
+	REGISTER_K5         Register = 253
+	REGISTER_K6         Register = 254
+	REGISTER_K7         Register = 255
+	REGISTER_BND0       Register = 256
+	REGISTER_BND1       Register = 257
+	REGISTER_BND2       Register = 258
+	REGISTER_BND3       Register = 259
+	REGISTER_BNDCFG     Register = 260
+	REGISTER_BNDSTATUS  Register = 261
+	REGISTER_MXCSR      Register = 262
+	REGISTER_PKRU       Register = 263
+	REGISTER_XCR0       Register = 264
+	REGISTER_UIF        Register = 265
+	// Maximum value of this enum.
+	REGISTER_MAX_VALUE Register = 265
+	// The minimum number of bits required to represent all values of this enum.
+	REGISTER_REQUIRED_BITS Register = 9
+)
+
+// Defines the `ZydisRegisterKind` enum.
+// Please note that this enum does not contain a matching entry for all values of the
+// `ZydisRegister` enum, but only for those registers where it makes sense to logically group them
+// for decoding/encoding purposes.
+// These are mainly the registers that can be identified by an id within their corresponding
+// register-class.
+type RegisterKind int32
+
+const (
+	REGKIND_INVALID RegisterKind = 0
+	REGKIND_GPR     RegisterKind = 1
+	REGKIND_X87     RegisterKind = 2
+	REGKIND_MMX     RegisterKind = 3
+	REGKIND_VR      RegisterKind = 4
+	REGKIND_TMM     RegisterKind = 5
+	REGKIND_SEGMENT RegisterKind = 6
+	REGKIND_TEST    RegisterKind = 7
+	REGKIND_CONTROL RegisterKind = 8
+	REGKIND_DEBUG   RegisterKind = 9
+	REGKIND_MASK    RegisterKind = 10
+	REGKIND_BOUND   RegisterKind = 11
+	// Maximum value of this enum.
+	REGKIND_MAX_VALUE RegisterKind = 11
+	// The minimum number of bits required to represent all values of this enum.
+	REGKIND_REQUIRED_BITS RegisterKind = 4
+)
+
+// Defines the `ZydisRegisterClass` enum.
+// Please note that this enum does not contain a matching entry for all values of the
+// `ZydisRegister` enum, but only for those registers where it makes sense to logically group them
+// for decoding/encoding purposes.
+// These are mainly the registers that can be identified by an id within their corresponding
+// register-class. The `IP` and `FLAGS` values are exceptions to this rule.
+type RegisterClass int32
+
+const (
+	REGCLASS_INVALID RegisterClass = 0
+	// 8-bit general-purpose registers.
+	REGCLASS_GPR8 RegisterClass = 1
+	// 16-bit general-purpose registers.
+	REGCLASS_GPR16 RegisterClass = 2
+	// 32-bit general-purpose registers.
+	REGCLASS_GPR32 RegisterClass = 3
+	// 64-bit general-purpose registers.
+	REGCLASS_GPR64 RegisterClass = 4
+	// Floating point legacy registers.
+	REGCLASS_X87 RegisterClass = 5
+	// Floating point multimedia registers.
+	REGCLASS_MMX RegisterClass = 6
+	// 128-bit vector registers.
+	REGCLASS_XMM RegisterClass = 7
+	// 256-bit vector registers.
+	REGCLASS_YMM RegisterClass = 8
+	// 512-bit vector registers.
+	REGCLASS_ZMM RegisterClass = 9
+	// Matrix registers.
+	REGCLASS_TMM RegisterClass = 10
+	// Matrix registers.
+	REGCLASS_FLAGS RegisterClass = 11
+	// Instruction-pointer registers.
+	REGCLASS_IP RegisterClass = 12
+	// Segment registers.
+	REGCLASS_SEGMENT RegisterClass = 13
+	// Table registers.
+	REGCLASS_TABLE RegisterClass = 14
+	// Test registers.
+	REGCLASS_TEST RegisterClass = 15
+	// Control registers.
+	REGCLASS_CONTROL RegisterClass = 16
+	// Debug registers.
+	REGCLASS_DEBUG RegisterClass = 17
+	// Mask registers.
+	REGCLASS_MASK RegisterClass = 18
+	// Bound registers.
+	REGCLASS_BOUND RegisterClass = 19
+	// Maximum value of this enum.
+	REGCLASS_MAX_VALUE RegisterClass = 19
+	// The minimum number of bits required to represent all values of this enum.
+	REGCLASS_REQUIRED_BITS RegisterClass = 5
+)
+
+// Defines the `ZydisMemoryOperandType` enum.
+type MemoryOperandType int32
+
+const (
+	MEMOP_TYPE_INVALID MemoryOperandType = 0
+	// Normal memory operand.
+	MEMOP_TYPE_MEM MemoryOperandType = 1
+	// The memory operand is only used for address-generation. No real memory-access is
+	// caused.
+	MEMOP_TYPE_AGEN MemoryOperandType = 2
+	// A memory operand using `SIB` addressing form, where the index register is not used
+	// in address calculation and scale is ignored. No real memory-access is caused.
+	MEMOP_TYPE_MIB MemoryOperandType = 3
+	// A vector `SIB` memory addressing operand (`VSIB`).
+	MEMOP_TYPE_VSIB MemoryOperandType = 4
+	// Maximum value of this enum.
+	MEMOP_TYPE_MAX_VALUE MemoryOperandType = 4
+	// The minimum number of bits required to represent all values of this enum.
+	MEMOP_TYPE_REQUIRED_BITS MemoryOperandType = 3
+)
+
+// Defines the `ZydisBranchType` enum.
+type BranchType int32
+
+const (
+	// The instruction is not a branch instruction.
+	BRANCH_TYPE_NONE BranchType = 0
+	// The instruction is a short (8-bit) branch instruction.
+	BRANCH_TYPE_SHORT BranchType = 1
+	// The instruction is a near (16-bit or 32-bit) branch instruction.
+	BRANCH_TYPE_NEAR BranchType = 2
+	// The instruction is a far (inter-segment) branch instruction.
+	BRANCH_TYPE_FAR BranchType = 3
+	// Maximum value of this enum.
+	BRANCH_TYPE_MAX_VALUE BranchType = 3
+	// The minimum number of bits required to represent all values of this enum.
+	BRANCH_TYPE_REQUIRED_BITS BranchType = 2
+)
+
+// Defines the `ZydisExceptionClass` enum.
+type ExceptionClass int32
+
+const (
+	EXCEPTION_CLASS_NONE    ExceptionClass = 0
+	EXCEPTION_CLASS_SSE1    ExceptionClass = 1
+	EXCEPTION_CLASS_SSE2    ExceptionClass = 2
+	EXCEPTION_CLASS_SSE3    ExceptionClass = 3
+	EXCEPTION_CLASS_SSE4    ExceptionClass = 4
+	EXCEPTION_CLASS_SSE5    ExceptionClass = 5
+	EXCEPTION_CLASS_SSE7    ExceptionClass = 6
+	EXCEPTION_CLASS_AVX1    ExceptionClass = 7
+	EXCEPTION_CLASS_AVX2    ExceptionClass = 8
+	EXCEPTION_CLASS_AVX3    ExceptionClass = 9
+	EXCEPTION_CLASS_AVX4    ExceptionClass = 10
+	EXCEPTION_CLASS_AVX5    ExceptionClass = 11
+	EXCEPTION_CLASS_AVX6    ExceptionClass = 12
+	EXCEPTION_CLASS_AVX7    ExceptionClass = 13
+	EXCEPTION_CLASS_AVX8    ExceptionClass = 14
+	EXCEPTION_CLASS_AVX11   ExceptionClass = 15
+	EXCEPTION_CLASS_AVX12   ExceptionClass = 16
+	EXCEPTION_CLASS_E1      ExceptionClass = 17
+	EXCEPTION_CLASS_E1NF    ExceptionClass = 18
+	EXCEPTION_CLASS_E2      ExceptionClass = 19
+	EXCEPTION_CLASS_E2NF    ExceptionClass = 20
+	EXCEPTION_CLASS_E3      ExceptionClass = 21
+	EXCEPTION_CLASS_E3NF    ExceptionClass = 22
+	EXCEPTION_CLASS_E4      ExceptionClass = 23
+	EXCEPTION_CLASS_E4NF    ExceptionClass = 24
+	EXCEPTION_CLASS_E5      ExceptionClass = 25
+	EXCEPTION_CLASS_E5NF    ExceptionClass = 26
+	EXCEPTION_CLASS_E6      ExceptionClass = 27
+	EXCEPTION_CLASS_E6NF    ExceptionClass = 28
+	EXCEPTION_CLASS_E7NM    ExceptionClass = 29
+	EXCEPTION_CLASS_E7NM128 ExceptionClass = 30
+	EXCEPTION_CLASS_E9NF    ExceptionClass = 31
+	EXCEPTION_CLASS_E10     ExceptionClass = 32
+	EXCEPTION_CLASS_E10NF   ExceptionClass = 33
+	EXCEPTION_CLASS_E11     ExceptionClass = 34
+	EXCEPTION_CLASS_E11NF   ExceptionClass = 35
+	EXCEPTION_CLASS_E12     ExceptionClass = 36
+	EXCEPTION_CLASS_E12NP   ExceptionClass = 37
+	EXCEPTION_CLASS_K20     ExceptionClass = 38
+	EXCEPTION_CLASS_K21     ExceptionClass = 39
+	EXCEPTION_CLASS_AMXE1   ExceptionClass = 40
+	EXCEPTION_CLASS_AMXE2   ExceptionClass = 41
+	EXCEPTION_CLASS_AMXE3   ExceptionClass = 42
+	EXCEPTION_CLASS_AMXE4   ExceptionClass = 43
+	EXCEPTION_CLASS_AMXE5   ExceptionClass = 44
+	EXCEPTION_CLASS_AMXE6   ExceptionClass = 45
+	// Maximum value of this enum.
+	EXCEPTION_CLASS_MAX_VALUE ExceptionClass = 45
+	// The minimum number of bits required to represent all values of this enum.
+	EXCEPTION_CLASS_REQUIRED_BITS ExceptionClass = 6
+)
+
+// Defines the `ZydisMaskMode` enum.
+type MaskMode int32
+
+const (
+	MASK_MODE_INVALID MaskMode = 0
+	// Masking is disabled for the current instruction (`K0` register is used).
+	MASK_MODE_DISABLED MaskMode = 1
+	// The embedded mask register is used as a merge-mask.
+	MASK_MODE_MERGING MaskMode = 2
+	// The embedded mask register is used as a zero-mask.
+	MASK_MODE_ZEROING MaskMode = 3
+	// The embedded mask register is used as a control-mask (element selector).
+	MASK_MODE_CONTROL MaskMode = 4
+	// The embedded mask register is used as a zeroing control-mask (element selector).
+	MASK_MODE_CONTROL_ZEROING MaskMode = 5
+	// Maximum value of this enum.
+	MASK_MODE_MAX_VALUE MaskMode = 5
+	// The minimum number of bits required to represent all values of this enum.
+	MASK_MODE_REQUIRED_BITS MaskMode = 3
+)
+
+// Defines the `ZydisBroadcastMode` enum.
+type BroadcastMode int32
+
+const (
+	BROADCAST_MODE_INVALID BroadcastMode = 0
+	BROADCAST_MODE_1_TO_2  BroadcastMode = 1
+	BROADCAST_MODE_1_TO_4  BroadcastMode = 2
+	BROADCAST_MODE_1_TO_8  BroadcastMode = 3
+	BROADCAST_MODE_1_TO_16 BroadcastMode = 4
+	BROADCAST_MODE_1_TO_32 BroadcastMode = 5
+	BROADCAST_MODE_1_TO_64 BroadcastMode = 6
+	BROADCAST_MODE_2_TO_4  BroadcastMode = 7
+	BROADCAST_MODE_2_TO_8  BroadcastMode = 8
+	BROADCAST_MODE_2_TO_16 BroadcastMode = 9
+	BROADCAST_MODE_4_TO_8  BroadcastMode = 10
+	BROADCAST_MODE_4_TO_16 BroadcastMode = 11
+	BROADCAST_MODE_8_TO_16 BroadcastMode = 12
+	// Maximum value of this enum.
+	BROADCAST_MODE_MAX_VALUE BroadcastMode = 12
+	// The minimum number of bits required to represent all values of this enum.
+	BROADCAST_MODE_REQUIRED_BITS BroadcastMode = 4
+)
+
+// Defines the `ZydisRoundingMode` enum.
+type RoundingMode int32
+
+const (
+	ROUNDING_MODE_INVALID RoundingMode = 0
+	// Round to nearest.
+	ROUNDING_MODE_RN RoundingMode = 1
+	// Round down.
+	ROUNDING_MODE_RD RoundingMode = 2
+	// Round up.
+	ROUNDING_MODE_RU RoundingMode = 3
+	// Round towards zero.
+	ROUNDING_MODE_RZ RoundingMode = 4
+	// Maximum value of this enum.
+	ROUNDING_MODE_MAX_VALUE RoundingMode = 4
+	// The minimum number of bits required to represent all values of this enum.
+	ROUNDING_MODE_REQUIRED_BITS RoundingMode = 3
+)
+
+// Defines the `ZydisSwizzleMode` enum.
+type SwizzleMode int32
+
+const (
+	SWIZZLE_MODE_INVALID SwizzleMode = 0
+	SWIZZLE_MODE_DCBA    SwizzleMode = 1
+	SWIZZLE_MODE_CDAB    SwizzleMode = 2
+	SWIZZLE_MODE_BADC    SwizzleMode = 3
+	SWIZZLE_MODE_DACB    SwizzleMode = 4
+	SWIZZLE_MODE_AAAA    SwizzleMode = 5
+	SWIZZLE_MODE_BBBB    SwizzleMode = 6
+	SWIZZLE_MODE_CCCC    SwizzleMode = 7
+	SWIZZLE_MODE_DDDD    SwizzleMode = 8
+	// Maximum value of this enum.
+	SWIZZLE_MODE_MAX_VALUE SwizzleMode = 8
+	// The minimum number of bits required to represent all values of this enum.
+	SWIZZLE_MODE_REQUIRED_BITS SwizzleMode = 4
+)
+
+// Defines the `ZydisConversionMode` enum.
+type ConversionMode int32
+
+const (
+	CONVERSION_MODE_INVALID ConversionMode = 0
+	CONVERSION_MODE_FLOAT16 ConversionMode = 1
+	CONVERSION_MODE_SINT8   ConversionMode = 2
+	CONVERSION_MODE_UINT8   ConversionMode = 3
+	CONVERSION_MODE_SINT16  ConversionMode = 4
+	CONVERSION_MODE_UINT16  ConversionMode = 5
+	// Maximum value of this enum.
+	CONVERSION_MODE_MAX_VALUE ConversionMode = 5
+	// The minimum number of bits required to represent all values of this enum.
+	CONVERSION_MODE_REQUIRED_BITS ConversionMode = 3
+)
+
+// Defines the `ZydisPrefixType` enum.
+type PrefixType int32
+
+const (
+	// The prefix is ignored by the instruction.
+	// This applies to all prefixes that are not accepted by the instruction in general or the
+	// ones that are overwritten by a prefix of the same group closer to the instruction opcode.
+	PREFIX_TYPE_IGNORED PrefixType = 0
+	// The prefix is effectively used by the instruction.
+	PREFIX_TYPE_EFFECTIVE PrefixType = 1
+	// The prefix is used as a mandatory prefix.
+	// A mandatory prefix is interpreted as an opcode extension and has no further effect on the
+	// instruction.
+	PREFIX_TYPE_MANDATORY PrefixType = 2
+	// Maximum value of this enum.
+	PREFIX_TYPE_MAX_VALUE PrefixType = 2
+	// The minimum number of bits required to represent all values of this enum.
+	PREFIX_TYPE_REQUIRED_BITS PrefixType = 2
+)
+
+// Defines the `ZydisDecoderMode` enum.
+type DecoderMode int32
+
+const (
+	// Enables minimal instruction decoding without semantic analysis.
+	// This mode provides access to the mnemonic, the instruction-length, the effective
+	// operand-size, the effective address-width, some attributes (e.g. `ZYDIS_ATTRIB_IS_RELATIVE`)
+	// and all of the information in the `raw` field of the `ZydisDecodedInstruction` struct.
+	// Operands, most attributes and other specific information (like `AVX` info) are not
+	// accessible in this mode.
+	// This mode is NOT enabled by default.
+	DECODER_MODE_MINIMAL DecoderMode = 0
+	// Enables the `AMD`-branch mode.
+	// Intel ignores the operand-size override-prefix (`0x66`) for all branches with 32-bit
+	// immediates and forces the operand-size of the instruction to 64-bit in 64-bit mode.
+	// In `AMD`-branch mode `0x66` is not ignored and changes the operand-size and the size of the
+	// immediate to 16-bit.
+	// This mode is NOT enabled by default.
+	DECODER_MODE_AMD_BRANCHES DecoderMode = 1
+	// Enables `KNC` compatibility-mode.
+	// `KNC` and `KNL+` chips are sharing opcodes and encodings for some mask-related instructions.
+	// Enable this mode to use the old `KNC` specifications (different mnemonics, operands, ..).
+	// This mode is NOT enabled by default.
+	DECODER_MODE_KNC DecoderMode = 2
+	// Enables the `MPX` mode.
+	// The `MPX` isa-extension reuses (overrides) some of the widenop instruction opcodes.
+	// This mode is enabled by default.
+	DECODER_MODE_MPX DecoderMode = 3
+	// Enables the `CET` mode.
+	// The `CET` isa-extension reuses (overrides) some of the widenop instruction opcodes.
+	// This mode is enabled by default.
+	DECODER_MODE_CET DecoderMode = 4
+	// Enables the `LZCNT` mode.
+	// The `LZCNT` isa-extension reuses (overrides) some of the widenop instruction opcodes.
+	// This mode is enabled by default.
+	DECODER_MODE_LZCNT DecoderMode = 5
+	// Enables the `TZCNT` mode.
+	// The `TZCNT` isa-extension reuses (overrides) some of the widenop instruction opcodes.
+	// This mode is enabled by default.
+	DECODER_MODE_TZCNT DecoderMode = 6
+	// Enables the `WBNOINVD` mode.
+	// The `WBINVD` instruction is interpreted as `WBNOINVD` on ICL chips, if a `F3` prefix is
+	// used.
+	// This mode is disabled by default.
+	DECODER_MODE_WBNOINVD DecoderMode = 7
+	// Enables the `CLDEMOTE` mode.
+	// The `CLDEMOTE` isa-extension reuses (overrides) some of the widenop instruction opcodes.
+	// This mode is enabled by default.
+	DECODER_MODE_CLDEMOTE DecoderMode = 8
+	// Enables the `IPREFETCH` mode.
+	// The `IPREFETCH` isa-extension reuses (overrides) some of the widenop instruction opcodes.
+	// This mode is enabled by default.
+	DECODER_MODE_IPREFETCH DecoderMode = 9
+	// Enables the `UD0` compatibility mode.
+	// Some processors decode the `UD0` instruction without a ModR/M byte. Enable this decoder mode
+	// to mimic this behavior.
+	// This mode is disabled by default.
+	DECODER_MODE_UD0_COMPAT DecoderMode = 10
+	// Maximum value of this enum.
+	DECODER_MODE_MAX_VALUE DecoderMode = 10
+	// The minimum number of bits required to represent all values of this enum.
+	DECODER_MODE_REQUIRED_BITS DecoderMode = 4
+)
+
+// Defines possible physical instruction encodings as bit flags, so multiple acceptable encodings
+// can be specified simultaneously.
+type EncodableEncoding int32
+
+const (
+	ENCODABLE_ENCODING_DEFAULT EncodableEncoding = 0
+	ENCODABLE_ENCODING_LEGACY  EncodableEncoding = 1
+	ENCODABLE_ENCODING_3DNOW   EncodableEncoding = 2
+	ENCODABLE_ENCODING_XOP     EncodableEncoding = 4
+	ENCODABLE_ENCODING_VEX     EncodableEncoding = 8
+	ENCODABLE_ENCODING_EVEX    EncodableEncoding = 16
+	ENCODABLE_ENCODING_MVEX    EncodableEncoding = 32
+	// Maximum value of this enum.
+	ENCODABLE_ENCODING_MAX_VALUE EncodableEncoding = 63
+	// The minimum number of bits required to represent all values of this enum.
+	ENCODABLE_ENCODING_REQUIRED_BITS EncodableEncoding = 6
+)
+
+// Defines encodable physical/effective sizes of relative immediate operands. See
+// `ZydisEncoderRequest.branch_width` for more details.
+type BranchWidth int32
+
+const (
+	BRANCH_WIDTH_NONE BranchWidth = 0
+	BRANCH_WIDTH_8    BranchWidth = 1
+	BRANCH_WIDTH_16   BranchWidth = 2
+	BRANCH_WIDTH_32   BranchWidth = 3
+	BRANCH_WIDTH_64   BranchWidth = 4
+	// Maximum value of this enum.
+	BRANCH_WIDTH_MAX_VALUE BranchWidth = 4
+	// The minimum number of bits required to represent all values of this enum.
+	BRANCH_WIDTH_REQUIRED_BITS BranchWidth = 3
+)
+
+// Defines possible values for address size hints. See `ZydisEncoderRequest` for more information
+// about address size hints.
+type AddressSizeHint int32
+
+const (
+	ADDRESS_SIZE_HINT_NONE AddressSizeHint = 0
+	ADDRESS_SIZE_HINT_16   AddressSizeHint = 1
+	ADDRESS_SIZE_HINT_32   AddressSizeHint = 2
+	ADDRESS_SIZE_HINT_64   AddressSizeHint = 3
+	// Maximum value of this enum.
+	ADDRESS_SIZE_HINT_MAX_VALUE AddressSizeHint = 3
+	// The minimum number of bits required to represent all values of this enum.
+	ADDRESS_SIZE_HINT_REQUIRED_BITS AddressSizeHint = 2
+)
+
+// Defines possible values for operand size hints. See `ZydisEncoderRequest` for more information
+// about operand size hints.
+type OperandSizeHint int32
+
+const (
+	OPERAND_SIZE_HINT_NONE OperandSizeHint = 0
+	OPERAND_SIZE_HINT_8    OperandSizeHint = 1
+	OPERAND_SIZE_HINT_16   OperandSizeHint = 2
+	OPERAND_SIZE_HINT_32   OperandSizeHint = 3
+	OPERAND_SIZE_HINT_64   OperandSizeHint = 4
+	// Maximum value of this enum.
+	OPERAND_SIZE_HINT_MAX_VALUE OperandSizeHint = 4
+	// The minimum number of bits required to represent all values of this enum.
+	OPERAND_SIZE_HINT_REQUIRED_BITS OperandSizeHint = 3
+)
+
+// Enum selecting the syntax to format the disassembly in.
+type FormatterStyle int32
+
+const (
+	// Generates `AT
+	// &T
+	// `-style disassembly.
+	FORMATTER_STYLE_ATT FormatterStyle = 0
+	// Generates `Intel`-style disassembly.
+	FORMATTER_STYLE_INTEL FormatterStyle = 1
+	// Generates `MASM`-style disassembly that is directly accepted as input for
+	// the `MASM` assembler.
+	// The runtime-address is ignored in this mode.
+	FORMATTER_STYLE_INTEL_MASM FormatterStyle = 2
+	// Maximum value of this enum.
+	FORMATTER_STYLE_MAX_VALUE FormatterStyle = 2
+	// The minimum number of bits required to represent all values of this enum.
+	FORMATTER_STYLE_REQUIRED_BITS FormatterStyle = 2
+)
+
+// Enum selecting a property of the formatter.
+type FormatterProperty int32
+
+const (
+	// Controls the printing of effective operand-size suffixes (`AT
+	// &T
+	// `) or operand-sizes
+	// of memory operands (`INTEL`).
+	// Pass `ZYAN_TRUE` as value to force the formatter to always print the size, or `ZYAN_FALSE`
+	// to only print it if needed.
+	FORMATTER_PROP_FORCE_SIZE FormatterProperty = 0
+	// Controls the printing of segment prefixes.
+	// Pass `ZYAN_TRUE` as value to force the formatter to always print the segment register of
+	// memory-operands or `ZYAN_FALSE` to omit implicit `DS`/`SS` segments.
+	FORMATTER_PROP_FORCE_SEGMENT FormatterProperty = 1
+	// Controls the printing of the scale-factor component for memory operands.
+	// Pass `ZYAN_TRUE` as value to force the formatter to always print the scale-factor component
+	// of memory operands or `ZYAN_FALSE` to omit the scale factor for values of `1`.
+	FORMATTER_PROP_FORCE_SCALE_ONE FormatterProperty = 2
+	// Controls the printing of branch addresses.
+	// Pass `ZYAN_TRUE` as value to force the formatter to always print relative branch addresses
+	// or `ZYAN_FALSE` to use absolute addresses, if a runtime-address different to
+	// `ZYDIS_RUNTIME_ADDRESS_NONE` was passed.
+	FORMATTER_PROP_FORCE_RELATIVE_BRANCHES FormatterProperty = 3
+	// Controls the printing of `EIP`/`RIP`-relative addresses.
+	// Pass `ZYAN_TRUE` as value to force the formatter to always print relative addresses for
+	// `EIP`/`RIP`-relative operands or `ZYAN_FALSE` to use absolute addresses, if a runtime-
+	// address different to `ZYDIS_RUNTIME_ADDRESS_NONE` was passed.
+	FORMATTER_PROP_FORCE_RELATIVE_RIPREL FormatterProperty = 4
+	// Controls the printing of branch-instructions sizes.
+	// Pass `ZYAN_TRUE` as value to print the size (`short`, `near`) of branch
+	// instructions or `ZYAN_FALSE` to hide it.
+	// Note that the `far`/`l` modifier is always printed.
+	FORMATTER_PROP_PRINT_BRANCH_SIZE FormatterProperty = 5
+	// Controls the printing of instruction prefixes.
+	// Pass `ZYAN_TRUE` as value to print all instruction-prefixes (even ignored or duplicate
+	// ones) or `ZYAN_FALSE` to only print prefixes that are effectively used by the instruction.
+	FORMATTER_PROP_DETAILED_PREFIXES FormatterProperty = 6
+	// Controls the base of address values.
+	FORMATTER_PROP_ADDR_BASE FormatterProperty = 7
+	// Controls the signedness of relative addresses. Absolute addresses are
+	// always unsigned.
+	FORMATTER_PROP_ADDR_SIGNEDNESS FormatterProperty = 8
+	// Controls the padding of absolute address values.
+	// Pass `ZYDIS_PADDING_DISABLED` to disable padding, `ZYDIS_PADDING_AUTO` to pad all
+	// addresses to the current address width (hexadecimal only), or any other integer value for
+	// custom padding.
+	FORMATTER_PROP_ADDR_PADDING_ABSOLUTE FormatterProperty = 9
+	// Controls the padding of relative address values.
+	// Pass `ZYDIS_PADDING_DISABLED` to disable padding, `ZYDIS_PADDING_AUTO` to pad all
+	// addresses to the current address width (hexadecimal only), or any other integer value for
+	// custom padding.
+	FORMATTER_PROP_ADDR_PADDING_RELATIVE FormatterProperty = 10
+	// Controls the base of displacement values.
+	FORMATTER_PROP_DISP_BASE FormatterProperty = 11
+	// Controls the signedness of displacement values.
+	FORMATTER_PROP_DISP_SIGNEDNESS FormatterProperty = 12
+	// Controls the padding of displacement values.
+	// Pass `ZYDIS_PADDING_DISABLED` to disable padding, or any other integer value for custom
+	// padding.
+	FORMATTER_PROP_DISP_PADDING FormatterProperty = 13
+	// Controls the base of immediate values.
+	FORMATTER_PROP_IMM_BASE FormatterProperty = 14
+	// Controls the signedness of immediate values.
+	// Pass `ZYDIS_SIGNEDNESS_AUTO` to automatically choose the most suitable mode based on the
+	// operands `ZydisDecodedOperand.imm.is_signed` attribute.
+	FORMATTER_PROP_IMM_SIGNEDNESS FormatterProperty = 15
+	// Controls the padding of immediate values.
+	// Pass `ZYDIS_PADDING_DISABLED` to disable padding, `ZYDIS_PADDING_AUTO` to padd all
+	// immediates to the operand-width (hexadecimal only), or any other integer value for custom
+	// padding.
+	FORMATTER_PROP_IMM_PADDING FormatterProperty = 16
+	// Controls the letter-case for prefixes.
+	// Pass `ZYAN_TRUE` as value to format in uppercase or `ZYAN_FALSE` to format in lowercase.
+	FORMATTER_PROP_UPPERCASE_PREFIXES FormatterProperty = 17
+	// Controls the letter-case for the mnemonic.
+	// Pass `ZYAN_TRUE` as value to format in uppercase or `ZYAN_FALSE` to format in lowercase.
+	FORMATTER_PROP_UPPERCASE_MNEMONIC FormatterProperty = 18
+	// Controls the letter-case for registers.
+	// Pass `ZYAN_TRUE` as value to format in uppercase or `ZYAN_FALSE` to format in lowercase.
+	FORMATTER_PROP_UPPERCASE_REGISTERS FormatterProperty = 19
+	// Controls the letter-case for typecasts.
+	// Pass `ZYAN_TRUE` as value to format in uppercase or `ZYAN_FALSE` to format in lowercase.
+	FORMATTER_PROP_UPPERCASE_TYPECASTS FormatterProperty = 20
+	// Controls the letter-case for decorators.
+	// Pass `ZYAN_TRUE` as value to format in uppercase or `ZYAN_FALSE` to format in lowercase.
+	// WARNING: this is currently not implemented (ignored).
+	FORMATTER_PROP_UPPERCASE_DECORATORS FormatterProperty = 21
+	// Controls the prefix for decimal values.
+	// Pass a pointer to a null-terminated C-style string with a maximum length of 10 characters
+	// to set a custom prefix, or `ZYAN_NULL` to disable it.
+	// The string is deep-copied into an internal buffer.
+	FORMATTER_PROP_DEC_PREFIX FormatterProperty = 22
+	// Controls the suffix for decimal values.
+	// Pass a pointer to a null-terminated C-style string with a maximum length of 10 characters
+	// to set a custom suffix, or `ZYAN_NULL` to disable it.
+	// The string is deep-copied into an internal buffer.
+	FORMATTER_PROP_DEC_SUFFIX FormatterProperty = 23
+	// Controls the letter-case of hexadecimal values.
+	// Pass `ZYAN_TRUE` as value to format in uppercase and `ZYAN_FALSE` to format in lowercase.
+	// The default value is `ZYAN_TRUE`.
+	FORMATTER_PROP_HEX_UPPERCASE FormatterProperty = 24
+	// Controls whether to prepend hexadecimal values with a leading zero if the first character
+	// is non-numeric.
+	// Pass `ZYAN_TRUE` to prepend a leading zero if the first character is non-numeric or
+	// `ZYAN_FALSE` to disable this functionality.
+	// The default value is `ZYAN_FALSE`.
+	FORMATTER_PROP_HEX_FORCE_LEADING_NUMBER FormatterProperty = 25
+	// Controls the prefix for hexadecimal values.
+	// Pass a pointer to a null-terminated C-style string with a maximum length of 10 characters
+	// to set a custom prefix, or `ZYAN_NULL` to disable it.
+	// The string is deep-copied into an internal buffer.
+	FORMATTER_PROP_HEX_PREFIX FormatterProperty = 26
+	// Controls the suffix for hexadecimal values.
+	// Pass a pointer to a null-terminated C-style string with a maximum length of 10 characters
+	// to set a custom suffix, or `ZYAN_NULL` to disable it.
+	// The string is deep-copied into an internal buffer.
+	FORMATTER_PROP_HEX_SUFFIX FormatterProperty = 27
+	// Maximum value of this enum.
+	FORMATTER_PROP_MAX_VALUE FormatterProperty = 27
+	// The minimum number of bits required to represent all values of this enum.
+	FORMATTER_PROP_REQUIRED_BITS FormatterProperty = 5
+)
+
+// Enum defining different mantissae to be used during formatting.
+type NumericBase int32
+
+const (
+	// Decimal system.
+	NUMERIC_BASE_DEC NumericBase = 0
+	// Hexadecimal system.
+	NUMERIC_BASE_HEX NumericBase = 1
+	// Maximum value of this enum.
+	NUMERIC_BASE_MAX_VALUE NumericBase = 1
+	// The minimum number of bits required to represent all values of this enum.
+	NUMERIC_BASE_REQUIRED_BITS NumericBase = 1
+)
+
+// Enum defining the signeness of integers to be used during formatting.
+type Signedness int32
+
+const (
+	// Automatically choose the most suitable mode based on the operands
+	// ZydisDecodedOperand.imm.is_signed` attribute.
+	SIGNEDNESS_AUTO Signedness = 0
+	// Force signed values.
+	SIGNEDNESS_SIGNED Signedness = 1
+	// Force unsigned values.
+	SIGNEDNESS_UNSIGNED Signedness = 2
+	// Maximum value of this enum.
+	SIGNEDNESS_MAX_VALUE Signedness = 2
+	// The minimum number of bits required to represent all values of this enum.
+	SIGNEDNESS_REQUIRED_BITS Signedness = 2
+)
+
+// Enum definining magic values that receive special treatment when used as padding properties
+// of the formatter.
+type Padding int32
+
+const (
+	// Disables padding.
+	PADDING_DISABLED Padding = 0
+	// Padds the value to the current stack-width for addresses, or to the
+	// operand-width for immediate values (hexadecimal only).
+	PADDING_AUTO Padding = -1
+	// Maximum value of this enum.
+	PADDING_MAX_VALUE Padding = -1
+	// The minimum number of bits required to represent all values of this enum.
+	PADDING_REQUIRED_BITS Padding = 32
+)
+
+// Enum selecting a formatter function to be replaced with hooks.
+// Do NOT change the order of the values this enum or the function fields inside the
+// `ZydisFormatter` struct.
+type FormatterFunction int32
+
+const (
+	// This function is invoked before the formatter formats an instruction.
+	FORMATTER_FUNC_PRE_INSTRUCTION FormatterFunction = 0
+	// This function is invoked after the formatter formatted an instruction.
+	FORMATTER_FUNC_POST_INSTRUCTION FormatterFunction = 1
+	// This function refers to the main formatting function.
+	// Replacing this function allows for complete custom formatting, but indirectly disables all
+	// other hooks except for `ZYDIS_FORMATTER_FUNC_PRE_INSTRUCTION` and
+	// `ZYDIS_FORMATTER_FUNC_POST_INSTRUCTION`.
+	FORMATTER_FUNC_FORMAT_INSTRUCTION FormatterFunction = 2
+	// This function is invoked before the formatter formats an operand.
+	FORMATTER_FUNC_PRE_OPERAND FormatterFunction = 3
+	// This function is invoked after the formatter formatted an operand.
+	FORMATTER_FUNC_POST_OPERAND FormatterFunction = 4
+	// This function is invoked to format a register operand.
+	FORMATTER_FUNC_FORMAT_OPERAND_REG FormatterFunction = 5
+	// This function is invoked to format a memory operand.
+	// Replacing this function might indirectly disable some specific calls to the
+	// `ZYDIS_FORMATTER_FUNC_PRINT_TYPECAST`, `ZYDIS_FORMATTER_FUNC_PRINT_SEGMENT`,
+	// `ZYDIS_FORMATTER_FUNC_PRINT_ADDRESS_ABS` and `ZYDIS_FORMATTER_FUNC_PRINT_DISP` functions.
+	FORMATTER_FUNC_FORMAT_OPERAND_MEM FormatterFunction = 6
+	// This function is invoked to format a pointer operand.
+	FORMATTER_FUNC_FORMAT_OPERAND_PTR FormatterFunction = 7
+	// This function is invoked to format an immediate operand.
+	// Replacing this function might indirectly disable some specific calls to the
+	// `ZYDIS_FORMATTER_FUNC_PRINT_ADDRESS_ABS`, `ZYDIS_FORMATTER_FUNC_PRINT_ADDRESS_REL` and
+	// `ZYDIS_FORMATTER_FUNC_PRINT_IMM` functions.
+	FORMATTER_FUNC_FORMAT_OPERAND_IMM FormatterFunction = 8
+	// This function is invoked to print the instruction mnemonic.
+	FORMATTER_FUNC_PRINT_MNEMONIC FormatterFunction = 9
+	// This function is invoked to print a register.
+	FORMATTER_FUNC_PRINT_REGISTER FormatterFunction = 10
+	// This function is invoked to print absolute addresses.
+	// Conditionally invoked, if a runtime-address different to `ZYDIS_RUNTIME_ADDRESS_NONE` was
+	// passed:
+	// - `IMM` operands with relative address (e.g. `JMP`, `CALL`, ...)
+	// - `MEM` operands with `EIP`/`RIP`-relative address (e.g. `MOV RAX, [RIP+0x12345678]`)
+	// Always invoked for:
+	// - `MEM` operands with absolute address (e.g. `MOV RAX, [0x12345678]`)
+	FORMATTER_FUNC_PRINT_ADDRESS_ABS FormatterFunction = 11
+	// This function is invoked to print relative addresses.
+	// Conditionally invoked, if `ZYDIS_RUNTIME_ADDRESS_NONE` was passed as runtime-address:
+	// - `IMM` operands with relative address (e.g. `JMP`, `CALL`, ...)
+	FORMATTER_FUNC_PRINT_ADDRESS_REL FormatterFunction = 12
+	// This function is invoked to print a memory displacement value.
+	// If the memory displacement contains an address and a runtime-address different to
+	// `ZYDIS_RUNTIME_ADDRESS_NONE` was passed, `ZYDIS_FORMATTER_FUNC_PRINT_ADDRESS_ABS` is called
+	// instead.
+	FORMATTER_FUNC_PRINT_DISP FormatterFunction = 13
+	// This function is invoked to print an immediate value.
+	// If the immediate contains an address and a runtime-address different to
+	// `ZYDIS_RUNTIME_ADDRESS_NONE` was passed, `ZYDIS_FORMATTER_FUNC_PRINT_ADDRESS_ABS` is called
+	// instead.
+	// If the immediate contains an address and `ZYDIS_RUNTIME_ADDRESS_NONE` was passed as
+	// runtime-address, `ZYDIS_FORMATTER_FUNC_PRINT_ADDRESS_REL` is called instead.
+	FORMATTER_FUNC_PRINT_IMM FormatterFunction = 14
+	// This function is invoked to print the size of a memory operand (`INTEL` only).
+	FORMATTER_FUNC_PRINT_TYPECAST FormatterFunction = 15
+	// This function is invoked to print the segment-register of a memory operand.
+	FORMATTER_FUNC_PRINT_SEGMENT FormatterFunction = 16
+	// This function is invoked to print the instruction prefixes.
+	FORMATTER_FUNC_PRINT_PREFIXES FormatterFunction = 17
+	// This function is invoked after formatting an operand to print a `EVEX`/`MVEX`
+	// decorator.
+	FORMATTER_FUNC_PRINT_DECORATOR FormatterFunction = 18
+	// Maximum value of this enum.
+	FORMATTER_FUNC_MAX_VALUE FormatterFunction = 18
+	// The minimum number of bits required to represent all values of this enum.
+	FORMATTER_FUNC_REQUIRED_BITS FormatterFunction = 5
+)
+
+// Enum of all decorator types.
+type Decorator int32
+
+const (
+	DECORATOR_INVALID Decorator = 0
+	// The embedded-mask decorator.
+	DECORATOR_MASK Decorator = 1
+	// The broadcast decorator.
+	DECORATOR_BC Decorator = 2
+	// The rounding-control decorator.
+	DECORATOR_RC Decorator = 3
+	// The suppress-all-exceptions decorator.
+	DECORATOR_SAE Decorator = 4
+	// The register-swizzle decorator.
+	DECORATOR_SWIZZLE Decorator = 5
+	// The conversion decorator.
+	DECORATOR_CONVERSION Decorator = 6
+	// The eviction-hint decorator.
+	DECORATOR_EH Decorator = 7
+	// Maximum value of this enum.
+	DECORATOR_MAX_VALUE Decorator = 7
+	// The minimum number of bits required to represent all values of this enum.
+	DECORATOR_REQUIRED_BITS Decorator = 3
+)
+
+// Defines the `ZydisInstructionSegment` struct.
+type InstructionSegment int32
+
+const (
+	INSTR_SEGMENT_NONE InstructionSegment = 0
+	// The legacy prefixes (including ignored `REX` prefixes).
+	INSTR_SEGMENT_PREFIXES InstructionSegment = 1
+	// The effective `REX` prefix byte.
+	INSTR_SEGMENT_REX InstructionSegment = 2
+	// The `XOP` prefix bytes.
+	INSTR_SEGMENT_XOP InstructionSegment = 3
+	// The `VEX` prefix bytes.
+	INSTR_SEGMENT_VEX InstructionSegment = 4
+	// The `EVEX` prefix bytes.
+	INSTR_SEGMENT_EVEX InstructionSegment = 5
+	// The `MVEX` prefix bytes.
+	INSTR_SEGMENT_MVEX InstructionSegment = 6
+	// The opcode bytes.
+	INSTR_SEGMENT_OPCODE InstructionSegment = 7
+	// The `ModRM` byte.
+	INSTR_SEGMENT_MODRM InstructionSegment = 8
+	// The `SIB` byte.
+	INSTR_SEGMENT_SIB InstructionSegment = 9
+	// The displacement bytes.
+	INSTR_SEGMENT_DISPLACEMENT InstructionSegment = 10
+	// The immediate bytes.
+	INSTR_SEGMENT_IMMEDIATE InstructionSegment = 11
+	// Maximum value of this enum.
+	INSTR_SEGMENT_MAX_VALUE InstructionSegment = 11
+	// The minimum number of bits required to represent all values of this enum.
+	INSTR_SEGMENT_REQUIRED_BITS InstructionSegment = 4
+)
+
+// Defines the `ZydisFeature` enum.
+type Feature int32
+
+const (
+	FEATURE_DECODER   Feature = 0
+	FEATURE_ENCODER   Feature = 1
+	FEATURE_FORMATTER Feature = 2
+	FEATURE_AVX512    Feature = 3
+	FEATURE_KNC       Feature = 4
+	FEATURE_SEGMENT   Feature = 5
+	// Maximum value of this enum.
+	FEATURE_MAX_VALUE Feature = 5
+	// The minimum number of bits required to represent all values of this enum.
+	FEATURE_REQUIRED_BITS Feature = 3
+)
+
+type ShortString struct {
+	Raw [9]byte
 }
-type _CrtLocalePointers struct {
-	Locinfo unsafe.Pointer
-	Mbcinfo unsafe.Pointer
+type RegisterContext struct {
+	// The values stored in the register context.
+	Values [266]U64
 }
-type MbstateT struct {
-	_Wchar uint64
-	_Byte  uint16
-	_State uint16
+type DecodedOperandReg struct {
+	// The register value.
+	Value Register
 }
-type Vidmode struct {
-	// The width, in screen coordinates, of the video mode.
-	Width int32
-	// The height, in screen coordinates, of the video mode.
-	Height int32
-	// The bit depth of the red channel of the video mode.
-	redBits int32
-	// The bit depth of the green channel of the video mode.
-	greenBits int32
-	// The bit depth of the blue channel of the video mode.
-	blueBits int32
-	// The refresh rate, in Hz, of the video mode.
-	refreshRate int32
+type DecodedOperandMem struct {
+	// The type of the memory operand.
+	Type MemoryOperandType
+	// The segment register.
+	Segment Register
+	// The base register.
+	Base Register
+	// The index register.
+	Index Register
+	// The scale factor.
+	Scale U8
+	Disp  DecodedOperandMemDisp_
 }
-type Gammaramp struct {
-	// An array of value describing the response of the red channel.
-	Red *uint16
-	// An array of value describing the response of the green channel.
-	Green *uint16
-	// An array of value describing the response of the blue channel.
-	Blue *uint16
-	// The number of elements in each array.
-	Size uint32
+type DecodedOperandMemDisp_ struct {
+	// Signals, if the displacement value is used.
+	HasDisplacement Bool
+	// The displacement value
+	Value I64
 }
-type Image struct {
-	// The width, in pixels, of this image.
-	Width int32
-	// The height, in pixels, of this image.
-	Height int32
-	// The pixel data of this image, arranged left-to-right, top-to-bottom.
-	Pixels *uint8
+type DecodedOperandPtr struct {
+	Segment U16
+	Offset  U32
 }
-type Gamepadstate struct {
-	// The states of each [gamepad button](
-	// @ref gamepad_buttons),
-	// `GLFW_PRESS`
-	// or `GLFW_RELEASE`.
-	Buttons [15]uint8
-	// The states of each [gamepad axis](
-	// @ref gamepad_axes),
-	// in the range -1.0
-	// to 1.0 inclusive.
-	Axes [6]float32
+type DecodedOperandImm struct {
+	// Signals, if the immediate value is signed.
+	IsSigned Bool
+	// Signals, if the immediate value contains a relative offset. You can use
+	// `ZydisCalcAbsoluteAddress` to determine the absolute address value.
+	IsRelative Bool
+	Value      DecodedOperandImmValue_
+}
+type DecodedOperandImmValue_ struct {
+	Raw [1]int64
+}
+type DecodedOperand struct {
+	// The operand-id.
+	Id U8
+	// The visibility of the operand.
+	Visibility OperandVisibility
+	// The operand-actions.
+	Actions OperandActions
+	// The operand-encoding.
+	Encoding OperandEncoding
+	// The logical size of the operand (in bits).
+	Size U16
+	// The element-type.
+	ElementType ElementType
+	// The size of a single element.
+	ElementSize ElementSize
+	// The number of elements.
+	ElementCount U16
+	Attributes   OperandAttributes
+	// The type of the operand.
+	Type OperandType
+	Anon5338_5
+}
+type Anon5338_5 struct {
+	Raw [5]int64
+}
+type AccessedFlags struct {
+	Tested    AccessedFlagsMask
+	Modified  AccessedFlagsMask
+	Set0      AccessedFlagsMask
+	Set1      AccessedFlagsMask
+	Undefined AccessedFlagsMask
+}
+type DecodedInstructionRawRex struct {
+	// 64-bit operand-size promotion.
+	W U8
+	// Extension of the `ModRM.reg` field.
+	R U8
+	// Extension of the `SIB.index` field.
+	X U8
+	// Extension of the `ModRM.rm`, `SIB.base`, or `opcode.reg` field.
+	B U8
+	// The offset of the effective `REX` byte, relative to the beginning of the
+	// instruction, in bytes.
+	// This offset always points to the "effective" `REX` prefix (the one closest to the
+	// instruction opcode), if multiple `REX` prefixes are present.
+	// Note that the `REX` byte can be the first byte of the instruction, which would lead
+	// to an offset of `0`. Please refer to the instruction attributes to check for the
+	// presence of the `REX` prefix.
+	Offset U8
+}
+type DecodedInstructionRawXop struct {
+	// Extension of the `ModRM.reg` field (inverted).
+	R U8
+	// Extension of the `SIB.index` field (inverted).
+	X U8
+	// Extension of the `ModRM.rm`, `SIB.base`, or `opcode.reg` field (inverted).
+	B U8
+	// Opcode-map specifier.
+	MMmmm U8
+	// 64-bit operand-size promotion or opcode-extension.
+	W U8
+	// `NDS`/`NDD` (non-destructive-source/destination) register
+	// specifier (inverted).
+	Vvvv U8
+	// Vector-length specifier.
+	L U8
+	// Compressed legacy prefix.
+	Pp U8
+	// The offset of the first xop byte, relative to the beginning of
+	// the instruction, in bytes.
+	Offset U8
+}
+type DecodedInstructionRawVex struct {
+	// Extension of the `ModRM.reg` field (inverted).
+	R U8
+	// Extension of the `SIB.index` field (inverted).
+	X U8
+	// Extension of the `ModRM.rm`, `SIB.base`, or `opcode.reg` field (inverted).
+	B U8
+	// Opcode-map specifier.
+	MMmmm U8
+	// 64-bit operand-size promotion or opcode-extension.
+	W U8
+	// `NDS`/`NDD` (non-destructive-source/destination) register specifier
+	// (inverted).
+	Vvvv U8
+	// Vector-length specifier.
+	L U8
+	// Compressed legacy prefix.
+	Pp U8
+	// The offset of the first `VEX` byte, relative to the beginning of the instruction, in
+	// bytes.
+	Offset U8
+	// The size of the `VEX` prefix, in bytes.
+	Size U8
+}
+type DecodedInstructionRawEvex struct {
+	// Extension of the `ModRM.reg` field (inverted).
+	R U8
+	// Extension of the `SIB.index/vidx` field (inverted).
+	X U8
+	// Extension of the `ModRM.rm` or `SIB.base` field (inverted).
+	B U8
+	// High-16 register specifier modifier (inverted).
+	R2 U8
+	// Opcode-map specifier.
+	Mmm U8
+	// 64-bit operand-size promotion or opcode-extension.
+	W U8
+	// `NDS`/`NDD` (non-destructive-source/destination) register specifier
+	// (inverted).
+	Vvvv U8
+	// Compressed legacy prefix.
+	Pp U8
+	// Zeroing/Merging.
+	Z U8
+	// Vector-length specifier or rounding-control (most significant bit).
+	L2 U8
+	// Vector-length specifier or rounding-control (least significant bit).
+	L U8
+	// Broadcast/RC/SAE context.
+	B U8
+	// High-16 `NDS`/`VIDX` register specifier.
+	V2 U8
+	// Embedded opmask register specifier.
+	Aaa U8
+	// The offset of the first evex byte, relative to the beginning of the
+	// instruction, in bytes.
+	Offset U8
+}
+type DecodedInstructionRawMvex struct {
+	// Extension of the `ModRM.reg` field (inverted).
+	R U8
+	// Extension of the `SIB.index/vidx` field (inverted).
+	X U8
+	// Extension of the `ModRM.rm` or `SIB.base` field (inverted).
+	B U8
+	// High-16 register specifier modifier (inverted).
+	R2 U8
+	// Opcode-map specifier.
+	Mmmm U8
+	// 64-bit operand-size promotion or opcode-extension.
+	W U8
+	// `NDS`/`NDD` (non-destructive-source/destination) register specifier
+	// (inverted).
+	Vvvv U8
+	// Compressed legacy prefix.
+	Pp U8
+	// Non-temporal/eviction hint.
+	E U8
+	// Swizzle/broadcast/up-convert/down-convert/static-rounding controls.
+	Sss U8
+	// High-16 `NDS`/`VIDX` register specifier.
+	V2 U8
+	// Embedded opmask register specifier.
+	Kkk U8
+	// The offset of the first mvex byte, relative to the beginning of the
+	// instruction, in bytes.
+	Offset U8
+}
+type DecodedInstructionAvx struct {
+	// The `AVX` vector-length.
+	VectorLength U16
+	Mask         DecodedInstructionAvxMask_
+	Broadcast    DecodedInstructionAvxBroadcast_
+	Rounding     DecodedInstructionAvxRounding_
+	Swizzle      DecodedInstructionAvxSwizzle_
+	Conversion   DecodedInstructionAvxConversion_
+	// Signals, if the `SAE` (suppress-all-exceptions) functionality is
+	// enabled for the instruction.
+	HasSae Bool
+	// Signals, if the instruction has a memory-eviction-hint (`KNC` only).
+	HasEvictionHint Bool
+}
+type DecodedInstructionAvxMask_ struct {
+	// The masking mode.
+	Mode MaskMode
+	// The mask register.
+	Reg Register
+}
+type DecodedInstructionAvxBroadcast_ struct {
+	// Signals, if the broadcast is a static broadcast.
+	// This is the case for instructions with inbuilt broadcast functionality, which is
+	// always active and not controlled by the `EVEX/MVEX.RC` bits.
+	IsStatic Bool
+	// The `AVX` broadcast-mode.
+	Mode BroadcastMode
+}
+type DecodedInstructionAvxRounding_ struct {
+	// The `AVX` rounding-mode.
+	Mode RoundingMode
+}
+type DecodedInstructionAvxSwizzle_ struct {
+	// The `AVX` register-swizzle mode.
+	Mode SwizzleMode
+}
+type DecodedInstructionAvxConversion_ struct {
+	// The `AVX` data-conversion mode.
+	Mode ConversionMode
+}
+type DecodedInstructionMeta struct {
+	// The instruction category.
+	Category InstructionCategory
+	// The ISA-set.
+	IsaSet ISASet
+	// The ISA-set extension.
+	IsaExt ISAExt
+	// The branch type.
+	BranchType BranchType
+	// The exception class.
+	ExceptionClass ExceptionClass
+}
+type DecodedInstructionRaw struct {
+	// The number of legacy prefixes.
+	PrefixCount U8
+	Prefixes    [15]DecodedInstructionRawPrefixes_
+	Encoding2   InstructionEncoding
+	Anon6217_5
+	Modrm DecodedInstructionModRm_
+	Sib   DecodedInstructionRawSib_
+	Disp  DecodedInstructionRawDisp_
+	Imm   [2]DecodedInstructionRawImm_
+}
+type DecodedInstructionRawPrefixes_ struct {
+	// The prefix type.
+	Type PrefixType
+	// The prefix byte.
+	Value U8
+}
+type Anon6217_5 struct {
+	Raw [15]byte
+}
+type DecodedInstructionModRm_ struct {
+	// The addressing mode.
+	Mod U8
+	// Register specifier or opcode-extension.
+	Reg U8
+	// Register specifier or opcode-extension.
+	Rm U8
+	// The offset of the `ModRM` byte, relative to the beginning of the
+	// instruction, in bytes.
+	Offset U8
+}
+type DecodedInstructionRawSib_ struct {
+	// The scale factor.
+	Scale U8
+	// The index-register specifier.
+	Index U8
+	// The base-register specifier.
+	Base U8
+	// The offset of the `SIB` byte, relative to the beginning of the
+	// instruction, in bytes.
+	Offset U8
+}
+type DecodedInstructionRawDisp_ struct {
+	// The displacement value
+	Value I64
+	// The physical displacement size, in bits.
+	Size U8
+	// The offset of the displacement data, relative to the beginning of the
+	// instruction, in bytes.
+	Offset U8
+}
+type DecodedInstructionRawImm_ struct {
+	// Signals, if the immediate value is signed.
+	IsSigned Bool
+	// Signals, if the immediate value contains a relative offset. You can use
+	// `ZydisCalcAbsoluteAddress` to determine the absolute address value.
+	IsRelative Bool
+	Value      DecodedInstructionRawImmValue_
+	// The physical immediate size, in bits.
+	Size U8
+	// The offset of the immediate data, relative to the beginning of the
+	// instruction, in bytes.
+	Offset U8
+}
+type DecodedInstructionRawImmValue_ struct {
+	Raw [1]int64
+}
+type DecodedInstruction struct {
+	// The machine mode used to decode this instruction.
+	MachineMode MachineMode
+	// The instruction-mnemonic.
+	Mnemonic Mnemonic
+	// The length of the decoded instruction.
+	Length U8
+	// The instruction-encoding (`LEGACY`, `3DNOW`, `VEX`, `EVEX`, `XOP`).
+	Encoding InstructionEncoding
+	// The opcode-map.
+	OpcodeMap OpcodeMap
+	// The instruction-opcode.
+	Opcode U8
+	// The stack width.
+	StackWidth U8
+	// The effective operand width.
+	OperandWidth U8
+	// The effective address width.
+	AddressWidth U8
+	// The number of instruction-operands.
+	// Explicit and implicit operands are guaranteed to be in the front and ordered as they are
+	// printed by the formatter in `Intel` mode. No assumptions can be made about the order of
+	// hidden operands, except that they always located behind the explicit and implicit operands.
+	OperandCount U8
+	// The number of explicit (visible) instruction-operands.
+	// Explicit and implicit operands are guaranteed to be in the front and ordered as they are
+	// printed by the formatter in `Intel` mode.
+	OperandCountVisible U8
+	// See
+	// @ref instruction_attributes.
+	Attributes InstructionAttributes
+	// Information about CPU flags accessed by the instruction.
+	// The bits in the masks correspond to the actual bits in the `FLAGS/EFLAGS/RFLAGS`
+	// register. See
+	// @ref decoder_cpu_flags.
+	CpuFlags *AccessedFlags
+	// Information about FPU flags accessed by the instruction.
+	// See
+	// @ref decoder_fpu_flags.
+	FpuFlags *AccessedFlags
+	// Extended info for `AVX` instructions.
+	Avx DecodedInstructionAvx
+	// Meta info.
+	Meta DecodedInstructionMeta
+	// Detailed info about different instruction-parts like `ModRM`, `SIB` or
+	// encoding-prefixes.
+	Raw DecodedInstructionRaw
+}
+type DecoderContext struct {
+	// A pointer to the internal instruction definition.
+	Definition unsafe.Pointer
+	// Contains the effective operand-size index.
+	// 0 = 16 bit, 1 = 32 bit, 2 = 64 bit
+	EoszIndex U8
+	// Contains the effective address-size index.
+	// 0 = 16 bit, 1 = 32 bit, 2 = 64 bit
+	EaszIndex     U8
+	VectorUnified Anon6451_5
+	RegInfo       Anon6467_5
+	Evex          Anon6504_5
+	Mvex          Anon6518_5
+	// The scale factor for EVEX/MVEX compressed 8-bit displacement values.
+	Cd8Scale U8
+}
+type Anon6451_5 struct {
+	W    U8
+	R    U8
+	X    U8
+	B    U8
+	L    U8
+	Ll   U8
+	R2   U8
+	V2   U8
+	Vvvv U8
+	Mask U8
+}
+type Anon6467_5 struct {
+	// Signals if the `modrm.mod == 3` or `reg` form is forced for the instruction.
+	IsModReg Bool
+	// The final register id for the `reg` encoded register.
+	IdReg U8
+	// The final register id for the `rm` encoded register.
+	// This value is only set, if a register is encoded in `modrm.rm`.
+	IdRm U8
+	// The final register id for the `ndsndd` (`.vvvv`) encoded register.
+	IdNdsndd U8
+	// The final register id for the base register.
+	// This value is only set, if a memory operand is encoded in `modrm.rm`.
+	IdBase U8
+	// The final register id for the index register.
+	// This value is only set, if a memory operand is encoded in `modrm.rm` and the `SIB` byte
+	// is present.
+	IdIndex U8
+}
+type Anon6504_5 struct {
+	// The EVEX tuple-type.
+	TupleType U8
+	// The EVEX element-size.
+	ElementSize U8
+}
+type Anon6518_5 struct {
+	// The MVEX functionality.
+	Functionality U8
+}
+type Decoder struct {
+	// The machine mode.
+	MachineMode MachineMode
+	// The stack width.
+	StackWidth StackWidth
+	// The decoder mode bitmap.
+	DecoderMode U32
+}
+type EncoderOperand struct {
+	// The type of the operand.
+	Type OperandType
+	Reg  EncoderOperandReg_
+	Mem  EncoderOperandMem_
+	Ptr  EncoderOperandPtr_
+	Imm  EncoderOperandImm_
+}
+type EncoderOperandReg_ struct {
+	// The register value.
+	Value Register
+	// Is this 4th operand (`VEX`/`XOP`). Despite its name, `is4` encoding can sometimes be
+	// applied to 3rd operand instead of 4th. This field is used to resolve such ambiguities.
+	// For all other operands it should be set to `ZYAN_FALSE`.
+	Is4 Bool
+}
+type EncoderOperandMem_ struct {
+	// The base register.
+	Base Register
+	// The index register.
+	Index Register
+	// The scale factor.
+	Scale U8
+	// The displacement value. This value is always treated as 64-bit signed integer, so it's
+	// important to take this into account when specifying absolute addresses. For example
+	// to specify a 16-bit address 0x8000 in 16-bit mode it should be sign extended to
+	// `0xFFFFFFFFFFFF8000`. See `address_size_hint` for more information about absolute
+	// addresses.
+	Displacement I64
+	// Size of this operand in bytes.
+	Size U16
+}
+type EncoderOperandPtr_ struct {
+	// The segment value.
+	Segment U16
+	// The offset value.
+	Offset U32
+}
+type EncoderOperandImm_ struct {
+	Raw [1]int64
+}
+type EncoderRequest struct {
+	// The machine mode used to encode this instruction.
+	MachineMode MachineMode
+	// This optional field can be used to restrict allowed physical encodings for desired
+	// instruction. Some mnemonics can be supported by more than one encoding, so this field can
+	// resolve ambiguities e.g. you can disable `AVX-512` extensions by prohibiting usage of `EVEX`
+	// prefix and allow only `VEX` variants.
+	AllowedEncodings EncodableEncoding
+	// The instruction-mnemonic.
+	Mnemonic Mnemonic
+	// A combination of requested encodable prefixes (`ZYDIS_ATTRIB_HAS_*` flags) for desired
+	// instruction. See `ZYDIS_ENCODABLE_PREFIXES` for list of available prefixes.
+	Prefixes InstructionAttributes
+	// Branch type (required for branching instructions only). Use `ZYDIS_BRANCH_TYPE_NONE` to let
+	// encoder pick size-optimal branch type automatically (`short` and `near` are prioritized over
+	// `far`).
+	BranchType BranchType
+	// Specifies physical size for relative immediate operands. Use `ZYDIS_BRANCH_WIDTH_NONE` to
+	// let encoder pick size-optimal branch width automatically. For segment:offset `far` branches
+	// this field applies to physical size of the offset part. For branching instructions without
+	// relative operands this field affects effective operand size attribute.
+	BranchWidth BranchWidth
+	// Optional address size hint used to resolve ambiguities for some instructions. Generally
+	// encoder deduces address size from `ZydisEncoderOperand` structures that represent
+	// explicit and implicit operands. This hint resolves conflicts when instruction's hidden
+	// operands scale with address size attribute.
+	// This hint is also used for instructions with absolute memory addresses (memory operands with
+	// displacement and no registers). Since displacement field is a 64-bit signed integer it's not
+	// possible to determine actual size of the address value in all situations. This hint
+	// specifies size of the address value provided inside encoder request rather than desired
+	// address size attribute of encoded instruction. Use `ZYDIS_ADDRESS_SIZE_HINT_NONE` to assume
+	// address size default for specified machine mode.
+	AddressSizeHint AddressSizeHint
+	// Optional operand size hint used to resolve ambiguities for some instructions. Generally
+	// encoder deduces operand size from `ZydisEncoderOperand` structures that represent
+	// explicit and implicit operands. This hint resolves conflicts when instruction's hidden
+	// operands scale with operand size attribute.
+	OperandSizeHint OperandSizeHint
+	// The number of instruction-operands.
+	OperandCount U8
+	// Detailed info for all explicit and implicit instruction operands.
+	Operands [5]EncoderOperand
+	Evex     EncoderRequestEvexFeatures_
+	Mvex     EncoderRequestMvexFeatures_
+}
+type EncoderRequestEvexFeatures_ struct {
+	// The broadcast-mode. Specify `ZYDIS_BROADCAST_MODE_INVALID` for instructions with
+	// static broadcast functionality.
+	Broadcast BroadcastMode
+	// The rounding-mode.
+	Rounding RoundingMode
+	// Signals, if the `SAE` (suppress-all-exceptions) functionality should be enabled for
+	// the instruction.
+	Sae Bool
+	// Signals, if the zeroing-mask functionality should be enabled for the instruction.
+	// Specify `ZYAN_TRUE` for instructions with forced zeroing mask.
+	ZeroingMask Bool
+}
+type EncoderRequestMvexFeatures_ struct {
+	// The broadcast-mode.
+	Broadcast BroadcastMode
+	// The data-conversion mode.
+	Conversion ConversionMode
+	// The rounding-mode.
+	Rounding RoundingMode
+	// The `AVX` register-swizzle mode.
+	Swizzle SwizzleMode
+	// Signals, if the `SAE` (suppress-all-exceptions) functionality is enabled for
+	// the instruction.
+	Sae Bool
+	// Signals, if the instruction has a memory-eviction-hint (`KNC` only).
+	EvictionHint Bool
 }
 type Allocator struct {
-	// The memory allocation function.  See
-	// @ref GLFWallocatefun
-	// for details about
-	// allocation function.
-	Allocate Allocatefun
-	// The memory reallocation function.  See
-	// @ref GLFWreallocatefun
-	// for details about
-	// reallocation function.
-	Reallocate Reallocatefun
-	// The memory deallocation function.  See
-	// @ref GLFWdeallocatefun
-	// for details about
-	// deallocation function.
-	Deallocate Deallocatefun
-	// The user pointer for this custom allocator.  This value will be passed to the
-	// allocator functions.
-	User unsafe.Pointer
+	// The allocate function.
+	Allocate AllocatorAllocate
+	// The reallocate function.
+	Reallocate AllocatorAllocate
+	// The deallocate function.
+	Deallocate AllocatorDeallocate
+}
+type Vector struct {
+	// The memory allocator.
+	Allocator *Allocator
+	// The growth factor.
+	GrowthFactor U8
+	// The shrink threshold.
+	ShrinkThreshold U8
+	// The current number of elements in the vector.
+	Size USize
+	// The maximum capacity (number of elements).
+	Capacity USize
+	// The size of a single element in bytes.
+	ElementSize USize
+	// The element destructor callback.
+	Destructor MemberProcedure
+	// The data pointer.
+	Data unsafe.Pointer
+}
+type String struct {
+	// String flags.
+	Flags StringFlags
+	// The vector that contains the actual string.
+	Vector Vector
+}
+type StringView struct {
+	// The string data.
+	// The view internally re-uses the normal string struct to allow casts without any runtime
+	// overhead.
+	String String
+}
+type FormatterToken struct {
+	// The token type.
+	Type TokenType
+	// An offset to the next token, or `0`.
+	Next U8
+}
+type FormatterBuffer struct {
+	// `ZYAN_TRUE`, if the buffer contains a token stream or `ZYAN_FALSE, if it
+	// contains a simple string.
+	IsTokenList Bool
+	// The remaining capacity of the buffer.
+	Capacity USize
+	// The `ZyanString` instance that refers to the literal value of the most
+	// recently added token.
+	String String
+}
+type FormatterContext struct {
+	// A pointer to the `ZydisDecodedInstruction` struct.
+	Instruction *DecodedInstruction
+	// A pointer to the first `ZydisDecodedOperand` struct of the instruction.
+	Operands *DecodedOperand
+	// A pointer to the `ZydisDecodedOperand` struct.
+	Operand *DecodedOperand
+	// The runtime address of the instruction.
+	RuntimeAddress U64
+	// A pointer to user-defined data.
+	// This is the value that was previously passed as the `user_data` argument to
+	//
+	// @ref ZydisFormatterFormatInstruction
+	// or
+	// @ref ZydisFormatterTokenizeOperand.
+	UserData unsafe.Pointer
+}
+type Formatter struct {
+	// The formatter style.
+	Style FormatterStyle
+	// The `ZYDIS_FORMATTER_PROP_FORCE_SIZE` property.
+	ForceMemorySize Bool
+	// The `ZYDIS_FORMATTER_PROP_FORCE_SEGMENT` property.
+	ForceMemorySegment Bool
+	// The `ZYDIS_FORMATTER_PROP_FORCE_SCALE_ONE` property.
+	ForceMemoryScale Bool
+	// The `ZYDIS_FORMATTER_PROP_FORCE_RELATIVE_BRANCHES` property.
+	ForceRelativeBranches Bool
+	// The `ZYDIS_FORMATTER_PROP_FORCE_RELATIVE_RIPREL` property.
+	ForceRelativeRiprel Bool
+	// The `ZYDIS_FORMATTER_PROP_PRINT_BRANCH_SIZE` property.
+	PrintBranchSize Bool
+	// The `ZYDIS_FORMATTER_PROP_DETAILED_PREFIXES` property.
+	DetailedPrefixes Bool
+	// The `ZYDIS_FORMATTER_PROP_ADDR_BASE` property.
+	AddrBase NumericBase
+	// The `ZYDIS_FORMATTER_PROP_ADDR_SIGNEDNESS` property.
+	AddrSignedness Signedness
+	// The `ZYDIS_FORMATTER_PROP_ADDR_PADDING_ABSOLUTE` property.
+	AddrPaddingAbsolute Padding
+	// The `ZYDIS_FORMATTER_PROP_ADDR_PADDING_RELATIVE` property.
+	AddrPaddingRelative Padding
+	// The `ZYDIS_FORMATTER_PROP_DISP_BASE` property.
+	DispBase NumericBase
+	// The `ZYDIS_FORMATTER_PROP_DISP_SIGNEDNESS` property.
+	DispSignedness Signedness
+	// The `ZYDIS_FORMATTER_PROP_DISP_PADDING` property.
+	DispPadding Padding
+	// The `ZYDIS_FORMATTER_PROP_IMM_BASE` property.
+	ImmBase NumericBase
+	// The `ZYDIS_FORMATTER_PROP_IMM_SIGNEDNESS` property.
+	ImmSignedness Signedness
+	// The `ZYDIS_FORMATTER_PROP_IMM_PADDING` property.
+	ImmPadding Padding
+	// The `ZYDIS_FORMATTER_PROP_UPPERCASE_PREFIXES` property.
+	CasePrefixes I32
+	// The `ZYDIS_FORMATTER_PROP_UPPERCASE_MNEMONIC` property.
+	CaseMnemonic I32
+	// The `ZYDIS_FORMATTER_PROP_UPPERCASE_REGISTERS` property.
+	CaseRegisters I32
+	// The `ZYDIS_FORMATTER_PROP_UPPERCASE_TYPECASTS` property.
+	CaseTypecasts I32
+	// The `ZYDIS_FORMATTER_PROP_UPPERCASE_DECORATORS` property.
+	CaseDecorators I32
+	// The `ZYDIS_FORMATTER_PROP_HEX_UPPERCASE` property.
+	HexUppercase Bool
+	// The `ZYDIS_FORMATTER_PROP_HEX_FORCE_LEADING_NUMBER` property.
+	HexForceLeadingNumber Bool
+	NumberFormat          [2][2]Anon11276_5
+	// The `ZYDIS_FORMATTER_FUNC_PRE_INSTRUCTION` function.
+	FuncPreInstruction FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_POST_INSTRUCTION` function.
+	FuncPostInstruction FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_FORMAT_INSTRUCTION` function.
+	FuncFormatInstruction FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_PRE_OPERAND` function.
+	FuncPreOperand FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_POST_OPERAND` function.
+	FuncPostOperand FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_FORMAT_OPERAND_REG` function.
+	FuncFormatOperandReg FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_FORMAT_OPERAND_MEM` function.
+	FuncFormatOperandMem FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_FORMAT_OPERAND_PTR` function.
+	FuncFormatOperandPtr FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_FORMAT_OPERAND_IMM` function.
+	FuncFormatOperandImm FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_PRINT_MNEMONIC function.
+	FuncPrintMnemonic FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_PRINT_REGISTER` function.
+	FuncPrintRegister FormatterRegisterFunc
+	// The `ZYDIS_FORMATTER_FUNC_PRINT_ADDRESS_ABS` function.
+	FuncPrintAddressAbs FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_PRINT_ADDRESS_REL` function.
+	FuncPrintAddressRel FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_PRINT_DISP` function.
+	FuncPrintDisp FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_PRINT_IMM` function.
+	FuncPrintImm FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_PRINT_TYPECAST` function.
+	FuncPrintTypecast FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_PRINT_SEGMENT` function.
+	FuncPrintSegment FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_PRINT_PREFIXES` function.
+	FuncPrintPrefixes FormatterFunc
+	// The `ZYDIS_FORMATTER_FUNC_PRINT_DECORATOR` function.
+	FuncPrintDecorator FormatterDecoratorFunc
+}
+type Anon11276_5 struct {
+	// A pointer to the `ZyanStringView` to use as prefix/suffix.
+	String *StringView
+	// The `ZyanStringView` to use as prefix/suffix
+	StringData StringView
+	// The actual string data.
+	Buffer [11]byte
+}
+type InstructionSegments struct {
+	// The number of logical instruction segments.
+	Count    U8
+	Segments [9]Anon11687_5
+}
+type Anon11687_5 struct {
+	// The type of the segment.
+	Type InstructionSegment
+	// The offset of the segment relative to the start of the instruction (in bytes).
+	Offset U8
+	// The size of the segment, in bytes.
+	Size U8
+}
+type DisassembledInstruction struct {
+	// The runtime address that was passed when disassembling the instruction.
+	RuntimeAddress U64
+	// General information about the decoded instruction in machine-readable format.
+	Info DecodedInstruction
+	// The operands of the decoded instruction in a machine-readable format.
+	// The amount of actual operands can be determined by inspecting the corresponding fields
+	// in the `info` member of this struct. Inspect `operand_count_visible` if you care about
+	// visible operands (those that are printed by the formatter) or `operand_count` if you're
+	// also interested in implicit operands (for example the registers implicitly accessed by
+	// `pushad`). Unused entries are zeroed.
+	Operands [10]DecodedOperand
+	// The textual, human-readable representation of the instruction.
+	// Guaranteed to be zero-terminated.
+	Text [96]byte
 }
 type _Int128T = any
 type _Uint128T = any
@@ -94,8685 +4277,2891 @@ type __NSConstantString = any
 type SizeT = uint64
 type _BuiltinMsVaList = *byte
 type _BuiltinVaList = *byte
-type UintptrT = uint64
-type VaList = *byte
-type SizeT = uint64
-type PtrdiffT = int64
-type IntptrT = int64
-type _VcrtBool = bool
-type WcharT = uint16
-type _CrtBool = bool
-type ErrnoT = int32
-type WintT = uint16
-type WctypeT = uint16
-type _Time32T = int64
-type TimeT = int64
-type _LocaleT = *_CrtLocalePointers
-type RsizeT = uint
-type Int8T = int8
-type Int16T = int16
-type Int32T = int32
-type Int64T = int64
-type Uint8T = uint8
-type Uint16T = uint16
-type Uint32T = uint32
-type Uint64T = uint64
-type IntLeast8T = int8
-type IntLeast16T = int16
-type IntLeast32T = int32
-type IntLeast64T = int64
-type UintLeast8T = uint8
-type UintLeast16T = uint16
-type UintLeast32T = uint32
-type UintLeast64T = uint64
-type IntFast8T = int8
-type IntFast16T = int32
-type IntFast32T = int32
-type IntFast64T = int64
-type UintFast8T = uint8
-type UintFast16T = uint32
-type UintFast32T = uint32
-type UintFast64T = uint64
-type IntmaxT = int64
-type UintmaxT = uint64
-type Enum = uint32
-type Boolean = uint8
-type Bitfield = uint32
-type Byte = int8
-type Short = int16
-type Int = int32
-type Sizei = int32
-type Ubyte = uint8
-type Ushort = uint16
-type Uint = uint32
-type Float = float32
-type Clampf = float32
-type Double = float64
-type Clampd = float64
-type Void = void
-type Pfnglarrayelementextproc = unsafe.Pointer
-type Pfngldrawarraysextproc = unsafe.Pointer
-type Pfnglvertexpointerextproc = unsafe.Pointer
-type Pfnglnormalpointerextproc = unsafe.Pointer
-type Pfnglcolorpointerextproc = unsafe.Pointer
-type Pfnglindexpointerextproc = unsafe.Pointer
-type Pfngltexcoordpointerextproc = unsafe.Pointer
-type Pfngledgeflagpointerextproc = unsafe.Pointer
-type Pfnglgetpointervextproc = unsafe.Pointer
-type Pfnglarrayelementarrayextproc = unsafe.Pointer
-type Pfngldrawrangeelementswinproc = unsafe.Pointer
-type Pfngladdswaphintrectwinproc = unsafe.Pointer
-type Pfnglcolortableextproc = unsafe.Pointer
-type Pfnglcolorsubtableextproc = unsafe.Pointer
-type Pfnglgetcolortableextproc = unsafe.Pointer
-type Pfnglgetcolortableparameterivextproc = unsafe.Pointer
-type Pfnglgetcolortableparameterfvextproc = unsafe.Pointer
+type U8 = uint8
+type U16 = uint16
+type U32 = uint32
+type U64 = uint64
+type I8 = int8
+type I16 = int16
+type I32 = int32
+type I64 = int64
+type USize = uint64
+type ISize = int64
+type UPointer = uint64
+type IPointer = int64
 
-// @brief Client API function pointer type.
-// Generic function pointer used for returning client API function pointers
-// without forcing a cast from a regular pointer.
-//
-// @sa
-// @ref context_glext
-//
-// @sa
-// @ref glfwGetProcAddress
-//
-// @since Added in version 3.0.
-type Glproc = unsafe.Pointer
+// Defines the `ZyanVoidPointer` data-type.
+type VoidPointer = unsafe.Pointer
 
-// @brief Vulkan API function pointer type.
-// Generic function pointer used for returning Vulkan API function pointers
-// without forcing a cast from a regular pointer.
-//
-// @sa
-// @ref vulkan_proc
-//
-// @sa
-// @ref glfwGetInstanceProcAddress
-//
-// @since Added in version 3.2.
-type Vkproc = unsafe.Pointer
+// Defines the `ZyanConstVoidPointer` data-type.
+type ConstVoidPointer = unsafe.Pointer
 
-// @brief Opaque monitor object.
-// Opaque monitor object.
-//
-// @see
-// @ref monitor_object
-//
-// @since Added in version 3.0.
-type Monitor = any
+// Defines the `ZyanBool` data-type.
+// Represents a default boolean data-type where `0` is interpreted as `false` and all other values
+// as `true`.
+type Bool = U8
 
-// @brief Opaque window object.
-// Opaque window object.
-//
-// @see
-// @ref window_object
-//
-// @since Added in version 3.0.
-type Window = any
+// Defines the `ZyanTernary` data-type.
+// The `ZyanTernary` is a balanced ternary type that uses three truth values indicating `true`,
+// `false` and an indeterminate third value.
+type Ternary = I8
 
-// @brief Opaque cursor object.
-// Opaque cursor object.
-//
-// @see
-// @ref cursor_object
-//
-// @since Added in version 3.1.
-type Cursor = any
+// Defines the `ZyanCharPointer` data-type.
+// This type is most often used to represent null-terminated strings aka. C-style strings.
+type CharPointer = *byte
 
-// @brief The function pointer type for memory allocation callbacks.
-// This is the function pointer type for memory allocation callbacks.  A memory
-// allocation callback function has the following signature:
-//
-// This function must return either a memory block at least `size` bytes long,
-// or `NULL` if allocation failed.  Note that not all parts of GLFW handle allocation
-// failures gracefully yet.
-// This function must support being called during
-// @ref glfwInit
-// but before the library is
-// flagged as initialized, as well as during
-// @ref glfwTerminate
-// after the library is no
-// longer flagged as initialized.
-// Any memory allocated via this function will be deallocated via the same allocator
-// during library termination or earlier.
-// Any memory allocated via this function must be suitably aligned for any object type.
-// If you are using C99 or earlier, this alignment is platform-dependent but will be the
-// same as what `malloc` provides.  If you are using C11 or later, this is the value of
-// `alignof(max_align_t)`.
-// The size will always be greater than zero.  Allocations of size zero are filtered out
-// before reaching the custom allocator.
-// If this function returns `NULL`, GLFW will emit
-// @ref GLFW_OUT_OF_MEMORY.
-// This function must not call any GLFW function.
-//
-// @param size The minimum size, in bytes, of the memory block.
-//
-// @param user The user-defined pointer from the allocator.
-//
-// @return The address of the newly allocated memory block, or `NULL` if an
-// error occurred.
-//
-// @pointer
-// _lifetime The returned memory block must be valid at least until it
-// is deallocated.
-//
-// @reentrancy
-// This function should not call any GLFW function.
-//
-// @thread
-// _safety This function must support being called from any thread that calls GLFW
-// functions.
-//
-// @sa
-// @ref init_allocator
-//
-// @sa
-// @ref GLFWallocator
-//
-// @since Added in version 3.4.
-type Allocatefun = unsafe.Pointer
+// Defines the `ZyanConstCharPointer` data-type.
+// This type is most often used to represent null-terminated strings aka. C-style strings.
+type ConstCharPointer = *byte
 
-// @brief The function pointer type for memory reallocation callbacks.
-// This is the function pointer type for memory reallocation callbacks.
-// A memory reallocation callback function has the following signature:
-//
-// This function must return a memory block at least `size` bytes long, or
-// `NULL` if allocation failed.  Note that not all parts of GLFW handle allocation
-// failures gracefully yet.
-// This function must support being called during
-// @ref glfwInit
-// but before the library is
-// flagged as initialized, as well as during
-// @ref glfwTerminate
-// after the library is no
-// longer flagged as initialized.
-// Any memory allocated via this function will be deallocated via the same allocator
-// during library termination or earlier.
-// Any memory allocated via this function must be suitably aligned for any object type.
-// If you are using C99 or earlier, this alignment is platform-dependent but will be the
-// same as what `realloc` provides.  If you are using C11 or later, this is the value of
-// `alignof(max_align_t)`.
-// The block address will never be `NULL` and the size will always be greater than zero.
-// Reallocations of a block to size zero are converted into deallocations before reaching
-// the custom allocator.  Reallocations of `NULL` to a non-zero size are converted into
-// regular allocations before reaching the custom allocator.
-// If this function returns `NULL`, GLFW will emit
-// @ref GLFW_OUT_OF_MEMORY.
-// This function must not call any GLFW function.
-//
-// @param block The address of the memory block to reallocate.
-//
-// @param size The new minimum size, in bytes, of the memory block.
-//
-// @param user The user-defined pointer from the allocator.
-//
-// @return The address of the newly allocated or resized memory block, or
-// `NULL` if an error occurred.
-//
-// @pointer
-// _lifetime The returned memory block must be valid at least until it
-// is deallocated.
-//
-// @reentrancy
-// This function should not call any GLFW function.
-//
-// @thread
-// _safety This function must support being called from any thread that calls GLFW
-// functions.
-//
-// @sa
-// @ref init_allocator
-//
-// @sa
-// @ref GLFWallocator
-//
-// @since Added in version 3.4.
-type Reallocatefun = unsafe.Pointer
+// Defines the `ZydisElementSize` datatype.
+type ElementSize = U16
 
-// @brief The function pointer type for memory deallocation callbacks.
-// This is the function pointer type for memory deallocation callbacks.
-// A memory deallocation callback function has the following signature:
-//
-// This function may deallocate the specified memory block.  This memory block
-// will have been allocated with the same allocator.
-// This function must support being called during
-// @ref glfwInit
-// but before the library is
-// flagged as initialized, as well as during
-// @ref glfwTerminate
-// after the library is no
-// longer flagged as initialized.
-// The block address will never be `NULL`.  Deallocations of `NULL` are filtered out
-// before reaching the custom allocator.
-// If this function returns `NULL`, GLFW will emit
-// @ref GLFW_OUT_OF_MEMORY.
-// This function must not call any GLFW function.
-//
-// @param block The address of the memory block to deallocate.
-//
-// @param user The user-defined pointer from the allocator.
-//
-// @pointer
-// _lifetime The specified memory block will not be accessed by GLFW
-// after this function is called.
-//
-// @reentrancy
-// This function should not call any GLFW function.
-//
-// @thread
-// _safety This function must support being called from any thread that calls GLFW
-// functions.
-//
-// @sa
-// @ref init_allocator
-//
-// @sa
-// @ref GLFWallocator
-//
-// @since Added in version 3.4.
-type Deallocatefun = unsafe.Pointer
+// Defines the `ZydisOperandActions` data-type.
+type OperandActions = U8
 
-// @brief The function pointer type for error callbacks.
-// This is the function pointer type for error callbacks.  An error callback
-// function has the following signature:
-//
-//
-// @param error_code An [error code](
-// @ref errors).
-// Future releases may add
-// more error codes.
-//
-// @param description A UTF-8 encoded string describing the error.
-//
-// @pointer
-// _lifetime The error description string is valid until the callback
-// function returns.
-//
-// @sa
-// @ref error_handling
-//
-// @sa
-// @ref glfwSetErrorCallback
-//
-// @since Added in version 3.0.
-type Errorfun = unsafe.Pointer
+// Defines the `ZydisInstructionAttributes` data-type.
+type InstructionAttributes = U64
 
-// @brief The function pointer type for window position callbacks.
-// This is the function pointer type for window position callbacks.  A window
-// position callback function has the following signature:
-//
-//
-// @param window The window that was moved.
-//
-// @param xpos The new x-coordinate, in screen coordinates, of the
-// upper-left corner of the content area of the window.
-//
-// @param ypos The new y-coordinate, in screen coordinates, of the
-// upper-left corner of the content area of the window.
-//
-// @sa
-// @ref window_pos
-//
-// @sa
-// @ref glfwSetWindowPosCallback
-//
-// @since Added in version 3.0.
-type Windowposfun = unsafe.Pointer
+// Defines the `ZydisRegisterWidth` data-type.
+type RegisterWidth = U16
 
-// @brief The function pointer type for window size callbacks.
-// This is the function pointer type for window size callbacks.  A window size
-// callback function has the following signature:
-//
-//
-// @param window The window that was resized.
-//
-// @param width The new width, in screen coordinates, of the window.
-//
-// @param height The new height, in screen coordinates, of the window.
-//
-// @sa
-// @ref window_size
-//
-// @sa
-// @ref glfwSetWindowSizeCallback
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Added window handle parameter.
-type Windowsizefun = unsafe.Pointer
+// Defines the `ZydisOperandAttributes` data-type.
+type OperandAttributes = U8
 
-// @brief The function pointer type for window close callbacks.
-// This is the function pointer type for window close callbacks.  A window
-// close callback function has the following signature:
-//
-//
-// @param window The window that the user attempted to close.
-//
-// @sa
-// @ref window_close
-//
-// @sa
-// @ref glfwSetWindowCloseCallback
-//
-// @since Added in version 2.5.
-//
-// @glfw3
-// Added window handle parameter.
-type Windowclosefun = unsafe.Pointer
+// Defines the `ZydisAccessedFlagsMask` data-type.
+type AccessedFlagsMask = U32
 
-// @brief The function pointer type for window content refresh callbacks.
-// This is the function pointer type for window content refresh callbacks.
-// A window content refresh callback function has the following signature:
-//
-//
-// @param window The window whose content needs to be refreshed.
-//
-// @sa
-// @ref window_refresh
-//
-// @sa
-// @ref glfwSetWindowRefreshCallback
-//
-// @since Added in version 2.5.
-//
-// @glfw3
-// Added window handle parameter.
-type Windowrefreshfun = unsafe.Pointer
+// Detailed info about the `EVEX` prefix.
+type DecodedInstructionRawEvex = DecodedInstructionRawEvex
 
-// @brief The function pointer type for window focus callbacks.
-// This is the function pointer type for window focus callbacks.  A window
-// focus callback function has the following signature:
-//
-//
-// @param window The window that gained or lost input focus.
-//
-// @param focused `GLFW_TRUE` if the window was given input focus, or
-// `GLFW_FALSE` if it lost it.
-//
-// @sa
-// @ref window_focus
-//
-// @sa
-// @ref glfwSetWindowFocusCallback
-//
-// @since Added in version 3.0.
-type Windowfocusfun = unsafe.Pointer
+// Defines the `ZyanStatus` data type.
+type Status = U32
 
-// @brief The function pointer type for window iconify callbacks.
-// This is the function pointer type for window iconify callbacks.  A window
-// iconify callback function has the following signature:
+// Defines the `ZyanAllocatorAllocate` function prototype.
 //
+// @param allocator A pointer to the `ZyanAllocator` instance.
 //
-// @param window The window that was iconified or restored.
+// @param p Receives a pointer to the first memory block sufficient to hold an
+// array of `n` elements with a size of `element_size`.
 //
-// @param iconified `GLFW_TRUE` if the window was iconified, or
-// `GLFW_FALSE` if it was restored.
+// @param element_size The size of a single element.
 //
-// @sa
-// @ref window_iconify
+// @param n The number of elements to allocate storage for.
 //
-// @sa
-// @ref glfwSetWindowIconifyCallback
-//
-// @since Added in version 3.0.
-type Windowiconifyfun = unsafe.Pointer
+// @return A zyan status code.
+// This prototype is used for the `allocate()` and `reallocate()` functions.
+// The result of the `reallocate()` function is undefined, if `p` does not point to a memory block
+// previously obtained by `(re-)allocate()`.
+type AllocatorAllocate = unsafe.Pointer
 
-// @brief The function pointer type for window maximize callbacks.
-// This is the function pointer type for window maximize callbacks.  A window
-// maximize callback function has the following signature:
+// Defines the `ZyanAllocatorDeallocate` function prototype.
 //
+// @param allocator A pointer to the `ZyanAllocator` instance.
 //
-// @param window The window that was maximized or restored.
+// @param p The pointer obtained from `(re-)allocate()`.
 //
-// @param maximized `GLFW_TRUE` if the window was maximized, or
-// `GLFW_FALSE` if it was restored.
+// @param element_size The size of a single element.
 //
-// @sa
-// @ref window_maximize
+// @param n The number of elements earlier passed to `(re-)allocate()`.
 //
-// @sa glfwSetWindowMaximizeCallback
-//
-// @since Added in version 3.3.
-type Windowmaximizefun = unsafe.Pointer
+// @return A zyan status code.
+type AllocatorDeallocate = unsafe.Pointer
 
-// @brief The function pointer type for framebuffer size callbacks.
-// This is the function pointer type for framebuffer size callbacks.
-// A framebuffer size callback function has the following signature:
+// Defines the `ZyanEqualityComparison` function prototype.
 //
+// @param left A pointer to the first element.
 //
-// @param window The window whose framebuffer was resized.
+// @param right A pointer to the second element.
 //
-// @param width The new width, in pixels, of the framebuffer.
-//
-// @param height The new height, in pixels, of the framebuffer.
-//
-// @sa
-// @ref window_fbsize
-//
-// @sa
-// @ref glfwSetFramebufferSizeCallback
-//
-// @since Added in version 3.0.
-type Framebuffersizefun = unsafe.Pointer
+// @return This function should return `ZYAN_TRUE` if the `left` element equals the `right` one
+// or `ZYAN_FALSE`, if not.
+type EqualityComparison = unsafe.Pointer
 
-// @brief The function pointer type for window content scale callbacks.
-// This is the function pointer type for window content scale callbacks.
-// A window content scale callback function has the following signature:
+// Defines the `ZyanComparison` function prototype.
 //
+// @param left A pointer to the first element.
 //
-// @param window The window whose content scale changed.
+// @param right A pointer to the second element.
 //
-// @param xscale The new x-axis content scale of the window.
-//
-// @param yscale The new y-axis content scale of the window.
-//
-// @sa
-// @ref window_scale
-//
-// @sa
-// @ref glfwSetWindowContentScaleCallback
-//
-// @since Added in version 3.3.
-type Windowcontentscalefun = unsafe.Pointer
+// @return This function should return values in the following range:
+// `left == right -> result == 0`
+// `left
+// <
+// right -> result
+// <
+// 0`
+// `left >  right -> result  > 0`
+type Comparison = unsafe.Pointer
 
-// @brief The function pointer type for mouse button callbacks.
-// This is the function pointer type for mouse button callback functions.
-// A mouse button callback function has the following signature:
+// Defines the `ZyanMemberProcedure` function prototype.
 //
-//
-// @param window The window that received the event.
-//
-// @param button The [mouse button](
-// @ref buttons)
-// that was pressed or
-// released.
-//
-// @param action One of `GLFW_PRESS` or `GLFW_RELEASE`.  Future releases
-// may add more actions.
-//
-// @param mods Bit field describing which [modifier keys](
-// @ref mods)
-// were
-// held down.
-//
-// @sa
-// @ref input_mouse_button
-//
-// @sa
-// @ref glfwSetMouseButtonCallback
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Added window handle and modifier mask parameters.
-type Mousebuttonfun = unsafe.Pointer
+// @param object A pointer to the object.
+type MemberProcedure = unsafe.Pointer
 
-// @brief The function pointer type for cursor position callbacks.
-// This is the function pointer type for cursor position callbacks.  A cursor
-// position callback function has the following signature:
+// Defines the `ZyanConstMemberProcedure` function prototype.
 //
-//
-// @param window The window that received the event.
-//
-// @param xpos The new cursor x-coordinate, relative to the left edge of
-// the content area.
-//
-// @param ypos The new cursor y-coordinate, relative to the top edge of the
-// content area.
-//
-// @sa
-// @ref cursor_pos
-//
-// @sa
-// @ref glfwSetCursorPosCallback
-//
-// @since Added in version 3.0.  Replaces `GLFWmouseposfun`.
-type Cursorposfun = unsafe.Pointer
+// @param object A pointer to the object.
+type ConstMemberProcedure = unsafe.Pointer
 
-// @brief The function pointer type for cursor enter/leave callbacks.
-// This is the function pointer type for cursor enter/leave callbacks.
-// A cursor enter/leave callback function has the following signature:
+// Defines the `ZyanMemberFunction` function prototype.
 //
+// @param object A pointer to the object.
 //
-// @param window The window that received the event.
-//
-// @param entered `GLFW_TRUE` if the cursor entered the window's content
-// area, or `GLFW_FALSE` if it left it.
-//
-// @sa
-// @ref cursor_enter
-//
-// @sa
-// @ref glfwSetCursorEnterCallback
-//
-// @since Added in version 3.0.
-type Cursorenterfun = unsafe.Pointer
+// @return A zyan status code.
+type MemberFunction = unsafe.Pointer
 
-// @brief The function pointer type for scroll callbacks.
-// This is the function pointer type for scroll callbacks.  A scroll callback
-// function has the following signature:
+// Defines the `ZyanConstMemberFunction` function prototype.
 //
+// @param object A pointer to the object.
 //
-// @param window The window that received the event.
-//
-// @param xoffset The scroll offset along the x-axis.
-//
-// @param yoffset The scroll offset along the y-axis.
-//
-// @sa
-// @ref scrolling
-//
-// @sa
-// @ref glfwSetScrollCallback
-//
-// @since Added in version 3.0.  Replaces `GLFWmousewheelfun`.
-type Scrollfun = unsafe.Pointer
+// @return A zyan status code.
+type ConstMemberFunction = unsafe.Pointer
 
-// @brief The function pointer type for keyboard key callbacks.
-// This is the function pointer type for keyboard key callbacks.  A keyboard
-// key callback function has the following signature:
-//
-//
-// @param window The window that received the event.
-//
-// @param key The [keyboard key](
-// @ref keys)
-// that was pressed or released.
-//
-// @param scancode The platform-specific scancode of the key.
-//
-// @param action `GLFW_PRESS`, `GLFW_RELEASE` or `GLFW_REPEAT`.  Future
-// releases may add more actions.
-//
-// @param mods Bit field describing which [modifier keys](
-// @ref mods)
-// were
-// held down.
-//
-// @sa
-// @ref input_key
-//
-// @sa
-// @ref glfwSetKeyCallback
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Added window handle, scancode and modifier mask parameters.
-type Keyfun = unsafe.Pointer
+// Defines the `ZyanStringFlags` data-type.
+type StringFlags = U8
 
-// @brief The function pointer type for Unicode character callbacks.
-// This is the function pointer type for Unicode character callbacks.
-// A Unicode character callback function has the following signature:
-//
-//
-// @param window The window that received the event.
-//
-// @param codepoint The Unicode code point of the character.
-//
-// @sa
-// @ref input_char
-//
-// @sa
-// @ref glfwSetCharCallback
-//
-// @since Added in version 2.4.
-//
-// @glfw3
-// Added window handle parameter.
-type Charfun = unsafe.Pointer
+// Defines the `ZydisTokenType` data-type.
+type TokenType = U8
 
-// @brief The function pointer type for Unicode character with modifiers
-// callbacks.
-// This is the function pointer type for Unicode character with modifiers
-// callbacks.  It is called for each input character, regardless of what
-// modifier keys are held down.  A Unicode character with modifiers callback
-// function has the following signature:
-//
-//
-// @param window The window that received the event.
-//
-// @param codepoint The Unicode code point of the character.
-//
-// @param mods Bit field describing which [modifier keys](
-// @ref mods)
-// were
-// held down.
-//
-// @sa
-// @ref input_char
-//
-// @sa
-// @ref glfwSetCharModsCallback
-//
-// @deprecated Scheduled for removal in version 4.0.
-//
-// @since Added in version 3.1.
-type Charmodsfun = unsafe.Pointer
+// Defines the `ZydisFormatterTokenConst` data-type.
+type FormatterTokenConst = FormatterToken
 
-// @brief The function pointer type for path drop callbacks.
-// This is the function pointer type for path drop callbacks.  A path drop
-// callback function has the following signature:
+// Defines the `ZydisFormatterFunc` function prototype.
 //
+// @param formatter A pointer to the `ZydisFormatter` instance.
 //
-// @param window The window that received the event.
+// @param buffer A pointer to the `ZydisFormatterBuffer` struct.
 //
-// @param path_count The number of dropped paths.
+// @param context A pointer to the `ZydisFormatterContext` struct.
 //
-// @param paths The UTF-8 encoded file and/or directory path names.
-//
-// @pointer
-// _lifetime The path array and its strings are valid until the
-// callback function returns.
-//
-// @sa
-// @ref path_drop
-//
-// @sa
-// @ref glfwSetDropCallback
-//
-// @since Added in version 3.1.
-type Dropfun = unsafe.Pointer
+// @return A zyan status code.
+// Returning a status code other than `ZYAN_STATUS_SUCCESS` will immediately cause the formatting
+// process to fail (see exceptions below).
+// Returning `ZYDIS_STATUS_SKIP_TOKEN` is valid for functions of the following types and will
+// instruct the formatter to omit the whole operand:
+// - `ZYDIS_FORMATTER_FUNC_PRE_OPERAND`
+// - `ZYDIS_FORMATTER_FUNC_POST_OPERAND`
+// - `ZYDIS_FORMATTER_FUNC_FORMAT_OPERAND_REG`
+// - `ZYDIS_FORMATTER_FUNC_FORMAT_OPERAND_MEM`
+// - `ZYDIS_FORMATTER_FUNC_FORMAT_OPERAND_PTR`
+// - `ZYDIS_FORMATTER_FUNC_FORMAT_OPERAND_IMM`
+// This function prototype is used by functions of the following types:
+// - `ZYDIS_FORMATTER_FUNC_PRE_INSTRUCTION`
+// - `ZYDIS_FORMATTER_FUNC_POST_INSTRUCTION`
+// - `ZYDIS_FORMATTER_FUNC_PRE_OPERAND`
+// - `ZYDIS_FORMATTER_FUNC_POST_OPERAND`
+// - `ZYDIS_FORMATTER_FUNC_FORMAT_INSTRUCTION`
+// - `ZYDIS_FORMATTER_FUNC_PRINT_MNEMONIC`
+// - `ZYDIS_FORMATTER_FUNC_PRINT_PREFIXES`
+// - `ZYDIS_FORMATTER_FUNC_FORMAT_OPERAND_REG`
+// - `ZYDIS_FORMATTER_FUNC_FORMAT_OPERAND_MEM`
+// - `ZYDIS_FORMATTER_FUNC_FORMAT_OPERAND_PTR`
+// - `ZYDIS_FORMATTER_FUNC_FORMAT_OPERAND_IMM`
+// - `ZYDIS_FORMATTER_FUNC_PRINT_ADDRESS_ABS`
+// - `ZYDIS_FORMATTER_FUNC_PRINT_ADDRESS_REL`
+// - `ZYDIS_FORMATTER_FUNC_PRINT_DISP`
+// - `ZYDIS_FORMATTER_FUNC_PRINT_IMM`
+// - `ZYDIS_FORMATTER_FUNC_PRINT_TYPECAST`
+// - `ZYDIS_FORMATTER_FUNC_PRINT_SEGMENT`
+type FormatterFunc = unsafe.Pointer
 
-// @brief The function pointer type for monitor configuration callbacks.
-// This is the function pointer type for monitor configuration callbacks.
-// A monitor callback function has the following signature:
+// Defines the `ZydisFormatterRegisterFunc` function prototype.
 //
+// @param formatter A pointer to the `ZydisFormatter` instance.
 //
-// @param monitor The monitor that was connected or disconnected.
+// @param buffer A pointer to the `ZydisFormatterBuffer` struct.
 //
-// @param event One of `GLFW_CONNECTED` or `GLFW_DISCONNECTED`.  Future
-// releases may add more events.
+// @param context A pointer to the `ZydisFormatterContext` struct.
 //
-// @sa
-// @ref monitor_event
+// @param reg The register.
 //
-// @sa
-// @ref glfwSetMonitorCallback
-//
-// @since Added in version 3.0.
-type Monitorfun = unsafe.Pointer
+// @return Returning a status code other than `ZYAN_STATUS_SUCCESS` will immediately cause the
+// formatting process to fail.
+// This function prototype is used by functions of the following types:
+// - `ZYDIS_FORMATTER_FUNC_PRINT_REGISTER`.
+type FormatterRegisterFunc = unsafe.Pointer
 
-// @brief The function pointer type for joystick configuration callbacks.
-// This is the function pointer type for joystick configuration callbacks.
-// A joystick configuration callback function has the following signature:
+// Defines the `ZydisFormatterDecoratorFunc` function prototype.
 //
+// @param formatter A pointer to the `ZydisFormatter` instance.
 //
-// @param jid The joystick that was connected or disconnected.
+// @param buffer A pointer to the `ZydisFormatterBuffer` struct.
 //
-// @param event One of `GLFW_CONNECTED` or `GLFW_DISCONNECTED`.  Future
-// releases may add more events.
+// @param context A pointer to the `ZydisFormatterContext` struct.
 //
-// @sa
-// @ref joystick_event
+// @param decorator The decorator type.
 //
-// @sa
-// @ref glfwSetJoystickCallback
-//
-// @since Added in version 3.2.
-type Joystickfun = unsafe.Pointer
+// @return Returning a status code other than `ZYAN_STATUS_SUCCESS` will immediately cause the
+// formatting process to fail.
+// This function type is used for:
+// - `ZYDIS_FORMATTER_FUNC_PRINT_DECORATOR`
+type FormatterDecoratorFunc = unsafe.Pointer
 
-// @brief Video mode type.
-// This describes a single video mode.
-//
-// @sa
-// @ref monitor_modes
-//
-// @sa
-// @ref glfwGetVideoMode
-//
-// @sa
-// @ref glfwGetVideoModes
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Added refresh rate member.
-type Vidmode = Vidmode
-
-// @brief Gamma ramp.
-// This describes the gamma ramp for a monitor.
-//
-// @sa
-// @ref monitor_gamma
-//
-// @sa
-// @ref glfwGetGammaRamp
-//
-// @sa
-// @ref glfwSetGammaRamp
-//
-// @since Added in version 3.0.
-type Gammaramp = Gammaramp
-
-// @brief Image data.
-// This describes a single 2D image.  See the documentation for each related
-// function what the expected pixel format is.
-//
-// @sa
-// @ref cursor_custom
-//
-// @sa
-// @ref window_icon
-//
-// @since Added in version 2.1.
-//
-// @glfw3
-// Removed format and bytes-per-pixel members.
-type Image = Image
-
-// @brief Gamepad input state
-// This describes the input state of a gamepad.
-//
-// @sa
-// @ref gamepad
-//
-// @sa
-// @ref glfwGetGamepadState
-//
-// @since Added in version 3.3.
-type Gamepadstate = Gamepadstate
-
-// @brief Custom heap memory allocator.
-// This describes a custom heap memory allocator for GLFW.  To set an allocator, pass it
-// to
-// @ref glfwInitAllocator
-// before initializing the library.
-//
-// @sa
-// @ref init_allocator
-//
-// @sa
-// @ref glfwInitAllocator
-//
-// @since Added in version 3.4.
-type Allocator = Allocator
-
-var __imp___va_start gengort.PreloadProc
+var __imp_ZydisCategoryGetString gengort.PreloadProc
 
 //  Gengo init function.
 func init() {
-	__imp___va_start = GengoLibrary.ImportNow("__va_start")
-	__imp___va_start = GengoLibrary.ImportNow("__va_start")
-	__imp___security_init_cookie = GengoLibrary.ImportNow("__security_init_cookie")
-	__imp___security_check_cookie = GengoLibrary.ImportNow("__security_check_cookie")
-	__imp___report_gsfailure = GengoLibrary.ImportNow("__report_gsfailure")
-	__imp__invalid_parameter_noinfo = GengoLibrary.ImportNow("_invalid_parameter_noinfo")
-	__imp__invalid_parameter_noinfo_noreturn = GengoLibrary.ImportNow("_invalid_parameter_noinfo_noreturn")
-	__imp__invoke_watson = GengoLibrary.ImportNow("_invoke_watson")
-	__imp__errno = GengoLibrary.ImportNow("_errno")
-	__imp__set_errno = GengoLibrary.ImportNow("_set_errno")
-	__imp__get_errno = GengoLibrary.ImportNow("_get_errno")
-	__imp___threadid = GengoLibrary.ImportNow("__threadid")
-	__imp___threadhandle = GengoLibrary.ImportNow("__threadhandle")
-	__imp_glAccum = GengoLibrary.ImportNow("glAccum")
-	__imp_glAlphaFunc = GengoLibrary.ImportNow("glAlphaFunc")
-	__imp_glAreTexturesResident = GengoLibrary.ImportNow("glAreTexturesResident")
-	__imp_glArrayElement = GengoLibrary.ImportNow("glArrayElement")
-	__imp_glBegin = GengoLibrary.ImportNow("glBegin")
-	__imp_glBindTexture = GengoLibrary.ImportNow("glBindTexture")
-	__imp_glBitmap = GengoLibrary.ImportNow("glBitmap")
-	__imp_glBlendFunc = GengoLibrary.ImportNow("glBlendFunc")
-	__imp_glCallList = GengoLibrary.ImportNow("glCallList")
-	__imp_glCallLists = GengoLibrary.ImportNow("glCallLists")
-	__imp_glClear = GengoLibrary.ImportNow("glClear")
-	__imp_glClearAccum = GengoLibrary.ImportNow("glClearAccum")
-	__imp_glClearColor = GengoLibrary.ImportNow("glClearColor")
-	__imp_glClearDepth = GengoLibrary.ImportNow("glClearDepth")
-	__imp_glClearIndex = GengoLibrary.ImportNow("glClearIndex")
-	__imp_glClearStencil = GengoLibrary.ImportNow("glClearStencil")
-	__imp_glClipPlane = GengoLibrary.ImportNow("glClipPlane")
-	__imp_glColor3b = GengoLibrary.ImportNow("glColor3b")
-	__imp_glColor3bv = GengoLibrary.ImportNow("glColor3bv")
-	__imp_glColor3d = GengoLibrary.ImportNow("glColor3d")
-	__imp_glColor3dv = GengoLibrary.ImportNow("glColor3dv")
-	__imp_glColor3f = GengoLibrary.ImportNow("glColor3f")
-	__imp_glColor3fv = GengoLibrary.ImportNow("glColor3fv")
-	__imp_glColor3i = GengoLibrary.ImportNow("glColor3i")
-	__imp_glColor3iv = GengoLibrary.ImportNow("glColor3iv")
-	__imp_glColor3s = GengoLibrary.ImportNow("glColor3s")
-	__imp_glColor3sv = GengoLibrary.ImportNow("glColor3sv")
-	__imp_glColor3ub = GengoLibrary.ImportNow("glColor3ub")
-	__imp_glColor3ubv = GengoLibrary.ImportNow("glColor3ubv")
-	__imp_glColor3ui = GengoLibrary.ImportNow("glColor3ui")
-	__imp_glColor3uiv = GengoLibrary.ImportNow("glColor3uiv")
-	__imp_glColor3us = GengoLibrary.ImportNow("glColor3us")
-	__imp_glColor3usv = GengoLibrary.ImportNow("glColor3usv")
-	__imp_glColor4b = GengoLibrary.ImportNow("glColor4b")
-	__imp_glColor4bv = GengoLibrary.ImportNow("glColor4bv")
-	__imp_glColor4d = GengoLibrary.ImportNow("glColor4d")
-	__imp_glColor4dv = GengoLibrary.ImportNow("glColor4dv")
-	__imp_glColor4f = GengoLibrary.ImportNow("glColor4f")
-	__imp_glColor4fv = GengoLibrary.ImportNow("glColor4fv")
-	__imp_glColor4i = GengoLibrary.ImportNow("glColor4i")
-	__imp_glColor4iv = GengoLibrary.ImportNow("glColor4iv")
-	__imp_glColor4s = GengoLibrary.ImportNow("glColor4s")
-	__imp_glColor4sv = GengoLibrary.ImportNow("glColor4sv")
-	__imp_glColor4ub = GengoLibrary.ImportNow("glColor4ub")
-	__imp_glColor4ubv = GengoLibrary.ImportNow("glColor4ubv")
-	__imp_glColor4ui = GengoLibrary.ImportNow("glColor4ui")
-	__imp_glColor4uiv = GengoLibrary.ImportNow("glColor4uiv")
-	__imp_glColor4us = GengoLibrary.ImportNow("glColor4us")
-	__imp_glColor4usv = GengoLibrary.ImportNow("glColor4usv")
-	__imp_glColorMask = GengoLibrary.ImportNow("glColorMask")
-	__imp_glColorMaterial = GengoLibrary.ImportNow("glColorMaterial")
-	__imp_glColorPointer = GengoLibrary.ImportNow("glColorPointer")
-	__imp_glCopyPixels = GengoLibrary.ImportNow("glCopyPixels")
-	__imp_glCopyTexImage1D = GengoLibrary.ImportNow("glCopyTexImage1D")
-	__imp_glCopyTexImage2D = GengoLibrary.ImportNow("glCopyTexImage2D")
-	__imp_glCopyTexSubImage1D = GengoLibrary.ImportNow("glCopyTexSubImage1D")
-	__imp_glCopyTexSubImage2D = GengoLibrary.ImportNow("glCopyTexSubImage2D")
-	__imp_glCullFace = GengoLibrary.ImportNow("glCullFace")
-	__imp_glDeleteLists = GengoLibrary.ImportNow("glDeleteLists")
-	__imp_glDeleteTextures = GengoLibrary.ImportNow("glDeleteTextures")
-	__imp_glDepthFunc = GengoLibrary.ImportNow("glDepthFunc")
-	__imp_glDepthMask = GengoLibrary.ImportNow("glDepthMask")
-	__imp_glDepthRange = GengoLibrary.ImportNow("glDepthRange")
-	__imp_glDisable = GengoLibrary.ImportNow("glDisable")
-	__imp_glDisableClientState = GengoLibrary.ImportNow("glDisableClientState")
-	__imp_glDrawArrays = GengoLibrary.ImportNow("glDrawArrays")
-	__imp_glDrawBuffer = GengoLibrary.ImportNow("glDrawBuffer")
-	__imp_glDrawElements = GengoLibrary.ImportNow("glDrawElements")
-	__imp_glDrawPixels = GengoLibrary.ImportNow("glDrawPixels")
-	__imp_glEdgeFlag = GengoLibrary.ImportNow("glEdgeFlag")
-	__imp_glEdgeFlagPointer = GengoLibrary.ImportNow("glEdgeFlagPointer")
-	__imp_glEdgeFlagv = GengoLibrary.ImportNow("glEdgeFlagv")
-	__imp_glEnable = GengoLibrary.ImportNow("glEnable")
-	__imp_glEnableClientState = GengoLibrary.ImportNow("glEnableClientState")
-	__imp_glEnd = GengoLibrary.ImportNow("glEnd")
-	__imp_glEndList = GengoLibrary.ImportNow("glEndList")
-	__imp_glEvalCoord1d = GengoLibrary.ImportNow("glEvalCoord1d")
-	__imp_glEvalCoord1dv = GengoLibrary.ImportNow("glEvalCoord1dv")
-	__imp_glEvalCoord1f = GengoLibrary.ImportNow("glEvalCoord1f")
-	__imp_glEvalCoord1fv = GengoLibrary.ImportNow("glEvalCoord1fv")
-	__imp_glEvalCoord2d = GengoLibrary.ImportNow("glEvalCoord2d")
-	__imp_glEvalCoord2dv = GengoLibrary.ImportNow("glEvalCoord2dv")
-	__imp_glEvalCoord2f = GengoLibrary.ImportNow("glEvalCoord2f")
-	__imp_glEvalCoord2fv = GengoLibrary.ImportNow("glEvalCoord2fv")
-	__imp_glEvalMesh1 = GengoLibrary.ImportNow("glEvalMesh1")
-	__imp_glEvalMesh2 = GengoLibrary.ImportNow("glEvalMesh2")
-	__imp_glEvalPoint1 = GengoLibrary.ImportNow("glEvalPoint1")
-	__imp_glEvalPoint2 = GengoLibrary.ImportNow("glEvalPoint2")
-	__imp_glFeedbackBuffer = GengoLibrary.ImportNow("glFeedbackBuffer")
-	__imp_glFinish = GengoLibrary.ImportNow("glFinish")
-	__imp_glFlush = GengoLibrary.ImportNow("glFlush")
-	__imp_glFogf = GengoLibrary.ImportNow("glFogf")
-	__imp_glFogfv = GengoLibrary.ImportNow("glFogfv")
-	__imp_glFogi = GengoLibrary.ImportNow("glFogi")
-	__imp_glFogiv = GengoLibrary.ImportNow("glFogiv")
-	__imp_glFrontFace = GengoLibrary.ImportNow("glFrontFace")
-	__imp_glFrustum = GengoLibrary.ImportNow("glFrustum")
-	__imp_glGenLists = GengoLibrary.ImportNow("glGenLists")
-	__imp_glGenTextures = GengoLibrary.ImportNow("glGenTextures")
-	__imp_glGetBooleanv = GengoLibrary.ImportNow("glGetBooleanv")
-	__imp_glGetClipPlane = GengoLibrary.ImportNow("glGetClipPlane")
-	__imp_glGetDoublev = GengoLibrary.ImportNow("glGetDoublev")
-	__imp_glGetError = GengoLibrary.ImportNow("glGetError")
-	__imp_glGetFloatv = GengoLibrary.ImportNow("glGetFloatv")
-	__imp_glGetIntegerv = GengoLibrary.ImportNow("glGetIntegerv")
-	__imp_glGetLightfv = GengoLibrary.ImportNow("glGetLightfv")
-	__imp_glGetLightiv = GengoLibrary.ImportNow("glGetLightiv")
-	__imp_glGetMapdv = GengoLibrary.ImportNow("glGetMapdv")
-	__imp_glGetMapfv = GengoLibrary.ImportNow("glGetMapfv")
-	__imp_glGetMapiv = GengoLibrary.ImportNow("glGetMapiv")
-	__imp_glGetMaterialfv = GengoLibrary.ImportNow("glGetMaterialfv")
-	__imp_glGetMaterialiv = GengoLibrary.ImportNow("glGetMaterialiv")
-	__imp_glGetPixelMapfv = GengoLibrary.ImportNow("glGetPixelMapfv")
-	__imp_glGetPixelMapuiv = GengoLibrary.ImportNow("glGetPixelMapuiv")
-	__imp_glGetPixelMapusv = GengoLibrary.ImportNow("glGetPixelMapusv")
-	__imp_glGetPointerv = GengoLibrary.ImportNow("glGetPointerv")
-	__imp_glGetPolygonStipple = GengoLibrary.ImportNow("glGetPolygonStipple")
-	__imp_glGetString = GengoLibrary.ImportNow("glGetString")
-	__imp_glGetTexEnvfv = GengoLibrary.ImportNow("glGetTexEnvfv")
-	__imp_glGetTexEnviv = GengoLibrary.ImportNow("glGetTexEnviv")
-	__imp_glGetTexGendv = GengoLibrary.ImportNow("glGetTexGendv")
-	__imp_glGetTexGenfv = GengoLibrary.ImportNow("glGetTexGenfv")
-	__imp_glGetTexGeniv = GengoLibrary.ImportNow("glGetTexGeniv")
-	__imp_glGetTexImage = GengoLibrary.ImportNow("glGetTexImage")
-	__imp_glGetTexLevelParameterfv = GengoLibrary.ImportNow("glGetTexLevelParameterfv")
-	__imp_glGetTexLevelParameteriv = GengoLibrary.ImportNow("glGetTexLevelParameteriv")
-	__imp_glGetTexParameterfv = GengoLibrary.ImportNow("glGetTexParameterfv")
-	__imp_glGetTexParameteriv = GengoLibrary.ImportNow("glGetTexParameteriv")
-	__imp_glHint = GengoLibrary.ImportNow("glHint")
-	__imp_glIndexMask = GengoLibrary.ImportNow("glIndexMask")
-	__imp_glIndexPointer = GengoLibrary.ImportNow("glIndexPointer")
-	__imp_glIndexd = GengoLibrary.ImportNow("glIndexd")
-	__imp_glIndexdv = GengoLibrary.ImportNow("glIndexdv")
-	__imp_glIndexf = GengoLibrary.ImportNow("glIndexf")
-	__imp_glIndexfv = GengoLibrary.ImportNow("glIndexfv")
-	__imp_glIndexi = GengoLibrary.ImportNow("glIndexi")
-	__imp_glIndexiv = GengoLibrary.ImportNow("glIndexiv")
-	__imp_glIndexs = GengoLibrary.ImportNow("glIndexs")
-	__imp_glIndexsv = GengoLibrary.ImportNow("glIndexsv")
-	__imp_glIndexub = GengoLibrary.ImportNow("glIndexub")
-	__imp_glIndexubv = GengoLibrary.ImportNow("glIndexubv")
-	__imp_glInitNames = GengoLibrary.ImportNow("glInitNames")
-	__imp_glInterleavedArrays = GengoLibrary.ImportNow("glInterleavedArrays")
-	__imp_glIsEnabled = GengoLibrary.ImportNow("glIsEnabled")
-	__imp_glIsList = GengoLibrary.ImportNow("glIsList")
-	__imp_glIsTexture = GengoLibrary.ImportNow("glIsTexture")
-	__imp_glLightModelf = GengoLibrary.ImportNow("glLightModelf")
-	__imp_glLightModelfv = GengoLibrary.ImportNow("glLightModelfv")
-	__imp_glLightModeli = GengoLibrary.ImportNow("glLightModeli")
-	__imp_glLightModeliv = GengoLibrary.ImportNow("glLightModeliv")
-	__imp_glLightf = GengoLibrary.ImportNow("glLightf")
-	__imp_glLightfv = GengoLibrary.ImportNow("glLightfv")
-	__imp_glLighti = GengoLibrary.ImportNow("glLighti")
-	__imp_glLightiv = GengoLibrary.ImportNow("glLightiv")
-	__imp_glLineStipple = GengoLibrary.ImportNow("glLineStipple")
-	__imp_glLineWidth = GengoLibrary.ImportNow("glLineWidth")
-	__imp_glListBase = GengoLibrary.ImportNow("glListBase")
-	__imp_glLoadIdentity = GengoLibrary.ImportNow("glLoadIdentity")
-	__imp_glLoadMatrixd = GengoLibrary.ImportNow("glLoadMatrixd")
-	__imp_glLoadMatrixf = GengoLibrary.ImportNow("glLoadMatrixf")
-	__imp_glLoadName = GengoLibrary.ImportNow("glLoadName")
-	__imp_glLogicOp = GengoLibrary.ImportNow("glLogicOp")
-	__imp_glMap1d = GengoLibrary.ImportNow("glMap1d")
-	__imp_glMap1f = GengoLibrary.ImportNow("glMap1f")
-	__imp_glMap2d = GengoLibrary.ImportNow("glMap2d")
-	__imp_glMap2f = GengoLibrary.ImportNow("glMap2f")
-	__imp_glMapGrid1d = GengoLibrary.ImportNow("glMapGrid1d")
-	__imp_glMapGrid1f = GengoLibrary.ImportNow("glMapGrid1f")
-	__imp_glMapGrid2d = GengoLibrary.ImportNow("glMapGrid2d")
-	__imp_glMapGrid2f = GengoLibrary.ImportNow("glMapGrid2f")
-	__imp_glMaterialf = GengoLibrary.ImportNow("glMaterialf")
-	__imp_glMaterialfv = GengoLibrary.ImportNow("glMaterialfv")
-	__imp_glMateriali = GengoLibrary.ImportNow("glMateriali")
-	__imp_glMaterialiv = GengoLibrary.ImportNow("glMaterialiv")
-	__imp_glMatrixMode = GengoLibrary.ImportNow("glMatrixMode")
-	__imp_glMultMatrixd = GengoLibrary.ImportNow("glMultMatrixd")
-	__imp_glMultMatrixf = GengoLibrary.ImportNow("glMultMatrixf")
-	__imp_glNewList = GengoLibrary.ImportNow("glNewList")
-	__imp_glNormal3b = GengoLibrary.ImportNow("glNormal3b")
-	__imp_glNormal3bv = GengoLibrary.ImportNow("glNormal3bv")
-	__imp_glNormal3d = GengoLibrary.ImportNow("glNormal3d")
-	__imp_glNormal3dv = GengoLibrary.ImportNow("glNormal3dv")
-	__imp_glNormal3f = GengoLibrary.ImportNow("glNormal3f")
-	__imp_glNormal3fv = GengoLibrary.ImportNow("glNormal3fv")
-	__imp_glNormal3i = GengoLibrary.ImportNow("glNormal3i")
-	__imp_glNormal3iv = GengoLibrary.ImportNow("glNormal3iv")
-	__imp_glNormal3s = GengoLibrary.ImportNow("glNormal3s")
-	__imp_glNormal3sv = GengoLibrary.ImportNow("glNormal3sv")
-	__imp_glNormalPointer = GengoLibrary.ImportNow("glNormalPointer")
-	__imp_glOrtho = GengoLibrary.ImportNow("glOrtho")
-	__imp_glPassThrough = GengoLibrary.ImportNow("glPassThrough")
-	__imp_glPixelMapfv = GengoLibrary.ImportNow("glPixelMapfv")
-	__imp_glPixelMapuiv = GengoLibrary.ImportNow("glPixelMapuiv")
-	__imp_glPixelMapusv = GengoLibrary.ImportNow("glPixelMapusv")
-	__imp_glPixelStoref = GengoLibrary.ImportNow("glPixelStoref")
-	__imp_glPixelStorei = GengoLibrary.ImportNow("glPixelStorei")
-	__imp_glPixelTransferf = GengoLibrary.ImportNow("glPixelTransferf")
-	__imp_glPixelTransferi = GengoLibrary.ImportNow("glPixelTransferi")
-	__imp_glPixelZoom = GengoLibrary.ImportNow("glPixelZoom")
-	__imp_glPointSize = GengoLibrary.ImportNow("glPointSize")
-	__imp_glPolygonMode = GengoLibrary.ImportNow("glPolygonMode")
-	__imp_glPolygonOffset = GengoLibrary.ImportNow("glPolygonOffset")
-	__imp_glPolygonStipple = GengoLibrary.ImportNow("glPolygonStipple")
-	__imp_glPopAttrib = GengoLibrary.ImportNow("glPopAttrib")
-	__imp_glPopClientAttrib = GengoLibrary.ImportNow("glPopClientAttrib")
-	__imp_glPopMatrix = GengoLibrary.ImportNow("glPopMatrix")
-	__imp_glPopName = GengoLibrary.ImportNow("glPopName")
-	__imp_glPrioritizeTextures = GengoLibrary.ImportNow("glPrioritizeTextures")
-	__imp_glPushAttrib = GengoLibrary.ImportNow("glPushAttrib")
-	__imp_glPushClientAttrib = GengoLibrary.ImportNow("glPushClientAttrib")
-	__imp_glPushMatrix = GengoLibrary.ImportNow("glPushMatrix")
-	__imp_glPushName = GengoLibrary.ImportNow("glPushName")
-	__imp_glRasterPos2d = GengoLibrary.ImportNow("glRasterPos2d")
-	__imp_glRasterPos2dv = GengoLibrary.ImportNow("glRasterPos2dv")
-	__imp_glRasterPos2f = GengoLibrary.ImportNow("glRasterPos2f")
-	__imp_glRasterPos2fv = GengoLibrary.ImportNow("glRasterPos2fv")
-	__imp_glRasterPos2i = GengoLibrary.ImportNow("glRasterPos2i")
-	__imp_glRasterPos2iv = GengoLibrary.ImportNow("glRasterPos2iv")
-	__imp_glRasterPos2s = GengoLibrary.ImportNow("glRasterPos2s")
-	__imp_glRasterPos2sv = GengoLibrary.ImportNow("glRasterPos2sv")
-	__imp_glRasterPos3d = GengoLibrary.ImportNow("glRasterPos3d")
-	__imp_glRasterPos3dv = GengoLibrary.ImportNow("glRasterPos3dv")
-	__imp_glRasterPos3f = GengoLibrary.ImportNow("glRasterPos3f")
-	__imp_glRasterPos3fv = GengoLibrary.ImportNow("glRasterPos3fv")
-	__imp_glRasterPos3i = GengoLibrary.ImportNow("glRasterPos3i")
-	__imp_glRasterPos3iv = GengoLibrary.ImportNow("glRasterPos3iv")
-	__imp_glRasterPos3s = GengoLibrary.ImportNow("glRasterPos3s")
-	__imp_glRasterPos3sv = GengoLibrary.ImportNow("glRasterPos3sv")
-	__imp_glRasterPos4d = GengoLibrary.ImportNow("glRasterPos4d")
-	__imp_glRasterPos4dv = GengoLibrary.ImportNow("glRasterPos4dv")
-	__imp_glRasterPos4f = GengoLibrary.ImportNow("glRasterPos4f")
-	__imp_glRasterPos4fv = GengoLibrary.ImportNow("glRasterPos4fv")
-	__imp_glRasterPos4i = GengoLibrary.ImportNow("glRasterPos4i")
-	__imp_glRasterPos4iv = GengoLibrary.ImportNow("glRasterPos4iv")
-	__imp_glRasterPos4s = GengoLibrary.ImportNow("glRasterPos4s")
-	__imp_glRasterPos4sv = GengoLibrary.ImportNow("glRasterPos4sv")
-	__imp_glReadBuffer = GengoLibrary.ImportNow("glReadBuffer")
-	__imp_glReadPixels = GengoLibrary.ImportNow("glReadPixels")
-	__imp_glRectd = GengoLibrary.ImportNow("glRectd")
-	__imp_glRectdv = GengoLibrary.ImportNow("glRectdv")
-	__imp_glRectf = GengoLibrary.ImportNow("glRectf")
-	__imp_glRectfv = GengoLibrary.ImportNow("glRectfv")
-	__imp_glRecti = GengoLibrary.ImportNow("glRecti")
-	__imp_glRectiv = GengoLibrary.ImportNow("glRectiv")
-	__imp_glRects = GengoLibrary.ImportNow("glRects")
-	__imp_glRectsv = GengoLibrary.ImportNow("glRectsv")
-	__imp_glRenderMode = GengoLibrary.ImportNow("glRenderMode")
-	__imp_glRotated = GengoLibrary.ImportNow("glRotated")
-	__imp_glRotatef = GengoLibrary.ImportNow("glRotatef")
-	__imp_glScaled = GengoLibrary.ImportNow("glScaled")
-	__imp_glScalef = GengoLibrary.ImportNow("glScalef")
-	__imp_glScissor = GengoLibrary.ImportNow("glScissor")
-	__imp_glSelectBuffer = GengoLibrary.ImportNow("glSelectBuffer")
-	__imp_glShadeModel = GengoLibrary.ImportNow("glShadeModel")
-	__imp_glStencilFunc = GengoLibrary.ImportNow("glStencilFunc")
-	__imp_glStencilMask = GengoLibrary.ImportNow("glStencilMask")
-	__imp_glStencilOp = GengoLibrary.ImportNow("glStencilOp")
-	__imp_glTexCoord1d = GengoLibrary.ImportNow("glTexCoord1d")
-	__imp_glTexCoord1dv = GengoLibrary.ImportNow("glTexCoord1dv")
-	__imp_glTexCoord1f = GengoLibrary.ImportNow("glTexCoord1f")
-	__imp_glTexCoord1fv = GengoLibrary.ImportNow("glTexCoord1fv")
-	__imp_glTexCoord1i = GengoLibrary.ImportNow("glTexCoord1i")
-	__imp_glTexCoord1iv = GengoLibrary.ImportNow("glTexCoord1iv")
-	__imp_glTexCoord1s = GengoLibrary.ImportNow("glTexCoord1s")
-	__imp_glTexCoord1sv = GengoLibrary.ImportNow("glTexCoord1sv")
-	__imp_glTexCoord2d = GengoLibrary.ImportNow("glTexCoord2d")
-	__imp_glTexCoord2dv = GengoLibrary.ImportNow("glTexCoord2dv")
-	__imp_glTexCoord2f = GengoLibrary.ImportNow("glTexCoord2f")
-	__imp_glTexCoord2fv = GengoLibrary.ImportNow("glTexCoord2fv")
-	__imp_glTexCoord2i = GengoLibrary.ImportNow("glTexCoord2i")
-	__imp_glTexCoord2iv = GengoLibrary.ImportNow("glTexCoord2iv")
-	__imp_glTexCoord2s = GengoLibrary.ImportNow("glTexCoord2s")
-	__imp_glTexCoord2sv = GengoLibrary.ImportNow("glTexCoord2sv")
-	__imp_glTexCoord3d = GengoLibrary.ImportNow("glTexCoord3d")
-	__imp_glTexCoord3dv = GengoLibrary.ImportNow("glTexCoord3dv")
-	__imp_glTexCoord3f = GengoLibrary.ImportNow("glTexCoord3f")
-	__imp_glTexCoord3fv = GengoLibrary.ImportNow("glTexCoord3fv")
-	__imp_glTexCoord3i = GengoLibrary.ImportNow("glTexCoord3i")
-	__imp_glTexCoord3iv = GengoLibrary.ImportNow("glTexCoord3iv")
-	__imp_glTexCoord3s = GengoLibrary.ImportNow("glTexCoord3s")
-	__imp_glTexCoord3sv = GengoLibrary.ImportNow("glTexCoord3sv")
-	__imp_glTexCoord4d = GengoLibrary.ImportNow("glTexCoord4d")
-	__imp_glTexCoord4dv = GengoLibrary.ImportNow("glTexCoord4dv")
-	__imp_glTexCoord4f = GengoLibrary.ImportNow("glTexCoord4f")
-	__imp_glTexCoord4fv = GengoLibrary.ImportNow("glTexCoord4fv")
-	__imp_glTexCoord4i = GengoLibrary.ImportNow("glTexCoord4i")
-	__imp_glTexCoord4iv = GengoLibrary.ImportNow("glTexCoord4iv")
-	__imp_glTexCoord4s = GengoLibrary.ImportNow("glTexCoord4s")
-	__imp_glTexCoord4sv = GengoLibrary.ImportNow("glTexCoord4sv")
-	__imp_glTexCoordPointer = GengoLibrary.ImportNow("glTexCoordPointer")
-	__imp_glTexEnvf = GengoLibrary.ImportNow("glTexEnvf")
-	__imp_glTexEnvfv = GengoLibrary.ImportNow("glTexEnvfv")
-	__imp_glTexEnvi = GengoLibrary.ImportNow("glTexEnvi")
-	__imp_glTexEnviv = GengoLibrary.ImportNow("glTexEnviv")
-	__imp_glTexGend = GengoLibrary.ImportNow("glTexGend")
-	__imp_glTexGendv = GengoLibrary.ImportNow("glTexGendv")
-	__imp_glTexGenf = GengoLibrary.ImportNow("glTexGenf")
-	__imp_glTexGenfv = GengoLibrary.ImportNow("glTexGenfv")
-	__imp_glTexGeni = GengoLibrary.ImportNow("glTexGeni")
-	__imp_glTexGeniv = GengoLibrary.ImportNow("glTexGeniv")
-	__imp_glTexImage1D = GengoLibrary.ImportNow("glTexImage1D")
-	__imp_glTexImage2D = GengoLibrary.ImportNow("glTexImage2D")
-	__imp_glTexParameterf = GengoLibrary.ImportNow("glTexParameterf")
-	__imp_glTexParameterfv = GengoLibrary.ImportNow("glTexParameterfv")
-	__imp_glTexParameteri = GengoLibrary.ImportNow("glTexParameteri")
-	__imp_glTexParameteriv = GengoLibrary.ImportNow("glTexParameteriv")
-	__imp_glTexSubImage1D = GengoLibrary.ImportNow("glTexSubImage1D")
-	__imp_glTexSubImage2D = GengoLibrary.ImportNow("glTexSubImage2D")
-	__imp_glTranslated = GengoLibrary.ImportNow("glTranslated")
-	__imp_glTranslatef = GengoLibrary.ImportNow("glTranslatef")
-	__imp_glVertex2d = GengoLibrary.ImportNow("glVertex2d")
-	__imp_glVertex2dv = GengoLibrary.ImportNow("glVertex2dv")
-	__imp_glVertex2f = GengoLibrary.ImportNow("glVertex2f")
-	__imp_glVertex2fv = GengoLibrary.ImportNow("glVertex2fv")
-	__imp_glVertex2i = GengoLibrary.ImportNow("glVertex2i")
-	__imp_glVertex2iv = GengoLibrary.ImportNow("glVertex2iv")
-	__imp_glVertex2s = GengoLibrary.ImportNow("glVertex2s")
-	__imp_glVertex2sv = GengoLibrary.ImportNow("glVertex2sv")
-	__imp_glVertex3d = GengoLibrary.ImportNow("glVertex3d")
-	__imp_glVertex3dv = GengoLibrary.ImportNow("glVertex3dv")
-	__imp_glVertex3f = GengoLibrary.ImportNow("glVertex3f")
-	__imp_glVertex3fv = GengoLibrary.ImportNow("glVertex3fv")
-	__imp_glVertex3i = GengoLibrary.ImportNow("glVertex3i")
-	__imp_glVertex3iv = GengoLibrary.ImportNow("glVertex3iv")
-	__imp_glVertex3s = GengoLibrary.ImportNow("glVertex3s")
-	__imp_glVertex3sv = GengoLibrary.ImportNow("glVertex3sv")
-	__imp_glVertex4d = GengoLibrary.ImportNow("glVertex4d")
-	__imp_glVertex4dv = GengoLibrary.ImportNow("glVertex4dv")
-	__imp_glVertex4f = GengoLibrary.ImportNow("glVertex4f")
-	__imp_glVertex4fv = GengoLibrary.ImportNow("glVertex4fv")
-	__imp_glVertex4i = GengoLibrary.ImportNow("glVertex4i")
-	__imp_glVertex4iv = GengoLibrary.ImportNow("glVertex4iv")
-	__imp_glVertex4s = GengoLibrary.ImportNow("glVertex4s")
-	__imp_glVertex4sv = GengoLibrary.ImportNow("glVertex4sv")
-	__imp_glVertexPointer = GengoLibrary.ImportNow("glVertexPointer")
-	__imp_glViewport = GengoLibrary.ImportNow("glViewport")
-	__imp_glfwInit = GengoLibrary.ImportNow("glfwInit")
-	__imp_glfwTerminate = GengoLibrary.ImportNow("glfwTerminate")
-	__imp_glfwInitHint = GengoLibrary.ImportNow("glfwInitHint")
-	__imp_glfwInitAllocator = GengoLibrary.ImportNow("glfwInitAllocator")
-	__imp_glfwGetVersion = GengoLibrary.ImportNow("glfwGetVersion")
-	__imp_glfwGetVersionString = GengoLibrary.ImportNow("glfwGetVersionString")
-	__imp_glfwGetError = GengoLibrary.ImportNow("glfwGetError")
-	__imp_glfwSetErrorCallback = GengoLibrary.ImportNow("glfwSetErrorCallback")
-	__imp_glfwGetPlatform = GengoLibrary.ImportNow("glfwGetPlatform")
-	__imp_glfwPlatformSupported = GengoLibrary.ImportNow("glfwPlatformSupported")
-	__imp_glfwGetMonitors = GengoLibrary.ImportNow("glfwGetMonitors")
-	__imp_glfwGetPrimaryMonitor = GengoLibrary.ImportNow("glfwGetPrimaryMonitor")
-	__imp_glfwGetMonitorPos = GengoLibrary.ImportNow("glfwGetMonitorPos")
-	__imp_glfwGetMonitorWorkarea = GengoLibrary.ImportNow("glfwGetMonitorWorkarea")
-	__imp_glfwGetMonitorPhysicalSize = GengoLibrary.ImportNow("glfwGetMonitorPhysicalSize")
-	__imp_glfwGetMonitorContentScale = GengoLibrary.ImportNow("glfwGetMonitorContentScale")
-	__imp_glfwGetMonitorName = GengoLibrary.ImportNow("glfwGetMonitorName")
-	__imp_glfwSetMonitorUserPointer = GengoLibrary.ImportNow("glfwSetMonitorUserPointer")
-	__imp_glfwGetMonitorUserPointer = GengoLibrary.ImportNow("glfwGetMonitorUserPointer")
-	__imp_glfwSetMonitorCallback = GengoLibrary.ImportNow("glfwSetMonitorCallback")
-	__imp_glfwGetVideoModes = GengoLibrary.ImportNow("glfwGetVideoModes")
-	__imp_glfwGetVideoMode = GengoLibrary.ImportNow("glfwGetVideoMode")
-	__imp_glfwSetGamma = GengoLibrary.ImportNow("glfwSetGamma")
-	__imp_glfwGetGammaRamp = GengoLibrary.ImportNow("glfwGetGammaRamp")
-	__imp_glfwSetGammaRamp = GengoLibrary.ImportNow("glfwSetGammaRamp")
-	__imp_glfwDefaultWindowHints = GengoLibrary.ImportNow("glfwDefaultWindowHints")
-	__imp_glfwWindowHint = GengoLibrary.ImportNow("glfwWindowHint")
-	__imp_glfwWindowHintString = GengoLibrary.ImportNow("glfwWindowHintString")
-	__imp_glfwCreateWindow = GengoLibrary.ImportNow("glfwCreateWindow")
-	__imp_glfwDestroyWindow = GengoLibrary.ImportNow("glfwDestroyWindow")
-	__imp_glfwWindowShouldClose = GengoLibrary.ImportNow("glfwWindowShouldClose")
-	__imp_glfwSetWindowShouldClose = GengoLibrary.ImportNow("glfwSetWindowShouldClose")
-	__imp_glfwGetWindowTitle = GengoLibrary.ImportNow("glfwGetWindowTitle")
-	__imp_glfwSetWindowTitle = GengoLibrary.ImportNow("glfwSetWindowTitle")
-	__imp_glfwSetWindowIcon = GengoLibrary.ImportNow("glfwSetWindowIcon")
-	__imp_glfwGetWindowPos = GengoLibrary.ImportNow("glfwGetWindowPos")
-	__imp_glfwSetWindowPos = GengoLibrary.ImportNow("glfwSetWindowPos")
-	__imp_glfwGetWindowSize = GengoLibrary.ImportNow("glfwGetWindowSize")
-	__imp_glfwSetWindowSizeLimits = GengoLibrary.ImportNow("glfwSetWindowSizeLimits")
-	__imp_glfwSetWindowAspectRatio = GengoLibrary.ImportNow("glfwSetWindowAspectRatio")
-	__imp_glfwSetWindowSize = GengoLibrary.ImportNow("glfwSetWindowSize")
-	__imp_glfwGetFramebufferSize = GengoLibrary.ImportNow("glfwGetFramebufferSize")
-	__imp_glfwGetWindowFrameSize = GengoLibrary.ImportNow("glfwGetWindowFrameSize")
-	__imp_glfwGetWindowContentScale = GengoLibrary.ImportNow("glfwGetWindowContentScale")
-	__imp_glfwGetWindowOpacity = GengoLibrary.ImportNow("glfwGetWindowOpacity")
-	__imp_glfwSetWindowOpacity = GengoLibrary.ImportNow("glfwSetWindowOpacity")
-	__imp_glfwIconifyWindow = GengoLibrary.ImportNow("glfwIconifyWindow")
-	__imp_glfwRestoreWindow = GengoLibrary.ImportNow("glfwRestoreWindow")
-	__imp_glfwMaximizeWindow = GengoLibrary.ImportNow("glfwMaximizeWindow")
-	__imp_glfwShowWindow = GengoLibrary.ImportNow("glfwShowWindow")
-	__imp_glfwHideWindow = GengoLibrary.ImportNow("glfwHideWindow")
-	__imp_glfwFocusWindow = GengoLibrary.ImportNow("glfwFocusWindow")
-	__imp_glfwRequestWindowAttention = GengoLibrary.ImportNow("glfwRequestWindowAttention")
-	__imp_glfwGetWindowMonitor = GengoLibrary.ImportNow("glfwGetWindowMonitor")
-	__imp_glfwSetWindowMonitor = GengoLibrary.ImportNow("glfwSetWindowMonitor")
-	__imp_glfwGetWindowAttrib = GengoLibrary.ImportNow("glfwGetWindowAttrib")
-	__imp_glfwSetWindowAttrib = GengoLibrary.ImportNow("glfwSetWindowAttrib")
-	__imp_glfwSetWindowUserPointer = GengoLibrary.ImportNow("glfwSetWindowUserPointer")
-	__imp_glfwGetWindowUserPointer = GengoLibrary.ImportNow("glfwGetWindowUserPointer")
-	__imp_glfwSetWindowPosCallback = GengoLibrary.ImportNow("glfwSetWindowPosCallback")
-	__imp_glfwSetWindowSizeCallback = GengoLibrary.ImportNow("glfwSetWindowSizeCallback")
-	__imp_glfwSetWindowCloseCallback = GengoLibrary.ImportNow("glfwSetWindowCloseCallback")
-	__imp_glfwSetWindowRefreshCallback = GengoLibrary.ImportNow("glfwSetWindowRefreshCallback")
-	__imp_glfwSetWindowFocusCallback = GengoLibrary.ImportNow("glfwSetWindowFocusCallback")
-	__imp_glfwSetWindowIconifyCallback = GengoLibrary.ImportNow("glfwSetWindowIconifyCallback")
-	__imp_glfwSetWindowMaximizeCallback = GengoLibrary.ImportNow("glfwSetWindowMaximizeCallback")
-	__imp_glfwSetFramebufferSizeCallback = GengoLibrary.ImportNow("glfwSetFramebufferSizeCallback")
-	__imp_glfwSetWindowContentScaleCallback = GengoLibrary.ImportNow("glfwSetWindowContentScaleCallback")
-	__imp_glfwPollEvents = GengoLibrary.ImportNow("glfwPollEvents")
-	__imp_glfwWaitEvents = GengoLibrary.ImportNow("glfwWaitEvents")
-	__imp_glfwWaitEventsTimeout = GengoLibrary.ImportNow("glfwWaitEventsTimeout")
-	__imp_glfwPostEmptyEvent = GengoLibrary.ImportNow("glfwPostEmptyEvent")
-	__imp_glfwGetInputMode = GengoLibrary.ImportNow("glfwGetInputMode")
-	__imp_glfwSetInputMode = GengoLibrary.ImportNow("glfwSetInputMode")
-	__imp_glfwRawMouseMotionSupported = GengoLibrary.ImportNow("glfwRawMouseMotionSupported")
-	__imp_glfwGetKeyName = GengoLibrary.ImportNow("glfwGetKeyName")
-	__imp_glfwGetKeyScancode = GengoLibrary.ImportNow("glfwGetKeyScancode")
-	__imp_glfwGetKey = GengoLibrary.ImportNow("glfwGetKey")
-	__imp_glfwGetMouseButton = GengoLibrary.ImportNow("glfwGetMouseButton")
-	__imp_glfwGetCursorPos = GengoLibrary.ImportNow("glfwGetCursorPos")
-	__imp_glfwSetCursorPos = GengoLibrary.ImportNow("glfwSetCursorPos")
-	__imp_glfwCreateCursor = GengoLibrary.ImportNow("glfwCreateCursor")
-	__imp_glfwCreateStandardCursor = GengoLibrary.ImportNow("glfwCreateStandardCursor")
-	__imp_glfwDestroyCursor = GengoLibrary.ImportNow("glfwDestroyCursor")
-	__imp_glfwSetCursor = GengoLibrary.ImportNow("glfwSetCursor")
-	__imp_glfwSetKeyCallback = GengoLibrary.ImportNow("glfwSetKeyCallback")
-	__imp_glfwSetCharCallback = GengoLibrary.ImportNow("glfwSetCharCallback")
-	__imp_glfwSetCharModsCallback = GengoLibrary.ImportNow("glfwSetCharModsCallback")
-	__imp_glfwSetMouseButtonCallback = GengoLibrary.ImportNow("glfwSetMouseButtonCallback")
-	__imp_glfwSetCursorPosCallback = GengoLibrary.ImportNow("glfwSetCursorPosCallback")
-	__imp_glfwSetCursorEnterCallback = GengoLibrary.ImportNow("glfwSetCursorEnterCallback")
-	__imp_glfwSetScrollCallback = GengoLibrary.ImportNow("glfwSetScrollCallback")
-	__imp_glfwSetDropCallback = GengoLibrary.ImportNow("glfwSetDropCallback")
-	__imp_glfwJoystickPresent = GengoLibrary.ImportNow("glfwJoystickPresent")
-	__imp_glfwGetJoystickAxes = GengoLibrary.ImportNow("glfwGetJoystickAxes")
-	__imp_glfwGetJoystickButtons = GengoLibrary.ImportNow("glfwGetJoystickButtons")
-	__imp_glfwGetJoystickHats = GengoLibrary.ImportNow("glfwGetJoystickHats")
-	__imp_glfwGetJoystickName = GengoLibrary.ImportNow("glfwGetJoystickName")
-	__imp_glfwGetJoystickGUID = GengoLibrary.ImportNow("glfwGetJoystickGUID")
-	__imp_glfwSetJoystickUserPointer = GengoLibrary.ImportNow("glfwSetJoystickUserPointer")
-	__imp_glfwGetJoystickUserPointer = GengoLibrary.ImportNow("glfwGetJoystickUserPointer")
-	__imp_glfwJoystickIsGamepad = GengoLibrary.ImportNow("glfwJoystickIsGamepad")
-	__imp_glfwSetJoystickCallback = GengoLibrary.ImportNow("glfwSetJoystickCallback")
-	__imp_glfwUpdateGamepadMappings = GengoLibrary.ImportNow("glfwUpdateGamepadMappings")
-	__imp_glfwGetGamepadName = GengoLibrary.ImportNow("glfwGetGamepadName")
-	__imp_glfwGetGamepadState = GengoLibrary.ImportNow("glfwGetGamepadState")
-	__imp_glfwSetClipboardString = GengoLibrary.ImportNow("glfwSetClipboardString")
-	__imp_glfwGetClipboardString = GengoLibrary.ImportNow("glfwGetClipboardString")
-	__imp_glfwGetTime = GengoLibrary.ImportNow("glfwGetTime")
-	__imp_glfwSetTime = GengoLibrary.ImportNow("glfwSetTime")
-	__imp_glfwGetTimerValue = GengoLibrary.ImportNow("glfwGetTimerValue")
-	__imp_glfwGetTimerFrequency = GengoLibrary.ImportNow("glfwGetTimerFrequency")
-	__imp_glfwMakeContextCurrent = GengoLibrary.ImportNow("glfwMakeContextCurrent")
-	__imp_glfwGetCurrentContext = GengoLibrary.ImportNow("glfwGetCurrentContext")
-	__imp_glfwSwapBuffers = GengoLibrary.ImportNow("glfwSwapBuffers")
-	__imp_glfwSwapInterval = GengoLibrary.ImportNow("glfwSwapInterval")
-	__imp_glfwExtensionSupported = GengoLibrary.ImportNow("glfwExtensionSupported")
-	__imp_glfwGetProcAddress = GengoLibrary.ImportNow("glfwGetProcAddress")
-	__imp_glfwVulkanSupported = GengoLibrary.ImportNow("glfwVulkanSupported")
-	__imp_glfwGetRequiredInstanceExtensions = GengoLibrary.ImportNow("glfwGetRequiredInstanceExtensions")
-	gengort.Validate((*_CrtLocaleDataPublic)(nil), 0x10, 0x8, "_LocalePctype", 0x0, "_LocaleMbCurMax", 0x8, "_LocaleLcCodepage", 0xc)
-	gengort.Validate((*_CrtLocalePointers)(nil), 0x10, 0x8, "Locinfo", 0x0, "Mbcinfo", 0x8)
-	gengort.Validate((*MbstateT)(nil), 0x8, 0x4, "_Wchar", 0x0, "_Byte", 0x4, "_State", 0x6)
-	gengort.Validate((*Vidmode)(nil), 0x18, 0x4, "Width", 0x0, "Height", 0x4, "redBits", 0x8, "greenBits", 0xc, "blueBits", 0x10, "refreshRate", 0x14)
-	gengort.Validate((*Gammaramp)(nil), 0x20, 0x8, "Red", 0x0, "Green", 0x8, "Blue", 0x10, "Size", 0x18)
-	gengort.Validate((*Image)(nil), 0x10, 0x8, "Width", 0x0, "Height", 0x4, "Pixels", 0x8)
-	gengort.Validate((*Gamepadstate)(nil), 0x28, 0x4, "Buttons", 0x0, "Axes", 0x10)
-	gengort.Validate((*Allocator)(nil), 0x20, 0x8, "Allocate", 0x0, "Reallocate", 0x8, "Deallocate", 0x10, "User", 0x18)
-}
-func _VaStart( **byte) { gengort.CCall1(__imp___va_start.Addr(), gengort.MarshallSyscall()) }
-
-var __imp___va_start gengort.PreloadProc
-
-func _VaStart( *VaList) { gengort.CCall1(__imp___va_start.Addr(), gengort.MarshallSyscall()) }
-
-var __imp___security_init_cookie gengort.PreloadProc
-
-func _SecurityInitCookie() { gengort.CCall0(__imp___security_init_cookie.Addr()) }
-
-var __imp___security_check_cookie gengort.PreloadProc
-
-func _SecurityCheckCookie(_StackCookie uintptr) {
-	gengort.CCall1(__imp___security_check_cookie.Addr(), gengort.MarshallSyscall(_StackCookie))
-}
-
-var __imp___report_gsfailure gengort.PreloadProc
-
-func _ReportGsfailure(_StackCookie uintptr) {
-	gengort.CCall1(__imp___report_gsfailure.Addr(), gengort.MarshallSyscall(_StackCookie))
-}
-
-var __imp__invalid_parameter_noinfo gengort.PreloadProc
-
-func _InvalidParameterNoinfo() { gengort.CCall0(__imp__invalid_parameter_noinfo.Addr()) }
-
-var __imp__invalid_parameter_noinfo_noreturn gengort.PreloadProc
-
-func _InvalidParameterNoinfoNoreturn() {
-	gengort.CCall0(__imp__invalid_parameter_noinfo_noreturn.Addr())
-}
-
-var __imp__invoke_watson gengort.PreloadProc
-
-func _InvokeWatson(_Expression *WcharT, _FunctionName *WcharT, _FileName *WcharT, _LineNo uint32, _Reserved uintptr) {
-	gengort.CCall5(__imp__invoke_watson.Addr(), gengort.MarshallSyscall(_Expression), gengort.MarshallSyscall(_FunctionName), gengort.MarshallSyscall(_FileName), gengort.MarshallSyscall(_LineNo), gengort.MarshallSyscall(_Reserved))
-}
-
-var __imp__errno gengort.PreloadProc
-
-func _Errno() *int32 {
-	__res := gengort.CCall0(__imp__errno.Addr())
-	return gengort.UnmarshallSyscall[*int32](__res)
-}
-
-var __imp__set_errno gengort.PreloadProc
-
-func _SetErrno(_Value int32) ErrnoT {
-	__res := gengort.CCall1(__imp__set_errno.Addr(), gengort.MarshallSyscall(_Value))
-	return gengort.UnmarshallSyscall[ErrnoT](__res)
-}
-
-var __imp__get_errno gengort.PreloadProc
-
-func _GetErrno(_Value *int32) ErrnoT {
-	__res := gengort.CCall1(__imp__get_errno.Addr(), gengort.MarshallSyscall(_Value))
-	return gengort.UnmarshallSyscall[ErrnoT](__res)
-}
-
-var __imp___threadid gengort.PreloadProc
-
-func _Threadid() uint64 {
-	__res := gengort.CCall0(__imp___threadid.Addr())
-	return gengort.UnmarshallSyscall[uint64](__res)
-}
-
-var __imp___threadhandle gengort.PreloadProc
-
-func _Threadhandle() uintptr {
-	__res := gengort.CCall0(__imp___threadhandle.Addr())
-	return gengort.UnmarshallSyscall[uintptr](__res)
-}
-
-var __imp_glAccum gengort.PreloadProc
-
-func Accum(op Enum, value Float) {
-	gengort.CCall2(__imp_glAccum.Addr(), gengort.MarshallSyscall(op), gengort.MarshallSyscall(value))
-}
-
-var __imp_glAlphaFunc gengort.PreloadProc
-
-func AlphaFunc(_func Enum, ref Clampf) {
-	gengort.CCall2(__imp_glAlphaFunc.Addr(), gengort.MarshallSyscall(_func), gengort.MarshallSyscall(ref))
-}
-
-var __imp_glAreTexturesResident gengort.PreloadProc
-
-func AreTexturesResident(n Sizei, textures *Uint, residences *Boolean) Boolean {
-	__res := gengort.CCall3(__imp_glAreTexturesResident.Addr(), gengort.MarshallSyscall(n), gengort.MarshallSyscall(textures), gengort.MarshallSyscall(residences))
-	return gengort.UnmarshallSyscall[Boolean](__res)
-}
-
-var __imp_glArrayElement gengort.PreloadProc
-
-func ArrayElement(i Int) { gengort.CCall1(__imp_glArrayElement.Addr(), gengort.MarshallSyscall(i)) }
-
-var __imp_glBegin gengort.PreloadProc
-
-func Begin(mode Enum) { gengort.CCall1(__imp_glBegin.Addr(), gengort.MarshallSyscall(mode)) }
-
-var __imp_glBindTexture gengort.PreloadProc
-
-func BindTexture(target Enum, texture Uint) {
-	gengort.CCall2(__imp_glBindTexture.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(texture))
-}
-
-var __imp_glBitmap gengort.PreloadProc
-
-func Bitmap(width Sizei, height Sizei, xorig Float, yorig Float, xmove Float, ymove Float, bitmap *Ubyte) {
-	gengort.CCall7(__imp_glBitmap.Addr(), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height), gengort.MarshallSyscall(xorig), gengort.MarshallSyscall(yorig), gengort.MarshallSyscall(xmove), gengort.MarshallSyscall(ymove), gengort.MarshallSyscall(bitmap))
-}
-
-var __imp_glBlendFunc gengort.PreloadProc
-
-func BlendFunc(sfactor Enum, dfactor Enum) {
-	gengort.CCall2(__imp_glBlendFunc.Addr(), gengort.MarshallSyscall(sfactor), gengort.MarshallSyscall(dfactor))
-}
-
-var __imp_glCallList gengort.PreloadProc
-
-func CallList(list Uint) { gengort.CCall1(__imp_glCallList.Addr(), gengort.MarshallSyscall(list)) }
-
-var __imp_glCallLists gengort.PreloadProc
-
-func CallLists(n Sizei, _type Enum, lists *Void) {
-	gengort.CCall3(__imp_glCallLists.Addr(), gengort.MarshallSyscall(n), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(lists))
-}
-
-var __imp_glClear gengort.PreloadProc
-
-func Clear(mask Bitfield) { gengort.CCall1(__imp_glClear.Addr(), gengort.MarshallSyscall(mask)) }
-
-var __imp_glClearAccum gengort.PreloadProc
-
-func ClearAccum(red Float, green Float, blue Float, alpha Float) {
-	gengort.CCall4(__imp_glClearAccum.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue), gengort.MarshallSyscall(alpha))
-}
-
-var __imp_glClearColor gengort.PreloadProc
-
-func ClearColor(red Clampf, green Clampf, blue Clampf, alpha Clampf) {
-	gengort.CCall4(__imp_glClearColor.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue), gengort.MarshallSyscall(alpha))
-}
-
-var __imp_glClearDepth gengort.PreloadProc
-
-func ClearDepth(depth Clampd) {
-	gengort.CCall1(__imp_glClearDepth.Addr(), gengort.MarshallSyscall(depth))
-}
-
-var __imp_glClearIndex gengort.PreloadProc
-
-func ClearIndex(c Float) { gengort.CCall1(__imp_glClearIndex.Addr(), gengort.MarshallSyscall(c)) }
-
-var __imp_glClearStencil gengort.PreloadProc
-
-func ClearStencil(s Int) { gengort.CCall1(__imp_glClearStencil.Addr(), gengort.MarshallSyscall(s)) }
-
-var __imp_glClipPlane gengort.PreloadProc
-
-func ClipPlane(plane Enum, equation *Double) {
-	gengort.CCall2(__imp_glClipPlane.Addr(), gengort.MarshallSyscall(plane), gengort.MarshallSyscall(equation))
-}
-
-var __imp_glColor3b gengort.PreloadProc
-
-func Color3b(red Byte, green Byte, blue Byte) {
-	gengort.CCall3(__imp_glColor3b.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue))
-}
-
-var __imp_glColor3bv gengort.PreloadProc
-
-func Color3bv(v *Byte) { gengort.CCall1(__imp_glColor3bv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor3d gengort.PreloadProc
-
-func Color3d(red Double, green Double, blue Double) {
-	gengort.CCall3(__imp_glColor3d.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue))
-}
-
-var __imp_glColor3dv gengort.PreloadProc
-
-func Color3dv(v *Double) { gengort.CCall1(__imp_glColor3dv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor3f gengort.PreloadProc
-
-func Color3f(red Float, green Float, blue Float) {
-	gengort.CCall3(__imp_glColor3f.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue))
-}
-
-var __imp_glColor3fv gengort.PreloadProc
-
-func Color3fv(v *Float) { gengort.CCall1(__imp_glColor3fv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor3i gengort.PreloadProc
-
-func Color3i(red Int, green Int, blue Int) {
-	gengort.CCall3(__imp_glColor3i.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue))
-}
-
-var __imp_glColor3iv gengort.PreloadProc
-
-func Color3iv(v *Int) { gengort.CCall1(__imp_glColor3iv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor3s gengort.PreloadProc
-
-func Color3s(red Short, green Short, blue Short) {
-	gengort.CCall3(__imp_glColor3s.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue))
-}
-
-var __imp_glColor3sv gengort.PreloadProc
-
-func Color3sv(v *Short) { gengort.CCall1(__imp_glColor3sv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor3ub gengort.PreloadProc
-
-func Color3ub(red Ubyte, green Ubyte, blue Ubyte) {
-	gengort.CCall3(__imp_glColor3ub.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue))
-}
-
-var __imp_glColor3ubv gengort.PreloadProc
-
-func Color3ubv(v *Ubyte) { gengort.CCall1(__imp_glColor3ubv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor3ui gengort.PreloadProc
-
-func Color3ui(red Uint, green Uint, blue Uint) {
-	gengort.CCall3(__imp_glColor3ui.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue))
-}
-
-var __imp_glColor3uiv gengort.PreloadProc
-
-func Color3uiv(v *Uint) { gengort.CCall1(__imp_glColor3uiv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor3us gengort.PreloadProc
-
-func Color3us(red Ushort, green Ushort, blue Ushort) {
-	gengort.CCall3(__imp_glColor3us.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue))
-}
-
-var __imp_glColor3usv gengort.PreloadProc
-
-func Color3usv(v *Ushort) { gengort.CCall1(__imp_glColor3usv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor4b gengort.PreloadProc
-
-func Color4b(red Byte, green Byte, blue Byte, alpha Byte) {
-	gengort.CCall4(__imp_glColor4b.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue), gengort.MarshallSyscall(alpha))
-}
-
-var __imp_glColor4bv gengort.PreloadProc
-
-func Color4bv(v *Byte) { gengort.CCall1(__imp_glColor4bv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor4d gengort.PreloadProc
-
-func Color4d(red Double, green Double, blue Double, alpha Double) {
-	gengort.CCall4(__imp_glColor4d.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue), gengort.MarshallSyscall(alpha))
-}
-
-var __imp_glColor4dv gengort.PreloadProc
-
-func Color4dv(v *Double) { gengort.CCall1(__imp_glColor4dv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor4f gengort.PreloadProc
-
-func Color4f(red Float, green Float, blue Float, alpha Float) {
-	gengort.CCall4(__imp_glColor4f.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue), gengort.MarshallSyscall(alpha))
-}
-
-var __imp_glColor4fv gengort.PreloadProc
-
-func Color4fv(v *Float) { gengort.CCall1(__imp_glColor4fv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor4i gengort.PreloadProc
-
-func Color4i(red Int, green Int, blue Int, alpha Int) {
-	gengort.CCall4(__imp_glColor4i.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue), gengort.MarshallSyscall(alpha))
-}
-
-var __imp_glColor4iv gengort.PreloadProc
-
-func Color4iv(v *Int) { gengort.CCall1(__imp_glColor4iv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor4s gengort.PreloadProc
-
-func Color4s(red Short, green Short, blue Short, alpha Short) {
-	gengort.CCall4(__imp_glColor4s.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue), gengort.MarshallSyscall(alpha))
-}
-
-var __imp_glColor4sv gengort.PreloadProc
-
-func Color4sv(v *Short) { gengort.CCall1(__imp_glColor4sv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor4ub gengort.PreloadProc
-
-func Color4ub(red Ubyte, green Ubyte, blue Ubyte, alpha Ubyte) {
-	gengort.CCall4(__imp_glColor4ub.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue), gengort.MarshallSyscall(alpha))
-}
-
-var __imp_glColor4ubv gengort.PreloadProc
-
-func Color4ubv(v *Ubyte) { gengort.CCall1(__imp_glColor4ubv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor4ui gengort.PreloadProc
-
-func Color4ui(red Uint, green Uint, blue Uint, alpha Uint) {
-	gengort.CCall4(__imp_glColor4ui.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue), gengort.MarshallSyscall(alpha))
-}
-
-var __imp_glColor4uiv gengort.PreloadProc
-
-func Color4uiv(v *Uint) { gengort.CCall1(__imp_glColor4uiv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColor4us gengort.PreloadProc
-
-func Color4us(red Ushort, green Ushort, blue Ushort, alpha Ushort) {
-	gengort.CCall4(__imp_glColor4us.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue), gengort.MarshallSyscall(alpha))
-}
-
-var __imp_glColor4usv gengort.PreloadProc
-
-func Color4usv(v *Ushort) { gengort.CCall1(__imp_glColor4usv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glColorMask gengort.PreloadProc
-
-func ColorMask(red Boolean, green Boolean, blue Boolean, alpha Boolean) {
-	gengort.CCall4(__imp_glColorMask.Addr(), gengort.MarshallSyscall(red), gengort.MarshallSyscall(green), gengort.MarshallSyscall(blue), gengort.MarshallSyscall(alpha))
-}
-
-var __imp_glColorMaterial gengort.PreloadProc
-
-func ColorMaterial(face Enum, mode Enum) {
-	gengort.CCall2(__imp_glColorMaterial.Addr(), gengort.MarshallSyscall(face), gengort.MarshallSyscall(mode))
-}
-
-var __imp_glColorPointer gengort.PreloadProc
-
-func ColorPointer(size Int, _type Enum, stride Sizei, pointer *Void) {
-	gengort.CCall4(__imp_glColorPointer.Addr(), gengort.MarshallSyscall(size), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(stride), gengort.MarshallSyscall(pointer))
-}
-
-var __imp_glCopyPixels gengort.PreloadProc
-
-func CopyPixels(x Int, y Int, width Sizei, height Sizei, _type Enum) {
-	gengort.CCall5(__imp_glCopyPixels.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height), gengort.MarshallSyscall(_type))
-}
-
-var __imp_glCopyTexImage1D gengort.PreloadProc
-
-func CopyTexImage1D(target Enum, level Int, internalFormat Enum, x Int, y Int, width Sizei, border Int) {
-	gengort.CCall7(__imp_glCopyTexImage1D.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(level), gengort.MarshallSyscall(internalFormat), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(width), gengort.MarshallSyscall(border))
-}
-
-var __imp_glCopyTexImage2D gengort.PreloadProc
-
-func CopyTexImage2D(target Enum, level Int, internalFormat Enum, x Int, y Int, width Sizei, height Sizei, border Int) {
-	gengort.CCall8(__imp_glCopyTexImage2D.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(level), gengort.MarshallSyscall(internalFormat), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height), gengort.MarshallSyscall(border))
-}
-
-var __imp_glCopyTexSubImage1D gengort.PreloadProc
-
-func CopyTexSubImage1D(target Enum, level Int, xoffset Int, x Int, y Int, width Sizei) {
-	gengort.CCall6(__imp_glCopyTexSubImage1D.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(level), gengort.MarshallSyscall(xoffset), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(width))
-}
-
-var __imp_glCopyTexSubImage2D gengort.PreloadProc
-
-func CopyTexSubImage2D(target Enum, level Int, xoffset Int, yoffset Int, x Int, y Int, width Sizei, height Sizei) {
-	gengort.CCall8(__imp_glCopyTexSubImage2D.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(level), gengort.MarshallSyscall(xoffset), gengort.MarshallSyscall(yoffset), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height))
-}
-
-var __imp_glCullFace gengort.PreloadProc
-
-func CullFace(mode Enum) { gengort.CCall1(__imp_glCullFace.Addr(), gengort.MarshallSyscall(mode)) }
-
-var __imp_glDeleteLists gengort.PreloadProc
-
-func DeleteLists(list Uint, _range Sizei) {
-	gengort.CCall2(__imp_glDeleteLists.Addr(), gengort.MarshallSyscall(list), gengort.MarshallSyscall(_range))
-}
-
-var __imp_glDeleteTextures gengort.PreloadProc
-
-func DeleteTextures(n Sizei, textures *Uint) {
-	gengort.CCall2(__imp_glDeleteTextures.Addr(), gengort.MarshallSyscall(n), gengort.MarshallSyscall(textures))
-}
-
-var __imp_glDepthFunc gengort.PreloadProc
-
-func DepthFunc(_func Enum) { gengort.CCall1(__imp_glDepthFunc.Addr(), gengort.MarshallSyscall(_func)) }
-
-var __imp_glDepthMask gengort.PreloadProc
-
-func DepthMask(flag Boolean) { gengort.CCall1(__imp_glDepthMask.Addr(), gengort.MarshallSyscall(flag)) }
-
-var __imp_glDepthRange gengort.PreloadProc
-
-func DepthRange(zNear Clampd, zFar Clampd) {
-	gengort.CCall2(__imp_glDepthRange.Addr(), gengort.MarshallSyscall(zNear), gengort.MarshallSyscall(zFar))
-}
-
-var __imp_glDisable gengort.PreloadProc
-
-func Disable(_cap Enum) { gengort.CCall1(__imp_glDisable.Addr(), gengort.MarshallSyscall(_cap)) }
-
-var __imp_glDisableClientState gengort.PreloadProc
-
-func DisableClientState(array Enum) {
-	gengort.CCall1(__imp_glDisableClientState.Addr(), gengort.MarshallSyscall(array))
-}
-
-var __imp_glDrawArrays gengort.PreloadProc
-
-func DrawArrays(mode Enum, first Int, count Sizei) {
-	gengort.CCall3(__imp_glDrawArrays.Addr(), gengort.MarshallSyscall(mode), gengort.MarshallSyscall(first), gengort.MarshallSyscall(count))
-}
-
-var __imp_glDrawBuffer gengort.PreloadProc
-
-func DrawBuffer(mode Enum) { gengort.CCall1(__imp_glDrawBuffer.Addr(), gengort.MarshallSyscall(mode)) }
-
-var __imp_glDrawElements gengort.PreloadProc
-
-func DrawElements(mode Enum, count Sizei, _type Enum, indices *Void) {
-	gengort.CCall4(__imp_glDrawElements.Addr(), gengort.MarshallSyscall(mode), gengort.MarshallSyscall(count), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(indices))
-}
-
-var __imp_glDrawPixels gengort.PreloadProc
-
-func DrawPixels(width Sizei, height Sizei, format Enum, _type Enum, pixels *Void) {
-	gengort.CCall5(__imp_glDrawPixels.Addr(), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height), gengort.MarshallSyscall(format), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(pixels))
-}
-
-var __imp_glEdgeFlag gengort.PreloadProc
-
-func EdgeFlag(flag Boolean) { gengort.CCall1(__imp_glEdgeFlag.Addr(), gengort.MarshallSyscall(flag)) }
-
-var __imp_glEdgeFlagPointer gengort.PreloadProc
-
-func EdgeFlagPointer(stride Sizei, pointer *Void) {
-	gengort.CCall2(__imp_glEdgeFlagPointer.Addr(), gengort.MarshallSyscall(stride), gengort.MarshallSyscall(pointer))
-}
-
-var __imp_glEdgeFlagv gengort.PreloadProc
-
-func EdgeFlagv(flag *Boolean) {
-	gengort.CCall1(__imp_glEdgeFlagv.Addr(), gengort.MarshallSyscall(flag))
-}
-
-var __imp_glEnable gengort.PreloadProc
-
-func Enable(_cap Enum) { gengort.CCall1(__imp_glEnable.Addr(), gengort.MarshallSyscall(_cap)) }
-
-var __imp_glEnableClientState gengort.PreloadProc
-
-func EnableClientState(array Enum) {
-	gengort.CCall1(__imp_glEnableClientState.Addr(), gengort.MarshallSyscall(array))
-}
-
-var __imp_glEnd gengort.PreloadProc
-
-func End() { gengort.CCall0(__imp_glEnd.Addr()) }
-
-var __imp_glEndList gengort.PreloadProc
-
-func EndList() { gengort.CCall0(__imp_glEndList.Addr()) }
-
-var __imp_glEvalCoord1d gengort.PreloadProc
-
-func EvalCoord1d(u Double) { gengort.CCall1(__imp_glEvalCoord1d.Addr(), gengort.MarshallSyscall(u)) }
-
-var __imp_glEvalCoord1dv gengort.PreloadProc
-
-func EvalCoord1dv(u *Double) { gengort.CCall1(__imp_glEvalCoord1dv.Addr(), gengort.MarshallSyscall(u)) }
-
-var __imp_glEvalCoord1f gengort.PreloadProc
-
-func EvalCoord1f(u Float) { gengort.CCall1(__imp_glEvalCoord1f.Addr(), gengort.MarshallSyscall(u)) }
-
-var __imp_glEvalCoord1fv gengort.PreloadProc
-
-func EvalCoord1fv(u *Float) { gengort.CCall1(__imp_glEvalCoord1fv.Addr(), gengort.MarshallSyscall(u)) }
-
-var __imp_glEvalCoord2d gengort.PreloadProc
-
-func EvalCoord2d(u Double, v Double) {
-	gengort.CCall2(__imp_glEvalCoord2d.Addr(), gengort.MarshallSyscall(u), gengort.MarshallSyscall(v))
-}
-
-var __imp_glEvalCoord2dv gengort.PreloadProc
-
-func EvalCoord2dv(u *Double) { gengort.CCall1(__imp_glEvalCoord2dv.Addr(), gengort.MarshallSyscall(u)) }
-
-var __imp_glEvalCoord2f gengort.PreloadProc
-
-func EvalCoord2f(u Float, v Float) {
-	gengort.CCall2(__imp_glEvalCoord2f.Addr(), gengort.MarshallSyscall(u), gengort.MarshallSyscall(v))
-}
-
-var __imp_glEvalCoord2fv gengort.PreloadProc
-
-func EvalCoord2fv(u *Float) { gengort.CCall1(__imp_glEvalCoord2fv.Addr(), gengort.MarshallSyscall(u)) }
-
-var __imp_glEvalMesh1 gengort.PreloadProc
-
-func EvalMesh1(mode Enum, i1 Int, i2 Int) {
-	gengort.CCall3(__imp_glEvalMesh1.Addr(), gengort.MarshallSyscall(mode), gengort.MarshallSyscall(i1), gengort.MarshallSyscall(i2))
-}
-
-var __imp_glEvalMesh2 gengort.PreloadProc
-
-func EvalMesh2(mode Enum, i1 Int, i2 Int, j1 Int, j2 Int) {
-	gengort.CCall5(__imp_glEvalMesh2.Addr(), gengort.MarshallSyscall(mode), gengort.MarshallSyscall(i1), gengort.MarshallSyscall(i2), gengort.MarshallSyscall(j1), gengort.MarshallSyscall(j2))
-}
-
-var __imp_glEvalPoint1 gengort.PreloadProc
-
-func EvalPoint1(i Int) { gengort.CCall1(__imp_glEvalPoint1.Addr(), gengort.MarshallSyscall(i)) }
-
-var __imp_glEvalPoint2 gengort.PreloadProc
-
-func EvalPoint2(i Int, j Int) {
-	gengort.CCall2(__imp_glEvalPoint2.Addr(), gengort.MarshallSyscall(i), gengort.MarshallSyscall(j))
-}
-
-var __imp_glFeedbackBuffer gengort.PreloadProc
-
-func FeedbackBuffer(size Sizei, _type Enum, buffer *Float) {
-	gengort.CCall3(__imp_glFeedbackBuffer.Addr(), gengort.MarshallSyscall(size), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(buffer))
-}
-
-var __imp_glFinish gengort.PreloadProc
-
-func Finish() { gengort.CCall0(__imp_glFinish.Addr()) }
-
-var __imp_glFlush gengort.PreloadProc
-
-func Flush() { gengort.CCall0(__imp_glFlush.Addr()) }
-
-var __imp_glFogf gengort.PreloadProc
-
-func Fogf(pname Enum, param Float) {
-	gengort.CCall2(__imp_glFogf.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glFogfv gengort.PreloadProc
-
-func Fogfv(pname Enum, params *Float) {
-	gengort.CCall2(__imp_glFogfv.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glFogi gengort.PreloadProc
-
-func Fogi(pname Enum, param Int) {
-	gengort.CCall2(__imp_glFogi.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glFogiv gengort.PreloadProc
-
-func Fogiv(pname Enum, params *Int) {
-	gengort.CCall2(__imp_glFogiv.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glFrontFace gengort.PreloadProc
-
-func FrontFace(mode Enum) { gengort.CCall1(__imp_glFrontFace.Addr(), gengort.MarshallSyscall(mode)) }
-
-var __imp_glFrustum gengort.PreloadProc
-
-func Frustum(left Double, right Double, bottom Double, top Double, zNear Double, zFar Double) {
-	gengort.CCall6(__imp_glFrustum.Addr(), gengort.MarshallSyscall(left), gengort.MarshallSyscall(right), gengort.MarshallSyscall(bottom), gengort.MarshallSyscall(top), gengort.MarshallSyscall(zNear), gengort.MarshallSyscall(zFar))
-}
-
-var __imp_glGenLists gengort.PreloadProc
-
-func GenLists(_range Sizei) Uint {
-	__res := gengort.CCall1(__imp_glGenLists.Addr(), gengort.MarshallSyscall(_range))
-	return gengort.UnmarshallSyscall[Uint](__res)
-}
-
-var __imp_glGenTextures gengort.PreloadProc
-
-func GenTextures(n Sizei, textures *Uint) {
-	gengort.CCall2(__imp_glGenTextures.Addr(), gengort.MarshallSyscall(n), gengort.MarshallSyscall(textures))
-}
-
-var __imp_glGetBooleanv gengort.PreloadProc
-
-func GetBooleanv(pname Enum, params *Boolean) {
-	gengort.CCall2(__imp_glGetBooleanv.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetClipPlane gengort.PreloadProc
-
-func GetClipPlane(plane Enum, equation *Double) {
-	gengort.CCall2(__imp_glGetClipPlane.Addr(), gengort.MarshallSyscall(plane), gengort.MarshallSyscall(equation))
-}
-
-var __imp_glGetDoublev gengort.PreloadProc
-
-func GetDoublev(pname Enum, params *Double) {
-	gengort.CCall2(__imp_glGetDoublev.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetError gengort.PreloadProc
-
-func GetError() Enum {
-	__res := gengort.CCall0(__imp_glGetError.Addr())
-	return gengort.UnmarshallSyscall[Enum](__res)
-}
-
-var __imp_glGetFloatv gengort.PreloadProc
-
-func GetFloatv(pname Enum, params *Float) {
-	gengort.CCall2(__imp_glGetFloatv.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetIntegerv gengort.PreloadProc
-
-func GetIntegerv(pname Enum, params *Int) {
-	gengort.CCall2(__imp_glGetIntegerv.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetLightfv gengort.PreloadProc
-
-func GetLightfv(light Enum, pname Enum, params *Float) {
-	gengort.CCall3(__imp_glGetLightfv.Addr(), gengort.MarshallSyscall(light), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetLightiv gengort.PreloadProc
-
-func GetLightiv(light Enum, pname Enum, params *Int) {
-	gengort.CCall3(__imp_glGetLightiv.Addr(), gengort.MarshallSyscall(light), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetMapdv gengort.PreloadProc
-
-func GetMapdv(target Enum, query Enum, v *Double) {
-	gengort.CCall3(__imp_glGetMapdv.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(query), gengort.MarshallSyscall(v))
-}
-
-var __imp_glGetMapfv gengort.PreloadProc
-
-func GetMapfv(target Enum, query Enum, v *Float) {
-	gengort.CCall3(__imp_glGetMapfv.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(query), gengort.MarshallSyscall(v))
-}
-
-var __imp_glGetMapiv gengort.PreloadProc
-
-func GetMapiv(target Enum, query Enum, v *Int) {
-	gengort.CCall3(__imp_glGetMapiv.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(query), gengort.MarshallSyscall(v))
-}
-
-var __imp_glGetMaterialfv gengort.PreloadProc
-
-func GetMaterialfv(face Enum, pname Enum, params *Float) {
-	gengort.CCall3(__imp_glGetMaterialfv.Addr(), gengort.MarshallSyscall(face), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetMaterialiv gengort.PreloadProc
-
-func GetMaterialiv(face Enum, pname Enum, params *Int) {
-	gengort.CCall3(__imp_glGetMaterialiv.Addr(), gengort.MarshallSyscall(face), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetPixelMapfv gengort.PreloadProc
-
-func GetPixelMapfv(_map Enum, values *Float) {
-	gengort.CCall2(__imp_glGetPixelMapfv.Addr(), gengort.MarshallSyscall(_map), gengort.MarshallSyscall(values))
-}
-
-var __imp_glGetPixelMapuiv gengort.PreloadProc
-
-func GetPixelMapuiv(_map Enum, values *Uint) {
-	gengort.CCall2(__imp_glGetPixelMapuiv.Addr(), gengort.MarshallSyscall(_map), gengort.MarshallSyscall(values))
-}
-
-var __imp_glGetPixelMapusv gengort.PreloadProc
-
-func GetPixelMapusv(_map Enum, values *Ushort) {
-	gengort.CCall2(__imp_glGetPixelMapusv.Addr(), gengort.MarshallSyscall(_map), gengort.MarshallSyscall(values))
-}
-
-var __imp_glGetPointerv gengort.PreloadProc
-
-func GetPointerv(pname Enum, params **Void) {
-	gengort.CCall2(__imp_glGetPointerv.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetPolygonStipple gengort.PreloadProc
-
-func GetPolygonStipple(mask *Ubyte) {
-	gengort.CCall1(__imp_glGetPolygonStipple.Addr(), gengort.MarshallSyscall(mask))
-}
-
-var __imp_glGetString gengort.PreloadProc
-
-func GetString(name Enum) *Ubyte {
-	__res := gengort.CCall1(__imp_glGetString.Addr(), gengort.MarshallSyscall(name))
-	return gengort.UnmarshallSyscall[*Ubyte](__res)
-}
-
-var __imp_glGetTexEnvfv gengort.PreloadProc
-
-func GetTexEnvfv(target Enum, pname Enum, params *Float) {
-	gengort.CCall3(__imp_glGetTexEnvfv.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetTexEnviv gengort.PreloadProc
-
-func GetTexEnviv(target Enum, pname Enum, params *Int) {
-	gengort.CCall3(__imp_glGetTexEnviv.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetTexGendv gengort.PreloadProc
-
-func GetTexGendv(coord Enum, pname Enum, params *Double) {
-	gengort.CCall3(__imp_glGetTexGendv.Addr(), gengort.MarshallSyscall(coord), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetTexGenfv gengort.PreloadProc
-
-func GetTexGenfv(coord Enum, pname Enum, params *Float) {
-	gengort.CCall3(__imp_glGetTexGenfv.Addr(), gengort.MarshallSyscall(coord), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetTexGeniv gengort.PreloadProc
-
-func GetTexGeniv(coord Enum, pname Enum, params *Int) {
-	gengort.CCall3(__imp_glGetTexGeniv.Addr(), gengort.MarshallSyscall(coord), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetTexImage gengort.PreloadProc
-
-func GetTexImage(target Enum, level Int, format Enum, _type Enum, pixels *Void) {
-	gengort.CCall5(__imp_glGetTexImage.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(level), gengort.MarshallSyscall(format), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(pixels))
-}
-
-var __imp_glGetTexLevelParameterfv gengort.PreloadProc
-
-func GetTexLevelParameterfv(target Enum, level Int, pname Enum, params *Float) {
-	gengort.CCall4(__imp_glGetTexLevelParameterfv.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(level), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetTexLevelParameteriv gengort.PreloadProc
-
-func GetTexLevelParameteriv(target Enum, level Int, pname Enum, params *Int) {
-	gengort.CCall4(__imp_glGetTexLevelParameteriv.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(level), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetTexParameterfv gengort.PreloadProc
-
-func GetTexParameterfv(target Enum, pname Enum, params *Float) {
-	gengort.CCall3(__imp_glGetTexParameterfv.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glGetTexParameteriv gengort.PreloadProc
-
-func GetTexParameteriv(target Enum, pname Enum, params *Int) {
-	gengort.CCall3(__imp_glGetTexParameteriv.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glHint gengort.PreloadProc
-
-func Hint(target Enum, mode Enum) {
-	gengort.CCall2(__imp_glHint.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(mode))
-}
-
-var __imp_glIndexMask gengort.PreloadProc
-
-func IndexMask(mask Uint) { gengort.CCall1(__imp_glIndexMask.Addr(), gengort.MarshallSyscall(mask)) }
-
-var __imp_glIndexPointer gengort.PreloadProc
-
-func IndexPointer(_type Enum, stride Sizei, pointer *Void) {
-	gengort.CCall3(__imp_glIndexPointer.Addr(), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(stride), gengort.MarshallSyscall(pointer))
-}
-
-var __imp_glIndexd gengort.PreloadProc
-
-func Indexd(c Double) { gengort.CCall1(__imp_glIndexd.Addr(), gengort.MarshallSyscall(c)) }
-
-var __imp_glIndexdv gengort.PreloadProc
-
-func Indexdv(c *Double) { gengort.CCall1(__imp_glIndexdv.Addr(), gengort.MarshallSyscall(c)) }
-
-var __imp_glIndexf gengort.PreloadProc
-
-func Indexf(c Float) { gengort.CCall1(__imp_glIndexf.Addr(), gengort.MarshallSyscall(c)) }
-
-var __imp_glIndexfv gengort.PreloadProc
-
-func Indexfv(c *Float) { gengort.CCall1(__imp_glIndexfv.Addr(), gengort.MarshallSyscall(c)) }
-
-var __imp_glIndexi gengort.PreloadProc
-
-func Indexi(c Int) { gengort.CCall1(__imp_glIndexi.Addr(), gengort.MarshallSyscall(c)) }
-
-var __imp_glIndexiv gengort.PreloadProc
-
-func Indexiv(c *Int) { gengort.CCall1(__imp_glIndexiv.Addr(), gengort.MarshallSyscall(c)) }
-
-var __imp_glIndexs gengort.PreloadProc
-
-func Indexs(c Short) { gengort.CCall1(__imp_glIndexs.Addr(), gengort.MarshallSyscall(c)) }
-
-var __imp_glIndexsv gengort.PreloadProc
-
-func Indexsv(c *Short) { gengort.CCall1(__imp_glIndexsv.Addr(), gengort.MarshallSyscall(c)) }
-
-var __imp_glIndexub gengort.PreloadProc
-
-func Indexub(c Ubyte) { gengort.CCall1(__imp_glIndexub.Addr(), gengort.MarshallSyscall(c)) }
-
-var __imp_glIndexubv gengort.PreloadProc
-
-func Indexubv(c *Ubyte) { gengort.CCall1(__imp_glIndexubv.Addr(), gengort.MarshallSyscall(c)) }
-
-var __imp_glInitNames gengort.PreloadProc
-
-func InitNames() { gengort.CCall0(__imp_glInitNames.Addr()) }
-
-var __imp_glInterleavedArrays gengort.PreloadProc
-
-func InterleavedArrays(format Enum, stride Sizei, pointer *Void) {
-	gengort.CCall3(__imp_glInterleavedArrays.Addr(), gengort.MarshallSyscall(format), gengort.MarshallSyscall(stride), gengort.MarshallSyscall(pointer))
-}
-
-var __imp_glIsEnabled gengort.PreloadProc
-
-func IsEnabled(_cap Enum) Boolean {
-	__res := gengort.CCall1(__imp_glIsEnabled.Addr(), gengort.MarshallSyscall(_cap))
-	return gengort.UnmarshallSyscall[Boolean](__res)
-}
-
-var __imp_glIsList gengort.PreloadProc
-
-func IsList(list Uint) Boolean {
-	__res := gengort.CCall1(__imp_glIsList.Addr(), gengort.MarshallSyscall(list))
-	return gengort.UnmarshallSyscall[Boolean](__res)
-}
-
-var __imp_glIsTexture gengort.PreloadProc
-
-func IsTexture(texture Uint) Boolean {
-	__res := gengort.CCall1(__imp_glIsTexture.Addr(), gengort.MarshallSyscall(texture))
-	return gengort.UnmarshallSyscall[Boolean](__res)
-}
-
-var __imp_glLightModelf gengort.PreloadProc
-
-func LightModelf(pname Enum, param Float) {
-	gengort.CCall2(__imp_glLightModelf.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glLightModelfv gengort.PreloadProc
-
-func LightModelfv(pname Enum, params *Float) {
-	gengort.CCall2(__imp_glLightModelfv.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glLightModeli gengort.PreloadProc
-
-func LightModeli(pname Enum, param Int) {
-	gengort.CCall2(__imp_glLightModeli.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glLightModeliv gengort.PreloadProc
-
-func LightModeliv(pname Enum, params *Int) {
-	gengort.CCall2(__imp_glLightModeliv.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glLightf gengort.PreloadProc
-
-func Lightf(light Enum, pname Enum, param Float) {
-	gengort.CCall3(__imp_glLightf.Addr(), gengort.MarshallSyscall(light), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glLightfv gengort.PreloadProc
-
-func Lightfv(light Enum, pname Enum, params *Float) {
-	gengort.CCall3(__imp_glLightfv.Addr(), gengort.MarshallSyscall(light), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glLighti gengort.PreloadProc
-
-func Lighti(light Enum, pname Enum, param Int) {
-	gengort.CCall3(__imp_glLighti.Addr(), gengort.MarshallSyscall(light), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glLightiv gengort.PreloadProc
-
-func Lightiv(light Enum, pname Enum, params *Int) {
-	gengort.CCall3(__imp_glLightiv.Addr(), gengort.MarshallSyscall(light), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glLineStipple gengort.PreloadProc
-
-func LineStipple(factor Int, pattern Ushort) {
-	gengort.CCall2(__imp_glLineStipple.Addr(), gengort.MarshallSyscall(factor), gengort.MarshallSyscall(pattern))
-}
-
-var __imp_glLineWidth gengort.PreloadProc
-
-func LineWidth(width Float) { gengort.CCall1(__imp_glLineWidth.Addr(), gengort.MarshallSyscall(width)) }
-
-var __imp_glListBase gengort.PreloadProc
-
-func ListBase(base Uint) { gengort.CCall1(__imp_glListBase.Addr(), gengort.MarshallSyscall(base)) }
-
-var __imp_glLoadIdentity gengort.PreloadProc
-
-func LoadIdentity() { gengort.CCall0(__imp_glLoadIdentity.Addr()) }
-
-var __imp_glLoadMatrixd gengort.PreloadProc
-
-func LoadMatrixd(m *Double) { gengort.CCall1(__imp_glLoadMatrixd.Addr(), gengort.MarshallSyscall(m)) }
-
-var __imp_glLoadMatrixf gengort.PreloadProc
-
-func LoadMatrixf(m *Float) { gengort.CCall1(__imp_glLoadMatrixf.Addr(), gengort.MarshallSyscall(m)) }
-
-var __imp_glLoadName gengort.PreloadProc
-
-func LoadName(name Uint) { gengort.CCall1(__imp_glLoadName.Addr(), gengort.MarshallSyscall(name)) }
-
-var __imp_glLogicOp gengort.PreloadProc
-
-func LogicOp(opcode Enum) { gengort.CCall1(__imp_glLogicOp.Addr(), gengort.MarshallSyscall(opcode)) }
-
-var __imp_glMap1d gengort.PreloadProc
-
-func Map1d(target Enum, u1 Double, u2 Double, stride Int, order Int, points *Double) {
-	gengort.CCall6(__imp_glMap1d.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(u1), gengort.MarshallSyscall(u2), gengort.MarshallSyscall(stride), gengort.MarshallSyscall(order), gengort.MarshallSyscall(points))
-}
-
-var __imp_glMap1f gengort.PreloadProc
-
-func Map1f(target Enum, u1 Float, u2 Float, stride Int, order Int, points *Float) {
-	gengort.CCall6(__imp_glMap1f.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(u1), gengort.MarshallSyscall(u2), gengort.MarshallSyscall(stride), gengort.MarshallSyscall(order), gengort.MarshallSyscall(points))
-}
-
-var __imp_glMap2d gengort.PreloadProc
-
-func Map2d(target Enum, u1 Double, u2 Double, ustride Int, uorder Int, v1 Double, v2 Double, vstride Int, vorder Int, points *Double) {
-	gengort.CCall10(__imp_glMap2d.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(u1), gengort.MarshallSyscall(u2), gengort.MarshallSyscall(ustride), gengort.MarshallSyscall(uorder), gengort.MarshallSyscall(v1), gengort.MarshallSyscall(v2), gengort.MarshallSyscall(vstride), gengort.MarshallSyscall(vorder), gengort.MarshallSyscall(points))
-}
-
-var __imp_glMap2f gengort.PreloadProc
-
-func Map2f(target Enum, u1 Float, u2 Float, ustride Int, uorder Int, v1 Float, v2 Float, vstride Int, vorder Int, points *Float) {
-	gengort.CCall10(__imp_glMap2f.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(u1), gengort.MarshallSyscall(u2), gengort.MarshallSyscall(ustride), gengort.MarshallSyscall(uorder), gengort.MarshallSyscall(v1), gengort.MarshallSyscall(v2), gengort.MarshallSyscall(vstride), gengort.MarshallSyscall(vorder), gengort.MarshallSyscall(points))
-}
-
-var __imp_glMapGrid1d gengort.PreloadProc
-
-func MapGrid1d(un Int, u1 Double, u2 Double) {
-	gengort.CCall3(__imp_glMapGrid1d.Addr(), gengort.MarshallSyscall(un), gengort.MarshallSyscall(u1), gengort.MarshallSyscall(u2))
-}
-
-var __imp_glMapGrid1f gengort.PreloadProc
-
-func MapGrid1f(un Int, u1 Float, u2 Float) {
-	gengort.CCall3(__imp_glMapGrid1f.Addr(), gengort.MarshallSyscall(un), gengort.MarshallSyscall(u1), gengort.MarshallSyscall(u2))
-}
-
-var __imp_glMapGrid2d gengort.PreloadProc
-
-func MapGrid2d(un Int, u1 Double, u2 Double, vn Int, v1 Double, v2 Double) {
-	gengort.CCall6(__imp_glMapGrid2d.Addr(), gengort.MarshallSyscall(un), gengort.MarshallSyscall(u1), gengort.MarshallSyscall(u2), gengort.MarshallSyscall(vn), gengort.MarshallSyscall(v1), gengort.MarshallSyscall(v2))
-}
-
-var __imp_glMapGrid2f gengort.PreloadProc
-
-func MapGrid2f(un Int, u1 Float, u2 Float, vn Int, v1 Float, v2 Float) {
-	gengort.CCall6(__imp_glMapGrid2f.Addr(), gengort.MarshallSyscall(un), gengort.MarshallSyscall(u1), gengort.MarshallSyscall(u2), gengort.MarshallSyscall(vn), gengort.MarshallSyscall(v1), gengort.MarshallSyscall(v2))
-}
-
-var __imp_glMaterialf gengort.PreloadProc
-
-func Materialf(face Enum, pname Enum, param Float) {
-	gengort.CCall3(__imp_glMaterialf.Addr(), gengort.MarshallSyscall(face), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glMaterialfv gengort.PreloadProc
-
-func Materialfv(face Enum, pname Enum, params *Float) {
-	gengort.CCall3(__imp_glMaterialfv.Addr(), gengort.MarshallSyscall(face), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glMateriali gengort.PreloadProc
-
-func Materiali(face Enum, pname Enum, param Int) {
-	gengort.CCall3(__imp_glMateriali.Addr(), gengort.MarshallSyscall(face), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glMaterialiv gengort.PreloadProc
-
-func Materialiv(face Enum, pname Enum, params *Int) {
-	gengort.CCall3(__imp_glMaterialiv.Addr(), gengort.MarshallSyscall(face), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glMatrixMode gengort.PreloadProc
-
-func MatrixMode(mode Enum) { gengort.CCall1(__imp_glMatrixMode.Addr(), gengort.MarshallSyscall(mode)) }
-
-var __imp_glMultMatrixd gengort.PreloadProc
-
-func MultMatrixd(m *Double) { gengort.CCall1(__imp_glMultMatrixd.Addr(), gengort.MarshallSyscall(m)) }
-
-var __imp_glMultMatrixf gengort.PreloadProc
-
-func MultMatrixf(m *Float) { gengort.CCall1(__imp_glMultMatrixf.Addr(), gengort.MarshallSyscall(m)) }
-
-var __imp_glNewList gengort.PreloadProc
-
-func NewList(list Uint, mode Enum) {
-	gengort.CCall2(__imp_glNewList.Addr(), gengort.MarshallSyscall(list), gengort.MarshallSyscall(mode))
-}
-
-var __imp_glNormal3b gengort.PreloadProc
-
-func Normal3b(nx Byte, ny Byte, nz Byte) {
-	gengort.CCall3(__imp_glNormal3b.Addr(), gengort.MarshallSyscall(nx), gengort.MarshallSyscall(ny), gengort.MarshallSyscall(nz))
-}
-
-var __imp_glNormal3bv gengort.PreloadProc
-
-func Normal3bv(v *Byte) { gengort.CCall1(__imp_glNormal3bv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glNormal3d gengort.PreloadProc
-
-func Normal3d(nx Double, ny Double, nz Double) {
-	gengort.CCall3(__imp_glNormal3d.Addr(), gengort.MarshallSyscall(nx), gengort.MarshallSyscall(ny), gengort.MarshallSyscall(nz))
-}
-
-var __imp_glNormal3dv gengort.PreloadProc
-
-func Normal3dv(v *Double) { gengort.CCall1(__imp_glNormal3dv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glNormal3f gengort.PreloadProc
-
-func Normal3f(nx Float, ny Float, nz Float) {
-	gengort.CCall3(__imp_glNormal3f.Addr(), gengort.MarshallSyscall(nx), gengort.MarshallSyscall(ny), gengort.MarshallSyscall(nz))
-}
-
-var __imp_glNormal3fv gengort.PreloadProc
-
-func Normal3fv(v *Float) { gengort.CCall1(__imp_glNormal3fv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glNormal3i gengort.PreloadProc
-
-func Normal3i(nx Int, ny Int, nz Int) {
-	gengort.CCall3(__imp_glNormal3i.Addr(), gengort.MarshallSyscall(nx), gengort.MarshallSyscall(ny), gengort.MarshallSyscall(nz))
-}
-
-var __imp_glNormal3iv gengort.PreloadProc
-
-func Normal3iv(v *Int) { gengort.CCall1(__imp_glNormal3iv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glNormal3s gengort.PreloadProc
-
-func Normal3s(nx Short, ny Short, nz Short) {
-	gengort.CCall3(__imp_glNormal3s.Addr(), gengort.MarshallSyscall(nx), gengort.MarshallSyscall(ny), gengort.MarshallSyscall(nz))
-}
-
-var __imp_glNormal3sv gengort.PreloadProc
-
-func Normal3sv(v *Short) { gengort.CCall1(__imp_glNormal3sv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glNormalPointer gengort.PreloadProc
-
-func NormalPointer(_type Enum, stride Sizei, pointer *Void) {
-	gengort.CCall3(__imp_glNormalPointer.Addr(), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(stride), gengort.MarshallSyscall(pointer))
-}
-
-var __imp_glOrtho gengort.PreloadProc
-
-func Ortho(left Double, right Double, bottom Double, top Double, zNear Double, zFar Double) {
-	gengort.CCall6(__imp_glOrtho.Addr(), gengort.MarshallSyscall(left), gengort.MarshallSyscall(right), gengort.MarshallSyscall(bottom), gengort.MarshallSyscall(top), gengort.MarshallSyscall(zNear), gengort.MarshallSyscall(zFar))
-}
-
-var __imp_glPassThrough gengort.PreloadProc
-
-func PassThrough(token Float) {
-	gengort.CCall1(__imp_glPassThrough.Addr(), gengort.MarshallSyscall(token))
-}
-
-var __imp_glPixelMapfv gengort.PreloadProc
-
-func PixelMapfv(_map Enum, mapsize Sizei, values *Float) {
-	gengort.CCall3(__imp_glPixelMapfv.Addr(), gengort.MarshallSyscall(_map), gengort.MarshallSyscall(mapsize), gengort.MarshallSyscall(values))
-}
-
-var __imp_glPixelMapuiv gengort.PreloadProc
-
-func PixelMapuiv(_map Enum, mapsize Sizei, values *Uint) {
-	gengort.CCall3(__imp_glPixelMapuiv.Addr(), gengort.MarshallSyscall(_map), gengort.MarshallSyscall(mapsize), gengort.MarshallSyscall(values))
-}
-
-var __imp_glPixelMapusv gengort.PreloadProc
-
-func PixelMapusv(_map Enum, mapsize Sizei, values *Ushort) {
-	gengort.CCall3(__imp_glPixelMapusv.Addr(), gengort.MarshallSyscall(_map), gengort.MarshallSyscall(mapsize), gengort.MarshallSyscall(values))
-}
-
-var __imp_glPixelStoref gengort.PreloadProc
-
-func PixelStoref(pname Enum, param Float) {
-	gengort.CCall2(__imp_glPixelStoref.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glPixelStorei gengort.PreloadProc
-
-func PixelStorei(pname Enum, param Int) {
-	gengort.CCall2(__imp_glPixelStorei.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glPixelTransferf gengort.PreloadProc
-
-func PixelTransferf(pname Enum, param Float) {
-	gengort.CCall2(__imp_glPixelTransferf.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glPixelTransferi gengort.PreloadProc
-
-func PixelTransferi(pname Enum, param Int) {
-	gengort.CCall2(__imp_glPixelTransferi.Addr(), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glPixelZoom gengort.PreloadProc
-
-func PixelZoom(xfactor Float, yfactor Float) {
-	gengort.CCall2(__imp_glPixelZoom.Addr(), gengort.MarshallSyscall(xfactor), gengort.MarshallSyscall(yfactor))
-}
-
-var __imp_glPointSize gengort.PreloadProc
-
-func PointSize(size Float) { gengort.CCall1(__imp_glPointSize.Addr(), gengort.MarshallSyscall(size)) }
-
-var __imp_glPolygonMode gengort.PreloadProc
-
-func PolygonMode(face Enum, mode Enum) {
-	gengort.CCall2(__imp_glPolygonMode.Addr(), gengort.MarshallSyscall(face), gengort.MarshallSyscall(mode))
-}
-
-var __imp_glPolygonOffset gengort.PreloadProc
-
-func PolygonOffset(factor Float, units Float) {
-	gengort.CCall2(__imp_glPolygonOffset.Addr(), gengort.MarshallSyscall(factor), gengort.MarshallSyscall(units))
-}
-
-var __imp_glPolygonStipple gengort.PreloadProc
-
-func PolygonStipple(mask *Ubyte) {
-	gengort.CCall1(__imp_glPolygonStipple.Addr(), gengort.MarshallSyscall(mask))
-}
-
-var __imp_glPopAttrib gengort.PreloadProc
-
-func PopAttrib() { gengort.CCall0(__imp_glPopAttrib.Addr()) }
-
-var __imp_glPopClientAttrib gengort.PreloadProc
-
-func PopClientAttrib() { gengort.CCall0(__imp_glPopClientAttrib.Addr()) }
-
-var __imp_glPopMatrix gengort.PreloadProc
-
-func PopMatrix() { gengort.CCall0(__imp_glPopMatrix.Addr()) }
-
-var __imp_glPopName gengort.PreloadProc
-
-func PopName() { gengort.CCall0(__imp_glPopName.Addr()) }
-
-var __imp_glPrioritizeTextures gengort.PreloadProc
-
-func PrioritizeTextures(n Sizei, textures *Uint, priorities *Clampf) {
-	gengort.CCall3(__imp_glPrioritizeTextures.Addr(), gengort.MarshallSyscall(n), gengort.MarshallSyscall(textures), gengort.MarshallSyscall(priorities))
-}
-
-var __imp_glPushAttrib gengort.PreloadProc
-
-func PushAttrib(mask Bitfield) {
-	gengort.CCall1(__imp_glPushAttrib.Addr(), gengort.MarshallSyscall(mask))
-}
-
-var __imp_glPushClientAttrib gengort.PreloadProc
-
-func PushClientAttrib(mask Bitfield) {
-	gengort.CCall1(__imp_glPushClientAttrib.Addr(), gengort.MarshallSyscall(mask))
-}
-
-var __imp_glPushMatrix gengort.PreloadProc
-
-func PushMatrix() { gengort.CCall0(__imp_glPushMatrix.Addr()) }
-
-var __imp_glPushName gengort.PreloadProc
-
-func PushName(name Uint) { gengort.CCall1(__imp_glPushName.Addr(), gengort.MarshallSyscall(name)) }
-
-var __imp_glRasterPos2d gengort.PreloadProc
-
-func RasterPos2d(x Double, y Double) {
-	gengort.CCall2(__imp_glRasterPos2d.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y))
-}
-
-var __imp_glRasterPos2dv gengort.PreloadProc
-
-func RasterPos2dv(v *Double) { gengort.CCall1(__imp_glRasterPos2dv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glRasterPos2f gengort.PreloadProc
-
-func RasterPos2f(x Float, y Float) {
-	gengort.CCall2(__imp_glRasterPos2f.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y))
-}
-
-var __imp_glRasterPos2fv gengort.PreloadProc
-
-func RasterPos2fv(v *Float) { gengort.CCall1(__imp_glRasterPos2fv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glRasterPos2i gengort.PreloadProc
-
-func RasterPos2i(x Int, y Int) {
-	gengort.CCall2(__imp_glRasterPos2i.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y))
-}
-
-var __imp_glRasterPos2iv gengort.PreloadProc
-
-func RasterPos2iv(v *Int) { gengort.CCall1(__imp_glRasterPos2iv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glRasterPos2s gengort.PreloadProc
-
-func RasterPos2s(x Short, y Short) {
-	gengort.CCall2(__imp_glRasterPos2s.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y))
-}
-
-var __imp_glRasterPos2sv gengort.PreloadProc
-
-func RasterPos2sv(v *Short) { gengort.CCall1(__imp_glRasterPos2sv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glRasterPos3d gengort.PreloadProc
-
-func RasterPos3d(x Double, y Double, z Double) {
-	gengort.CCall3(__imp_glRasterPos3d.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z))
-}
-
-var __imp_glRasterPos3dv gengort.PreloadProc
-
-func RasterPos3dv(v *Double) { gengort.CCall1(__imp_glRasterPos3dv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glRasterPos3f gengort.PreloadProc
-
-func RasterPos3f(x Float, y Float, z Float) {
-	gengort.CCall3(__imp_glRasterPos3f.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z))
-}
-
-var __imp_glRasterPos3fv gengort.PreloadProc
-
-func RasterPos3fv(v *Float) { gengort.CCall1(__imp_glRasterPos3fv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glRasterPos3i gengort.PreloadProc
-
-func RasterPos3i(x Int, y Int, z Int) {
-	gengort.CCall3(__imp_glRasterPos3i.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z))
-}
-
-var __imp_glRasterPos3iv gengort.PreloadProc
-
-func RasterPos3iv(v *Int) { gengort.CCall1(__imp_glRasterPos3iv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glRasterPos3s gengort.PreloadProc
-
-func RasterPos3s(x Short, y Short, z Short) {
-	gengort.CCall3(__imp_glRasterPos3s.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z))
-}
-
-var __imp_glRasterPos3sv gengort.PreloadProc
-
-func RasterPos3sv(v *Short) { gengort.CCall1(__imp_glRasterPos3sv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glRasterPos4d gengort.PreloadProc
-
-func RasterPos4d(x Double, y Double, z Double, w Double) {
-	gengort.CCall4(__imp_glRasterPos4d.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z), gengort.MarshallSyscall(w))
-}
-
-var __imp_glRasterPos4dv gengort.PreloadProc
-
-func RasterPos4dv(v *Double) { gengort.CCall1(__imp_glRasterPos4dv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glRasterPos4f gengort.PreloadProc
-
-func RasterPos4f(x Float, y Float, z Float, w Float) {
-	gengort.CCall4(__imp_glRasterPos4f.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z), gengort.MarshallSyscall(w))
-}
-
-var __imp_glRasterPos4fv gengort.PreloadProc
-
-func RasterPos4fv(v *Float) { gengort.CCall1(__imp_glRasterPos4fv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glRasterPos4i gengort.PreloadProc
-
-func RasterPos4i(x Int, y Int, z Int, w Int) {
-	gengort.CCall4(__imp_glRasterPos4i.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z), gengort.MarshallSyscall(w))
-}
-
-var __imp_glRasterPos4iv gengort.PreloadProc
-
-func RasterPos4iv(v *Int) { gengort.CCall1(__imp_glRasterPos4iv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glRasterPos4s gengort.PreloadProc
-
-func RasterPos4s(x Short, y Short, z Short, w Short) {
-	gengort.CCall4(__imp_glRasterPos4s.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z), gengort.MarshallSyscall(w))
-}
-
-var __imp_glRasterPos4sv gengort.PreloadProc
-
-func RasterPos4sv(v *Short) { gengort.CCall1(__imp_glRasterPos4sv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glReadBuffer gengort.PreloadProc
-
-func ReadBuffer(mode Enum) { gengort.CCall1(__imp_glReadBuffer.Addr(), gengort.MarshallSyscall(mode)) }
-
-var __imp_glReadPixels gengort.PreloadProc
-
-func ReadPixels(x Int, y Int, width Sizei, height Sizei, format Enum, _type Enum, pixels *Void) {
-	gengort.CCall7(__imp_glReadPixels.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height), gengort.MarshallSyscall(format), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(pixels))
-}
-
-var __imp_glRectd gengort.PreloadProc
-
-func Rectd(x1 Double, y1 Double, x2 Double, y2 Double) {
-	gengort.CCall4(__imp_glRectd.Addr(), gengort.MarshallSyscall(x1), gengort.MarshallSyscall(y1), gengort.MarshallSyscall(x2), gengort.MarshallSyscall(y2))
-}
-
-var __imp_glRectdv gengort.PreloadProc
-
-func Rectdv(v1 *Double, v2 *Double) {
-	gengort.CCall2(__imp_glRectdv.Addr(), gengort.MarshallSyscall(v1), gengort.MarshallSyscall(v2))
-}
-
-var __imp_glRectf gengort.PreloadProc
-
-func Rectf(x1 Float, y1 Float, x2 Float, y2 Float) {
-	gengort.CCall4(__imp_glRectf.Addr(), gengort.MarshallSyscall(x1), gengort.MarshallSyscall(y1), gengort.MarshallSyscall(x2), gengort.MarshallSyscall(y2))
-}
-
-var __imp_glRectfv gengort.PreloadProc
-
-func Rectfv(v1 *Float, v2 *Float) {
-	gengort.CCall2(__imp_glRectfv.Addr(), gengort.MarshallSyscall(v1), gengort.MarshallSyscall(v2))
-}
-
-var __imp_glRecti gengort.PreloadProc
-
-func Recti(x1 Int, y1 Int, x2 Int, y2 Int) {
-	gengort.CCall4(__imp_glRecti.Addr(), gengort.MarshallSyscall(x1), gengort.MarshallSyscall(y1), gengort.MarshallSyscall(x2), gengort.MarshallSyscall(y2))
-}
-
-var __imp_glRectiv gengort.PreloadProc
-
-func Rectiv(v1 *Int, v2 *Int) {
-	gengort.CCall2(__imp_glRectiv.Addr(), gengort.MarshallSyscall(v1), gengort.MarshallSyscall(v2))
-}
-
-var __imp_glRects gengort.PreloadProc
-
-func Rects(x1 Short, y1 Short, x2 Short, y2 Short) {
-	gengort.CCall4(__imp_glRects.Addr(), gengort.MarshallSyscall(x1), gengort.MarshallSyscall(y1), gengort.MarshallSyscall(x2), gengort.MarshallSyscall(y2))
-}
-
-var __imp_glRectsv gengort.PreloadProc
-
-func Rectsv(v1 *Short, v2 *Short) {
-	gengort.CCall2(__imp_glRectsv.Addr(), gengort.MarshallSyscall(v1), gengort.MarshallSyscall(v2))
-}
-
-var __imp_glRenderMode gengort.PreloadProc
-
-func RenderMode(mode Enum) Int {
-	__res := gengort.CCall1(__imp_glRenderMode.Addr(), gengort.MarshallSyscall(mode))
-	return gengort.UnmarshallSyscall[Int](__res)
-}
-
-var __imp_glRotated gengort.PreloadProc
-
-func Rotated(angle Double, x Double, y Double, z Double) {
-	gengort.CCall4(__imp_glRotated.Addr(), gengort.MarshallSyscall(angle), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z))
-}
-
-var __imp_glRotatef gengort.PreloadProc
-
-func Rotatef(angle Float, x Float, y Float, z Float) {
-	gengort.CCall4(__imp_glRotatef.Addr(), gengort.MarshallSyscall(angle), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z))
-}
-
-var __imp_glScaled gengort.PreloadProc
-
-func Scaled(x Double, y Double, z Double) {
-	gengort.CCall3(__imp_glScaled.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z))
-}
-
-var __imp_glScalef gengort.PreloadProc
-
-func Scalef(x Float, y Float, z Float) {
-	gengort.CCall3(__imp_glScalef.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z))
-}
-
-var __imp_glScissor gengort.PreloadProc
-
-func Scissor(x Int, y Int, width Sizei, height Sizei) {
-	gengort.CCall4(__imp_glScissor.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height))
-}
-
-var __imp_glSelectBuffer gengort.PreloadProc
-
-func SelectBuffer(size Sizei, buffer *Uint) {
-	gengort.CCall2(__imp_glSelectBuffer.Addr(), gengort.MarshallSyscall(size), gengort.MarshallSyscall(buffer))
-}
-
-var __imp_glShadeModel gengort.PreloadProc
-
-func ShadeModel(mode Enum) { gengort.CCall1(__imp_glShadeModel.Addr(), gengort.MarshallSyscall(mode)) }
-
-var __imp_glStencilFunc gengort.PreloadProc
-
-func StencilFunc(_func Enum, ref Int, mask Uint) {
-	gengort.CCall3(__imp_glStencilFunc.Addr(), gengort.MarshallSyscall(_func), gengort.MarshallSyscall(ref), gengort.MarshallSyscall(mask))
-}
-
-var __imp_glStencilMask gengort.PreloadProc
-
-func StencilMask(mask Uint) {
-	gengort.CCall1(__imp_glStencilMask.Addr(), gengort.MarshallSyscall(mask))
-}
-
-var __imp_glStencilOp gengort.PreloadProc
-
-func StencilOp(fail Enum, zfail Enum, zpass Enum) {
-	gengort.CCall3(__imp_glStencilOp.Addr(), gengort.MarshallSyscall(fail), gengort.MarshallSyscall(zfail), gengort.MarshallSyscall(zpass))
-}
-
-var __imp_glTexCoord1d gengort.PreloadProc
-
-func TexCoord1d(s Double) { gengort.CCall1(__imp_glTexCoord1d.Addr(), gengort.MarshallSyscall(s)) }
-
-var __imp_glTexCoord1dv gengort.PreloadProc
-
-func TexCoord1dv(v *Double) { gengort.CCall1(__imp_glTexCoord1dv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord1f gengort.PreloadProc
-
-func TexCoord1f(s Float) { gengort.CCall1(__imp_glTexCoord1f.Addr(), gengort.MarshallSyscall(s)) }
-
-var __imp_glTexCoord1fv gengort.PreloadProc
-
-func TexCoord1fv(v *Float) { gengort.CCall1(__imp_glTexCoord1fv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord1i gengort.PreloadProc
-
-func TexCoord1i(s Int) { gengort.CCall1(__imp_glTexCoord1i.Addr(), gengort.MarshallSyscall(s)) }
-
-var __imp_glTexCoord1iv gengort.PreloadProc
-
-func TexCoord1iv(v *Int) { gengort.CCall1(__imp_glTexCoord1iv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord1s gengort.PreloadProc
-
-func TexCoord1s(s Short) { gengort.CCall1(__imp_glTexCoord1s.Addr(), gengort.MarshallSyscall(s)) }
-
-var __imp_glTexCoord1sv gengort.PreloadProc
-
-func TexCoord1sv(v *Short) { gengort.CCall1(__imp_glTexCoord1sv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord2d gengort.PreloadProc
-
-func TexCoord2d(s Double, t Double) {
-	gengort.CCall2(__imp_glTexCoord2d.Addr(), gengort.MarshallSyscall(s), gengort.MarshallSyscall(t))
-}
-
-var __imp_glTexCoord2dv gengort.PreloadProc
-
-func TexCoord2dv(v *Double) { gengort.CCall1(__imp_glTexCoord2dv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord2f gengort.PreloadProc
-
-func TexCoord2f(s Float, t Float) {
-	gengort.CCall2(__imp_glTexCoord2f.Addr(), gengort.MarshallSyscall(s), gengort.MarshallSyscall(t))
-}
-
-var __imp_glTexCoord2fv gengort.PreloadProc
-
-func TexCoord2fv(v *Float) { gengort.CCall1(__imp_glTexCoord2fv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord2i gengort.PreloadProc
-
-func TexCoord2i(s Int, t Int) {
-	gengort.CCall2(__imp_glTexCoord2i.Addr(), gengort.MarshallSyscall(s), gengort.MarshallSyscall(t))
-}
-
-var __imp_glTexCoord2iv gengort.PreloadProc
-
-func TexCoord2iv(v *Int) { gengort.CCall1(__imp_glTexCoord2iv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord2s gengort.PreloadProc
-
-func TexCoord2s(s Short, t Short) {
-	gengort.CCall2(__imp_glTexCoord2s.Addr(), gengort.MarshallSyscall(s), gengort.MarshallSyscall(t))
-}
-
-var __imp_glTexCoord2sv gengort.PreloadProc
-
-func TexCoord2sv(v *Short) { gengort.CCall1(__imp_glTexCoord2sv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord3d gengort.PreloadProc
-
-func TexCoord3d(s Double, t Double, r Double) {
-	gengort.CCall3(__imp_glTexCoord3d.Addr(), gengort.MarshallSyscall(s), gengort.MarshallSyscall(t), gengort.MarshallSyscall(r))
-}
-
-var __imp_glTexCoord3dv gengort.PreloadProc
-
-func TexCoord3dv(v *Double) { gengort.CCall1(__imp_glTexCoord3dv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord3f gengort.PreloadProc
-
-func TexCoord3f(s Float, t Float, r Float) {
-	gengort.CCall3(__imp_glTexCoord3f.Addr(), gengort.MarshallSyscall(s), gengort.MarshallSyscall(t), gengort.MarshallSyscall(r))
-}
-
-var __imp_glTexCoord3fv gengort.PreloadProc
-
-func TexCoord3fv(v *Float) { gengort.CCall1(__imp_glTexCoord3fv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord3i gengort.PreloadProc
-
-func TexCoord3i(s Int, t Int, r Int) {
-	gengort.CCall3(__imp_glTexCoord3i.Addr(), gengort.MarshallSyscall(s), gengort.MarshallSyscall(t), gengort.MarshallSyscall(r))
-}
-
-var __imp_glTexCoord3iv gengort.PreloadProc
-
-func TexCoord3iv(v *Int) { gengort.CCall1(__imp_glTexCoord3iv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord3s gengort.PreloadProc
-
-func TexCoord3s(s Short, t Short, r Short) {
-	gengort.CCall3(__imp_glTexCoord3s.Addr(), gengort.MarshallSyscall(s), gengort.MarshallSyscall(t), gengort.MarshallSyscall(r))
-}
-
-var __imp_glTexCoord3sv gengort.PreloadProc
-
-func TexCoord3sv(v *Short) { gengort.CCall1(__imp_glTexCoord3sv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord4d gengort.PreloadProc
-
-func TexCoord4d(s Double, t Double, r Double, q Double) {
-	gengort.CCall4(__imp_glTexCoord4d.Addr(), gengort.MarshallSyscall(s), gengort.MarshallSyscall(t), gengort.MarshallSyscall(r), gengort.MarshallSyscall(q))
-}
-
-var __imp_glTexCoord4dv gengort.PreloadProc
-
-func TexCoord4dv(v *Double) { gengort.CCall1(__imp_glTexCoord4dv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord4f gengort.PreloadProc
-
-func TexCoord4f(s Float, t Float, r Float, q Float) {
-	gengort.CCall4(__imp_glTexCoord4f.Addr(), gengort.MarshallSyscall(s), gengort.MarshallSyscall(t), gengort.MarshallSyscall(r), gengort.MarshallSyscall(q))
-}
-
-var __imp_glTexCoord4fv gengort.PreloadProc
-
-func TexCoord4fv(v *Float) { gengort.CCall1(__imp_glTexCoord4fv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord4i gengort.PreloadProc
-
-func TexCoord4i(s Int, t Int, r Int, q Int) {
-	gengort.CCall4(__imp_glTexCoord4i.Addr(), gengort.MarshallSyscall(s), gengort.MarshallSyscall(t), gengort.MarshallSyscall(r), gengort.MarshallSyscall(q))
-}
-
-var __imp_glTexCoord4iv gengort.PreloadProc
-
-func TexCoord4iv(v *Int) { gengort.CCall1(__imp_glTexCoord4iv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoord4s gengort.PreloadProc
-
-func TexCoord4s(s Short, t Short, r Short, q Short) {
-	gengort.CCall4(__imp_glTexCoord4s.Addr(), gengort.MarshallSyscall(s), gengort.MarshallSyscall(t), gengort.MarshallSyscall(r), gengort.MarshallSyscall(q))
-}
-
-var __imp_glTexCoord4sv gengort.PreloadProc
-
-func TexCoord4sv(v *Short) { gengort.CCall1(__imp_glTexCoord4sv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glTexCoordPointer gengort.PreloadProc
-
-func TexCoordPointer(size Int, _type Enum, stride Sizei, pointer *Void) {
-	gengort.CCall4(__imp_glTexCoordPointer.Addr(), gengort.MarshallSyscall(size), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(stride), gengort.MarshallSyscall(pointer))
-}
-
-var __imp_glTexEnvf gengort.PreloadProc
-
-func TexEnvf(target Enum, pname Enum, param Float) {
-	gengort.CCall3(__imp_glTexEnvf.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glTexEnvfv gengort.PreloadProc
-
-func TexEnvfv(target Enum, pname Enum, params *Float) {
-	gengort.CCall3(__imp_glTexEnvfv.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glTexEnvi gengort.PreloadProc
-
-func TexEnvi(target Enum, pname Enum, param Int) {
-	gengort.CCall3(__imp_glTexEnvi.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glTexEnviv gengort.PreloadProc
-
-func TexEnviv(target Enum, pname Enum, params *Int) {
-	gengort.CCall3(__imp_glTexEnviv.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glTexGend gengort.PreloadProc
-
-func TexGend(coord Enum, pname Enum, param Double) {
-	gengort.CCall3(__imp_glTexGend.Addr(), gengort.MarshallSyscall(coord), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glTexGendv gengort.PreloadProc
-
-func TexGendv(coord Enum, pname Enum, params *Double) {
-	gengort.CCall3(__imp_glTexGendv.Addr(), gengort.MarshallSyscall(coord), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glTexGenf gengort.PreloadProc
-
-func TexGenf(coord Enum, pname Enum, param Float) {
-	gengort.CCall3(__imp_glTexGenf.Addr(), gengort.MarshallSyscall(coord), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glTexGenfv gengort.PreloadProc
-
-func TexGenfv(coord Enum, pname Enum, params *Float) {
-	gengort.CCall3(__imp_glTexGenfv.Addr(), gengort.MarshallSyscall(coord), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glTexGeni gengort.PreloadProc
-
-func TexGeni(coord Enum, pname Enum, param Int) {
-	gengort.CCall3(__imp_glTexGeni.Addr(), gengort.MarshallSyscall(coord), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glTexGeniv gengort.PreloadProc
-
-func TexGeniv(coord Enum, pname Enum, params *Int) {
-	gengort.CCall3(__imp_glTexGeniv.Addr(), gengort.MarshallSyscall(coord), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glTexImage1D gengort.PreloadProc
-
-func TexImage1D(target Enum, level Int, internalformat Int, width Sizei, border Int, format Enum, _type Enum, pixels *Void) {
-	gengort.CCall8(__imp_glTexImage1D.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(level), gengort.MarshallSyscall(internalformat), gengort.MarshallSyscall(width), gengort.MarshallSyscall(border), gengort.MarshallSyscall(format), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(pixels))
-}
-
-var __imp_glTexImage2D gengort.PreloadProc
-
-func TexImage2D(target Enum, level Int, internalformat Int, width Sizei, height Sizei, border Int, format Enum, _type Enum, pixels *Void) {
-	gengort.CCall9(__imp_glTexImage2D.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(level), gengort.MarshallSyscall(internalformat), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height), gengort.MarshallSyscall(border), gengort.MarshallSyscall(format), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(pixels))
-}
-
-var __imp_glTexParameterf gengort.PreloadProc
-
-func TexParameterf(target Enum, pname Enum, param Float) {
-	gengort.CCall3(__imp_glTexParameterf.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glTexParameterfv gengort.PreloadProc
-
-func TexParameterfv(target Enum, pname Enum, params *Float) {
-	gengort.CCall3(__imp_glTexParameterfv.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glTexParameteri gengort.PreloadProc
-
-func TexParameteri(target Enum, pname Enum, param Int) {
-	gengort.CCall3(__imp_glTexParameteri.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(param))
-}
-
-var __imp_glTexParameteriv gengort.PreloadProc
-
-func TexParameteriv(target Enum, pname Enum, params *Int) {
-	gengort.CCall3(__imp_glTexParameteriv.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(pname), gengort.MarshallSyscall(params))
-}
-
-var __imp_glTexSubImage1D gengort.PreloadProc
-
-func TexSubImage1D(target Enum, level Int, xoffset Int, width Sizei, format Enum, _type Enum, pixels *Void) {
-	gengort.CCall7(__imp_glTexSubImage1D.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(level), gengort.MarshallSyscall(xoffset), gengort.MarshallSyscall(width), gengort.MarshallSyscall(format), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(pixels))
-}
-
-var __imp_glTexSubImage2D gengort.PreloadProc
-
-func TexSubImage2D(target Enum, level Int, xoffset Int, yoffset Int, width Sizei, height Sizei, format Enum, _type Enum, pixels *Void) {
-	gengort.CCall9(__imp_glTexSubImage2D.Addr(), gengort.MarshallSyscall(target), gengort.MarshallSyscall(level), gengort.MarshallSyscall(xoffset), gengort.MarshallSyscall(yoffset), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height), gengort.MarshallSyscall(format), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(pixels))
-}
-
-var __imp_glTranslated gengort.PreloadProc
-
-func Translated(x Double, y Double, z Double) {
-	gengort.CCall3(__imp_glTranslated.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z))
-}
-
-var __imp_glTranslatef gengort.PreloadProc
-
-func Translatef(x Float, y Float, z Float) {
-	gengort.CCall3(__imp_glTranslatef.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z))
-}
-
-var __imp_glVertex2d gengort.PreloadProc
-
-func Vertex2d(x Double, y Double) {
-	gengort.CCall2(__imp_glVertex2d.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y))
-}
-
-var __imp_glVertex2dv gengort.PreloadProc
-
-func Vertex2dv(v *Double) { gengort.CCall1(__imp_glVertex2dv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glVertex2f gengort.PreloadProc
-
-func Vertex2f(x Float, y Float) {
-	gengort.CCall2(__imp_glVertex2f.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y))
-}
-
-var __imp_glVertex2fv gengort.PreloadProc
-
-func Vertex2fv(v *Float) { gengort.CCall1(__imp_glVertex2fv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glVertex2i gengort.PreloadProc
-
-func Vertex2i(x Int, y Int) {
-	gengort.CCall2(__imp_glVertex2i.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y))
-}
-
-var __imp_glVertex2iv gengort.PreloadProc
-
-func Vertex2iv(v *Int) { gengort.CCall1(__imp_glVertex2iv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glVertex2s gengort.PreloadProc
-
-func Vertex2s(x Short, y Short) {
-	gengort.CCall2(__imp_glVertex2s.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y))
-}
-
-var __imp_glVertex2sv gengort.PreloadProc
-
-func Vertex2sv(v *Short) { gengort.CCall1(__imp_glVertex2sv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glVertex3d gengort.PreloadProc
-
-func Vertex3d(x Double, y Double, z Double) {
-	gengort.CCall3(__imp_glVertex3d.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z))
-}
-
-var __imp_glVertex3dv gengort.PreloadProc
-
-func Vertex3dv(v *Double) { gengort.CCall1(__imp_glVertex3dv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glVertex3f gengort.PreloadProc
-
-func Vertex3f(x Float, y Float, z Float) {
-	gengort.CCall3(__imp_glVertex3f.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z))
-}
-
-var __imp_glVertex3fv gengort.PreloadProc
-
-func Vertex3fv(v *Float) { gengort.CCall1(__imp_glVertex3fv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glVertex3i gengort.PreloadProc
-
-func Vertex3i(x Int, y Int, z Int) {
-	gengort.CCall3(__imp_glVertex3i.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z))
-}
-
-var __imp_glVertex3iv gengort.PreloadProc
-
-func Vertex3iv(v *Int) { gengort.CCall1(__imp_glVertex3iv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glVertex3s gengort.PreloadProc
-
-func Vertex3s(x Short, y Short, z Short) {
-	gengort.CCall3(__imp_glVertex3s.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z))
-}
-
-var __imp_glVertex3sv gengort.PreloadProc
-
-func Vertex3sv(v *Short) { gengort.CCall1(__imp_glVertex3sv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glVertex4d gengort.PreloadProc
-
-func Vertex4d(x Double, y Double, z Double, w Double) {
-	gengort.CCall4(__imp_glVertex4d.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z), gengort.MarshallSyscall(w))
-}
-
-var __imp_glVertex4dv gengort.PreloadProc
-
-func Vertex4dv(v *Double) { gengort.CCall1(__imp_glVertex4dv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glVertex4f gengort.PreloadProc
-
-func Vertex4f(x Float, y Float, z Float, w Float) {
-	gengort.CCall4(__imp_glVertex4f.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z), gengort.MarshallSyscall(w))
-}
-
-var __imp_glVertex4fv gengort.PreloadProc
-
-func Vertex4fv(v *Float) { gengort.CCall1(__imp_glVertex4fv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glVertex4i gengort.PreloadProc
-
-func Vertex4i(x Int, y Int, z Int, w Int) {
-	gengort.CCall4(__imp_glVertex4i.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z), gengort.MarshallSyscall(w))
-}
-
-var __imp_glVertex4iv gengort.PreloadProc
-
-func Vertex4iv(v *Int) { gengort.CCall1(__imp_glVertex4iv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glVertex4s gengort.PreloadProc
-
-func Vertex4s(x Short, y Short, z Short, w Short) {
-	gengort.CCall4(__imp_glVertex4s.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(z), gengort.MarshallSyscall(w))
-}
-
-var __imp_glVertex4sv gengort.PreloadProc
-
-func Vertex4sv(v *Short) { gengort.CCall1(__imp_glVertex4sv.Addr(), gengort.MarshallSyscall(v)) }
-
-var __imp_glVertexPointer gengort.PreloadProc
-
-func VertexPointer(size Int, _type Enum, stride Sizei, pointer *Void) {
-	gengort.CCall4(__imp_glVertexPointer.Addr(), gengort.MarshallSyscall(size), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(stride), gengort.MarshallSyscall(pointer))
-}
-
-var __imp_glViewport gengort.PreloadProc
-
-func Viewport(x Int, y Int, width Sizei, height Sizei) {
-	gengort.CCall4(__imp_glViewport.Addr(), gengort.MarshallSyscall(x), gengort.MarshallSyscall(y), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height))
-}
-
-var __imp_glfwInit gengort.PreloadProc
-
-// @brief Initializes the GLFW library.
-// This function initializes the GLFW library.  Before most GLFW functions can
-// be used, GLFW must be initialized, and before an application terminates GLFW
-// should be terminated in order to free any resources allocated during or
-// after initialization.
-// If this function fails, it calls
-// @ref glfwTerminate
-// before returning.  If it
-// succeeds, you should call
-// @ref glfwTerminate
-// before the application exits.
-// Additional calls to this function after successful initialization but before
-// termination will return `GLFW_TRUE` immediately.
-// The
-// @ref GLFW_PLATFORM
-// init hint controls which platforms are considered during
-// initialization.  This also depends on which platforms the library was compiled to
-// support.
+	__imp_ZydisCategoryGetString = GengoLibrary.ImportNow("ZydisCategoryGetString")
+	__imp_ZydisISASetGetString = GengoLibrary.ImportNow("ZydisISASetGetString")
+	__imp_ZydisISAExtGetString = GengoLibrary.ImportNow("ZydisISAExtGetString")
+	__imp_ZydisMnemonicGetString = GengoLibrary.ImportNow("ZydisMnemonicGetString")
+	__imp_ZydisMnemonicGetStringWrapped = GengoLibrary.ImportNow("ZydisMnemonicGetStringWrapped")
+	__imp_ZydisRegisterEncode = GengoLibrary.ImportNow("ZydisRegisterEncode")
+	__imp_ZydisRegisterGetId = GengoLibrary.ImportNow("ZydisRegisterGetId")
+	__imp_ZydisRegisterGetClass = GengoLibrary.ImportNow("ZydisRegisterGetClass")
+	__imp_ZydisRegisterGetWidth = GengoLibrary.ImportNow("ZydisRegisterGetWidth")
+	__imp_ZydisRegisterGetLargestEnclosing = GengoLibrary.ImportNow("ZydisRegisterGetLargestEnclosing")
+	__imp_ZydisRegisterGetString = GengoLibrary.ImportNow("ZydisRegisterGetString")
+	__imp_ZydisRegisterGetStringWrapped = GengoLibrary.ImportNow("ZydisRegisterGetStringWrapped")
+	__imp_ZydisRegisterClassGetWidth = GengoLibrary.ImportNow("ZydisRegisterClassGetWidth")
+	__imp_ZydisDecoderInit = GengoLibrary.ImportNow("ZydisDecoderInit")
+	__imp_ZydisDecoderEnableMode = GengoLibrary.ImportNow("ZydisDecoderEnableMode")
+	__imp_ZydisDecoderDecodeFull = GengoLibrary.ImportNow("ZydisDecoderDecodeFull")
+	__imp_ZydisDecoderDecodeInstruction = GengoLibrary.ImportNow("ZydisDecoderDecodeInstruction")
+	__imp_ZydisDecoderDecodeOperands = GengoLibrary.ImportNow("ZydisDecoderDecodeOperands")
+	__imp_ZydisEncoderEncodeInstruction = GengoLibrary.ImportNow("ZydisEncoderEncodeInstruction")
+	__imp_ZydisEncoderEncodeInstructionAbsolute = GengoLibrary.ImportNow("ZydisEncoderEncodeInstructionAbsolute")
+	__imp_ZydisEncoderDecodedInstructionToEncoderRequest = GengoLibrary.ImportNow("ZydisEncoderDecodedInstructionToEncoderRequest")
+	__imp_ZydisEncoderNopFill = GengoLibrary.ImportNow("ZydisEncoderNopFill")
+	__imp_ZyanAllocatorInit = GengoLibrary.ImportNow("ZyanAllocatorInit")
+	__imp_ZyanEqualsPointer = GengoLibrary.ImportNow("ZyanEqualsPointer")
+	__imp_ZyanEqualsBool = GengoLibrary.ImportNow("ZyanEqualsBool")
+	__imp_ZyanEqualsNumeric8 = GengoLibrary.ImportNow("ZyanEqualsNumeric8")
+	__imp_ZyanEqualsNumeric16 = GengoLibrary.ImportNow("ZyanEqualsNumeric16")
+	__imp_ZyanEqualsNumeric32 = GengoLibrary.ImportNow("ZyanEqualsNumeric32")
+	__imp_ZyanEqualsNumeric64 = GengoLibrary.ImportNow("ZyanEqualsNumeric64")
+	__imp_ZyanComparePointer = GengoLibrary.ImportNow("ZyanComparePointer")
+	__imp_ZyanCompareBool = GengoLibrary.ImportNow("ZyanCompareBool")
+	__imp_ZyanCompareNumeric8 = GengoLibrary.ImportNow("ZyanCompareNumeric8")
+	__imp_ZyanCompareNumeric16 = GengoLibrary.ImportNow("ZyanCompareNumeric16")
+	__imp_ZyanCompareNumeric32 = GengoLibrary.ImportNow("ZyanCompareNumeric32")
+	__imp_ZyanCompareNumeric64 = GengoLibrary.ImportNow("ZyanCompareNumeric64")
+	__imp_ZyanVectorInitEx = GengoLibrary.ImportNow("ZyanVectorInitEx")
+	__imp_ZyanVectorInitCustomBuffer = GengoLibrary.ImportNow("ZyanVectorInitCustomBuffer")
+	__imp_ZyanVectorDestroy = GengoLibrary.ImportNow("ZyanVectorDestroy")
+	__imp_ZyanVectorDuplicateEx = GengoLibrary.ImportNow("ZyanVectorDuplicateEx")
+	__imp_ZyanVectorDuplicateCustomBuffer = GengoLibrary.ImportNow("ZyanVectorDuplicateCustomBuffer")
+	__imp_ZyanVectorGet = GengoLibrary.ImportNow("ZyanVectorGet")
+	__imp_ZyanVectorGetMutable = GengoLibrary.ImportNow("ZyanVectorGetMutable")
+	__imp_ZyanVectorGetPointer = GengoLibrary.ImportNow("ZyanVectorGetPointer")
+	__imp_ZyanVectorGetPointerMutable = GengoLibrary.ImportNow("ZyanVectorGetPointerMutable")
+	__imp_ZyanVectorSet = GengoLibrary.ImportNow("ZyanVectorSet")
+	__imp_ZyanVectorPushBack = GengoLibrary.ImportNow("ZyanVectorPushBack")
+	__imp_ZyanVectorInsert = GengoLibrary.ImportNow("ZyanVectorInsert")
+	__imp_ZyanVectorInsertRange = GengoLibrary.ImportNow("ZyanVectorInsertRange")
+	__imp_ZyanVectorEmplace = GengoLibrary.ImportNow("ZyanVectorEmplace")
+	__imp_ZyanVectorEmplaceEx = GengoLibrary.ImportNow("ZyanVectorEmplaceEx")
+	__imp_ZyanVectorSwapElements = GengoLibrary.ImportNow("ZyanVectorSwapElements")
+	__imp_ZyanVectorDelete = GengoLibrary.ImportNow("ZyanVectorDelete")
+	__imp_ZyanVectorDeleteRange = GengoLibrary.ImportNow("ZyanVectorDeleteRange")
+	__imp_ZyanVectorPopBack = GengoLibrary.ImportNow("ZyanVectorPopBack")
+	__imp_ZyanVectorClear = GengoLibrary.ImportNow("ZyanVectorClear")
+	__imp_ZyanVectorFind = GengoLibrary.ImportNow("ZyanVectorFind")
+	__imp_ZyanVectorFindEx = GengoLibrary.ImportNow("ZyanVectorFindEx")
+	__imp_ZyanVectorBinarySearch = GengoLibrary.ImportNow("ZyanVectorBinarySearch")
+	__imp_ZyanVectorBinarySearchEx = GengoLibrary.ImportNow("ZyanVectorBinarySearchEx")
+	__imp_ZyanVectorResize = GengoLibrary.ImportNow("ZyanVectorResize")
+	__imp_ZyanVectorResizeEx = GengoLibrary.ImportNow("ZyanVectorResizeEx")
+	__imp_ZyanVectorReserve = GengoLibrary.ImportNow("ZyanVectorReserve")
+	__imp_ZyanVectorShrinkToFit = GengoLibrary.ImportNow("ZyanVectorShrinkToFit")
+	__imp_ZyanVectorGetCapacity = GengoLibrary.ImportNow("ZyanVectorGetCapacity")
+	__imp_ZyanVectorGetSize = GengoLibrary.ImportNow("ZyanVectorGetSize")
+	__imp_ZyanStringInitEx = GengoLibrary.ImportNow("ZyanStringInitEx")
+	__imp_ZyanStringInitCustomBuffer = GengoLibrary.ImportNow("ZyanStringInitCustomBuffer")
+	__imp_ZyanStringDestroy = GengoLibrary.ImportNow("ZyanStringDestroy")
+	__imp_ZyanStringDuplicateEx = GengoLibrary.ImportNow("ZyanStringDuplicateEx")
+	__imp_ZyanStringDuplicateCustomBuffer = GengoLibrary.ImportNow("ZyanStringDuplicateCustomBuffer")
+	__imp_ZyanStringConcatEx = GengoLibrary.ImportNow("ZyanStringConcatEx")
+	__imp_ZyanStringConcatCustomBuffer = GengoLibrary.ImportNow("ZyanStringConcatCustomBuffer")
+	__imp_ZyanStringViewInsideView = GengoLibrary.ImportNow("ZyanStringViewInsideView")
+	__imp_ZyanStringViewInsideViewEx = GengoLibrary.ImportNow("ZyanStringViewInsideViewEx")
+	__imp_ZyanStringViewInsideBuffer = GengoLibrary.ImportNow("ZyanStringViewInsideBuffer")
+	__imp_ZyanStringViewInsideBufferEx = GengoLibrary.ImportNow("ZyanStringViewInsideBufferEx")
+	__imp_ZyanStringViewGetSize = GengoLibrary.ImportNow("ZyanStringViewGetSize")
+	__imp_ZyanStringViewGetData = GengoLibrary.ImportNow("ZyanStringViewGetData")
+	__imp_ZyanStringGetChar = GengoLibrary.ImportNow("ZyanStringGetChar")
+	__imp_ZyanStringGetCharMutable = GengoLibrary.ImportNow("ZyanStringGetCharMutable")
+	__imp_ZyanStringSetChar = GengoLibrary.ImportNow("ZyanStringSetChar")
+	__imp_ZyanStringInsert = GengoLibrary.ImportNow("ZyanStringInsert")
+	__imp_ZyanStringInsertEx = GengoLibrary.ImportNow("ZyanStringInsertEx")
+	__imp_ZyanStringAppend = GengoLibrary.ImportNow("ZyanStringAppend")
+	__imp_ZyanStringAppendEx = GengoLibrary.ImportNow("ZyanStringAppendEx")
+	__imp_ZyanStringDelete = GengoLibrary.ImportNow("ZyanStringDelete")
+	__imp_ZyanStringTruncate = GengoLibrary.ImportNow("ZyanStringTruncate")
+	__imp_ZyanStringClear = GengoLibrary.ImportNow("ZyanStringClear")
+	__imp_ZyanStringLPos = GengoLibrary.ImportNow("ZyanStringLPos")
+	__imp_ZyanStringLPosEx = GengoLibrary.ImportNow("ZyanStringLPosEx")
+	__imp_ZyanStringLPosI = GengoLibrary.ImportNow("ZyanStringLPosI")
+	__imp_ZyanStringLPosIEx = GengoLibrary.ImportNow("ZyanStringLPosIEx")
+	__imp_ZyanStringRPos = GengoLibrary.ImportNow("ZyanStringRPos")
+	__imp_ZyanStringRPosEx = GengoLibrary.ImportNow("ZyanStringRPosEx")
+	__imp_ZyanStringRPosI = GengoLibrary.ImportNow("ZyanStringRPosI")
+	__imp_ZyanStringRPosIEx = GengoLibrary.ImportNow("ZyanStringRPosIEx")
+	__imp_ZyanStringCompare = GengoLibrary.ImportNow("ZyanStringCompare")
+	__imp_ZyanStringCompareI = GengoLibrary.ImportNow("ZyanStringCompareI")
+	__imp_ZyanStringToLowerCase = GengoLibrary.ImportNow("ZyanStringToLowerCase")
+	__imp_ZyanStringToLowerCaseEx = GengoLibrary.ImportNow("ZyanStringToLowerCaseEx")
+	__imp_ZyanStringToUpperCase = GengoLibrary.ImportNow("ZyanStringToUpperCase")
+	__imp_ZyanStringToUpperCaseEx = GengoLibrary.ImportNow("ZyanStringToUpperCaseEx")
+	__imp_ZyanStringResize = GengoLibrary.ImportNow("ZyanStringResize")
+	__imp_ZyanStringReserve = GengoLibrary.ImportNow("ZyanStringReserve")
+	__imp_ZyanStringShrinkToFit = GengoLibrary.ImportNow("ZyanStringShrinkToFit")
+	__imp_ZyanStringGetCapacity = GengoLibrary.ImportNow("ZyanStringGetCapacity")
+	__imp_ZyanStringGetSize = GengoLibrary.ImportNow("ZyanStringGetSize")
+	__imp_ZyanStringGetData = GengoLibrary.ImportNow("ZyanStringGetData")
+	__imp_ZydisFormatterTokenGetValue = GengoLibrary.ImportNow("ZydisFormatterTokenGetValue")
+	__imp_ZydisFormatterTokenNext = GengoLibrary.ImportNow("ZydisFormatterTokenNext")
+	__imp_ZydisFormatterBufferGetToken = GengoLibrary.ImportNow("ZydisFormatterBufferGetToken")
+	__imp_ZydisFormatterBufferGetString = GengoLibrary.ImportNow("ZydisFormatterBufferGetString")
+	__imp_ZydisFormatterBufferAppend = GengoLibrary.ImportNow("ZydisFormatterBufferAppend")
+	__imp_ZydisFormatterBufferRemember = GengoLibrary.ImportNow("ZydisFormatterBufferRemember")
+	__imp_ZydisFormatterBufferRestore = GengoLibrary.ImportNow("ZydisFormatterBufferRestore")
+	__imp_ZydisFormatterInit = GengoLibrary.ImportNow("ZydisFormatterInit")
+	__imp_ZydisFormatterSetProperty = GengoLibrary.ImportNow("ZydisFormatterSetProperty")
+	__imp_ZydisFormatterSetHook = GengoLibrary.ImportNow("ZydisFormatterSetHook")
+	__imp_ZydisFormatterFormatInstruction = GengoLibrary.ImportNow("ZydisFormatterFormatInstruction")
+	__imp_ZydisFormatterFormatOperand = GengoLibrary.ImportNow("ZydisFormatterFormatOperand")
+	__imp_ZydisFormatterTokenizeInstruction = GengoLibrary.ImportNow("ZydisFormatterTokenizeInstruction")
+	__imp_ZydisFormatterTokenizeOperand = GengoLibrary.ImportNow("ZydisFormatterTokenizeOperand")
+	__imp_ZydisGetInstructionSegments = GengoLibrary.ImportNow("ZydisGetInstructionSegments")
+	__imp_ZydisDisassembleIntel = GengoLibrary.ImportNow("ZydisDisassembleIntel")
+	__imp_ZydisDisassembleATT = GengoLibrary.ImportNow("ZydisDisassembleATT")
+	__imp_ZydisCalcAbsoluteAddress = GengoLibrary.ImportNow("ZydisCalcAbsoluteAddress")
+	__imp_ZydisCalcAbsoluteAddressEx = GengoLibrary.ImportNow("ZydisCalcAbsoluteAddressEx")
+	__imp_ZydisGetVersion = GengoLibrary.ImportNow("ZydisGetVersion")
+	__imp_ZydisIsFeatureEnabled = GengoLibrary.ImportNow("ZydisIsFeatureEnabled")
+	gengort.Validate((*ShortString)(nil), 0x9, 0x1)
+	gengort.Validate((*RegisterContext)(nil), 0x850, 0x8, "Values", 0x0)
+	gengort.Validate((*DecodedOperandReg)(nil), 0x4, 0x4, "Value", 0x0)
+	gengort.Validate((*DecodedOperandMem)(nil), 0x28, 0x8, "Type", 0x0, "Segment", 0x4, "Base", 0x8, "Index", 0xc, "Scale", 0x10, "Disp", 0x18)
+	gengort.Validate((*DecodedOperandMemDisp_)(nil), 0x10, 0x8, "HasDisplacement", 0x0, "Value", 0x8)
+	gengort.Validate((*DecodedOperandPtr)(nil), 0x8, 0x4, "Segment", 0x0, "Offset", 0x4)
+	gengort.Validate((*DecodedOperandImm)(nil), 0x10, 0x8, "IsSigned", 0x0, "IsRelative", 0x1, "Value", 0x8)
+	gengort.Validate((*DecodedOperandImmValue_)(nil), 0x8, 0x8)
+	gengort.Validate((*DecodedOperand)(nil), 0x50, 0x8, "Id", 0x0, "Visibility", 0x4, "Actions", 0x8, "Encoding", 0xc, "Size", 0x10, "ElementType", 0x14, "ElementSize", 0x18, "ElementCount", 0x1a, "Attributes", 0x1c, "Type", 0x20)
+	gengort.Validate((*Anon5338_5)(nil), 0x28, 0x8)
+	gengort.Validate((*AccessedFlags)(nil), 0x14, 0x4, "Tested", 0x0, "Modified", 0x4, "Set0", 0x8, "Set1", 0xc, "Undefined", 0x10)
+	gengort.Validate((*DecodedInstructionRawRex)(nil), 0x5, 0x1, "W", 0x0, "R", 0x1, "X", 0x2, "B", 0x3, "Offset", 0x4)
+	gengort.Validate((*DecodedInstructionRawXop)(nil), 0x9, 0x1, "R", 0x0, "X", 0x1, "B", 0x2, "MMmmm", 0x3, "W", 0x4, "Vvvv", 0x5, "L", 0x6, "Pp", 0x7, "Offset", 0x8)
+	gengort.Validate((*DecodedInstructionRawVex)(nil), 0xa, 0x1, "R", 0x0, "X", 0x1, "B", 0x2, "MMmmm", 0x3, "W", 0x4, "Vvvv", 0x5, "L", 0x6, "Pp", 0x7, "Offset", 0x8, "Size", 0x9)
+	gengort.Validate((*DecodedInstructionRawEvex)(nil), 0xf, 0x1, "R", 0x0, "X", 0x1, "B", 0x2, "R2", 0x3, "Mmm", 0x4, "W", 0x5, "Vvvv", 0x6, "Pp", 0x7, "Z", 0x8, "L2", 0x9, "L", 0xa, "B", 0xb, "V2", 0xc, "Aaa", 0xd, "Offset", 0xe)
+	gengort.Validate((*DecodedInstructionRawMvex)(nil), 0xd, 0x1, "R", 0x0, "X", 0x1, "B", 0x2, "R2", 0x3, "Mmmm", 0x4, "W", 0x5, "Vvvv", 0x6, "Pp", 0x7, "E", 0x8, "Sss", 0x9, "V2", 0xa, "Kkk", 0xb, "Offset", 0xc)
+	gengort.Validate((*DecodedInstructionAvx)(nil), 0x24, 0x4, "VectorLength", 0x0, "Mask", 0x4, "Broadcast", 0xc, "Rounding", 0x14, "Swizzle", 0x18, "Conversion", 0x1c, "HasSae", 0x20, "HasEvictionHint", 0x21)
+	gengort.Validate((*DecodedInstructionAvxMask_)(nil), 0x8, 0x4, "Mode", 0x0, "Reg", 0x4)
+	gengort.Validate((*DecodedInstructionAvxBroadcast_)(nil), 0x8, 0x4, "IsStatic", 0x0, "Mode", 0x4)
+	gengort.Validate((*DecodedInstructionAvxRounding_)(nil), 0x4, 0x4, "Mode", 0x0)
+	gengort.Validate((*DecodedInstructionAvxSwizzle_)(nil), 0x4, 0x4, "Mode", 0x0)
+	gengort.Validate((*DecodedInstructionAvxConversion_)(nil), 0x4, 0x4, "Mode", 0x0)
+	gengort.Validate((*DecodedInstructionMeta)(nil), 0x14, 0x4, "Category", 0x0, "IsaSet", 0x4, "IsaExt", 0x8, "BranchType", 0xc, "ExceptionClass", 0x10)
+	gengort.Validate((*DecodedInstructionRaw)(nil), 0xd8, 0x8, "PrefixCount", 0x0, "Prefixes", 0x4, "Encoding2", 0x7c, "Modrm", 0x8f, "Sib", 0x93, "Disp", 0x98, "Imm", 0xa8)
+	gengort.Validate((*DecodedInstructionRawPrefixes_)(nil), 0x8, 0x4, "Type", 0x0, "Value", 0x4)
+	gengort.Validate((*Anon6217_5)(nil), 0xf, 0x1)
+	gengort.Validate((*DecodedInstructionModRm_)(nil), 0x4, 0x1, "Mod", 0x0, "Reg", 0x1, "Rm", 0x2, "Offset", 0x3)
+	gengort.Validate((*DecodedInstructionRawSib_)(nil), 0x4, 0x1, "Scale", 0x0, "Index", 0x1, "Base", 0x2, "Offset", 0x3)
+	gengort.Validate((*DecodedInstructionRawDisp_)(nil), 0x10, 0x8, "Value", 0x0, "Size", 0x8, "Offset", 0x9)
+	gengort.Validate((*DecodedInstructionRawImm_)(nil), 0x18, 0x8, "IsSigned", 0x0, "IsRelative", 0x1, "Value", 0x8, "Size", 0x10, "Offset", 0x11)
+	gengort.Validate((*DecodedInstructionRawImmValue_)(nil), 0x8, 0x8)
+	gengort.Validate((*DecodedInstruction)(nil), 0x148, 0x8, "MachineMode", 0x0, "Mnemonic", 0x4, "Length", 0x8, "Encoding", 0xc, "OpcodeMap", 0x10, "Opcode", 0x14, "StackWidth", 0x15, "OperandWidth", 0x16, "AddressWidth", 0x17, "OperandCount", 0x18, "OperandCountVisible", 0x19, "Attributes", 0x20, "CpuFlags", 0x28, "FpuFlags", 0x30, "Avx", 0x38, "Meta", 0x5c, "Raw", 0x70)
+	gengort.Validate((*DecoderContext)(nil), 0x20, 0x8, "Definition", 0x0, "EoszIndex", 0x8, "EaszIndex", 0x9, "VectorUnified", 0xa, "RegInfo", 0x14, "Evex", 0x1a, "Mvex", 0x1c, "Cd8Scale", 0x1d)
+	gengort.Validate((*Anon6451_5)(nil), 0xa, 0x1, "W", 0x0, "R", 0x1, "X", 0x2, "B", 0x3, "L", 0x4, "Ll", 0x5, "R2", 0x6, "V2", 0x7, "Vvvv", 0x8, "Mask", 0x9)
+	gengort.Validate((*Anon6467_5)(nil), 0x6, 0x1, "IsModReg", 0x0, "IdReg", 0x1, "IdRm", 0x2, "IdNdsndd", 0x3, "IdBase", 0x4, "IdIndex", 0x5)
+	gengort.Validate((*Anon6504_5)(nil), 0x2, 0x1, "TupleType", 0x0, "ElementSize", 0x1)
+	gengort.Validate((*Anon6518_5)(nil), 0x1, 0x1, "Functionality", 0x0)
+	gengort.Validate((*Decoder)(nil), 0xc, 0x4, "MachineMode", 0x0, "StackWidth", 0x4, "DecoderMode", 0x8)
+	gengort.Validate((*EncoderOperand)(nil), 0x40, 0x8, "Type", 0x0, "Reg", 0x4, "Mem", 0x10, "Ptr", 0x30, "Imm", 0x38)
+	gengort.Validate((*EncoderOperandReg_)(nil), 0x8, 0x4, "Value", 0x0, "Is4", 0x4)
+	gengort.Validate((*EncoderOperandMem_)(nil), 0x20, 0x8, "Base", 0x0, "Index", 0x4, "Scale", 0x8, "Displacement", 0x10, "Size", 0x18)
+	gengort.Validate((*EncoderOperandPtr_)(nil), 0x8, 0x4, "Segment", 0x0, "Offset", 0x4)
+	gengort.Validate((*EncoderOperandImm_)(nil), 0x8, 0x8)
+	gengort.Validate((*EncoderRequest)(nil), 0x190, 0x8, "MachineMode", 0x0, "AllowedEncodings", 0x4, "Mnemonic", 0x8, "Prefixes", 0x10, "BranchType", 0x18, "BranchWidth", 0x1c, "AddressSizeHint", 0x20, "OperandSizeHint", 0x24, "OperandCount", 0x28, "Operands", 0x30, "Evex", 0x170, "Mvex", 0x17c)
+	gengort.Validate((*EncoderRequestEvexFeatures_)(nil), 0xc, 0x4, "Broadcast", 0x0, "Rounding", 0x4, "Sae", 0x8, "ZeroingMask", 0x9)
+	gengort.Validate((*EncoderRequestMvexFeatures_)(nil), 0x14, 0x4, "Broadcast", 0x0, "Conversion", 0x4, "Rounding", 0x8, "Swizzle", 0xc, "Sae", 0x10, "EvictionHint", 0x11)
+	gengort.Validate((*Allocator)(nil), 0x18, 0x8, "Allocate", 0x0, "Reallocate", 0x8, "Deallocate", 0x10)
+	gengort.Validate((*Vector)(nil), 0x38, 0x8, "Allocator", 0x0, "GrowthFactor", 0x8, "ShrinkThreshold", 0x9, "Size", 0x10, "Capacity", 0x18, "ElementSize", 0x20, "Destructor", 0x28, "Data", 0x30)
+	gengort.Validate((*String)(nil), 0x40, 0x8, "Flags", 0x0, "Vector", 0x8)
+	gengort.Validate((*StringView)(nil), 0x40, 0x8, "String", 0x0)
+	gengort.Validate((*FormatterToken)(nil), 0x2, 0x1, "Type", 0x0, "Next", 0x1)
+	gengort.Validate((*FormatterBuffer)(nil), 0x50, 0x8, "IsTokenList", 0x0, "Capacity", 0x8, "String", 0x10)
+	gengort.Validate((*FormatterContext)(nil), 0x28, 0x8, "Instruction", 0x0, "Operands", 0x8, "Operand", 0x10, "RuntimeAddress", 0x18, "UserData", 0x20)
+	gengort.Validate((*Formatter)(nil), 0x248, 0x8, "Style", 0x0, "ForceMemorySize", 0x4, "ForceMemorySegment", 0x5, "ForceMemoryScale", 0x6, "ForceRelativeBranches", 0x7, "ForceRelativeRiprel", 0x8, "PrintBranchSize", 0x9, "DetailedPrefixes", 0xa, "AddrBase", 0xc, "AddrSignedness", 0x10, "AddrPaddingAbsolute", 0x14, "AddrPaddingRelative", 0x18, "DispBase", 0x1c, "DispSignedness", 0x20, "DispPadding", 0x24, "ImmBase", 0x28, "ImmSignedness", 0x2c, "ImmPadding", 0x30, "CasePrefixes", 0x34, "CaseMnemonic", 0x38, "CaseRegisters", 0x3c, "CaseTypecasts", 0x40, "CaseDecorators", 0x44, "HexUppercase", 0x48, "HexForceLeadingNumber", 0x49, "NumberFormat", 0x50, "FuncPreInstruction", 0x1b0, "FuncPostInstruction", 0x1b8, "FuncFormatInstruction", 0x1c0, "FuncPreOperand", 0x1c8, "FuncPostOperand", 0x1d0, "FuncFormatOperandReg", 0x1d8, "FuncFormatOperandMem", 0x1e0, "FuncFormatOperandPtr", 0x1e8, "FuncFormatOperandImm", 0x1f0, "FuncPrintMnemonic", 0x1f8, "FuncPrintRegister", 0x200, "FuncPrintAddressAbs", 0x208, "FuncPrintAddressRel", 0x210, "FuncPrintDisp", 0x218, "FuncPrintImm", 0x220, "FuncPrintTypecast", 0x228, "FuncPrintSegment", 0x230, "FuncPrintPrefixes", 0x238, "FuncPrintDecorator", 0x240)
+	gengort.Validate((*Anon11276_5)(nil), 0x58, 0x8, "String", 0x0, "StringData", 0x8, "Buffer", 0x48)
+	gengort.Validate((*InstructionSegments)(nil), 0x4c, 0x4, "Count", 0x0, "Segments", 0x4)
+	gengort.Validate((*Anon11687_5)(nil), 0x8, 0x4, "Type", 0x0, "Offset", 0x4, "Size", 0x5)
+	gengort.Validate((*DisassembledInstruction)(nil), 0x4d0, 0x8, "RuntimeAddress", 0x0, "Info", 0x8, "Operands", 0x150, "Text", 0x470)
+}
+
+// Returns the specified instruction category string.
 //
-// @return `GLFW_TRUE` if successful, or `GLFW_FALSE` if an
-// [error](
-// @ref error_handling)
-// occurred.
+// @param category The instruction category.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_PLATFORM_UNAVAILABLE
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark
-// @macos
-// This function will change the current directory of the
-// application to the `Contents/Resources` subdirectory of the application's
-// bundle, if present.  This can be disabled with the
-// @ref GLFW_COCOA_CHDIR_RESOURCES
-// init hint.
-//
-// @remark
-// @macos
-// This function will create the main menu and dock icon for the
-// application.  If GLFW finds a `MainMenu.nib` it is loaded and assumed to
-// contain a menu bar.  Otherwise a minimal menu bar is created manually with
-// common commands like Hide, Quit and About.  The About entry opens a minimal
-// about dialog with information from the application's bundle.  The menu bar
-// and dock icon can be disabled entirely with the
-// @ref GLFW_COCOA_MENUBAR
-// init
-// hint.
-//
-// @remark __Wayland, X11:__ If the library was compiled with support for both
-// Wayland and X11, and the
-// @ref GLFW_PLATFORM
-// init hint is set to
-// `GLFW_ANY_PLATFORM`, the `XDG_SESSION_TYPE` environment variable affects
-// which platform is picked.  If the environment variable is not set, or is set
-// to something other than `wayland` or `x11`, the regular detection mechanism
-// will be used instead.
-//
-// @remark
-// @x11
-// This function will set the `LC_CTYPE` category of the
-// application locale according to the current environment if that category is
-// still "C".  This is because the "C" locale breaks Unicode text input.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref intro_init
-//
-// @sa
-// @ref glfwInitHint
-//
-// @sa
-// @ref glfwInitAllocator
-//
-// @sa
-// @ref glfwTerminate
-//
-// @since Added in version 1.0.
-func Init() int32 {
-	__res := gengort.CCall0(__imp_glfwInit.Addr())
-	return gengort.UnmarshallSyscall[int32](__res)
-}
-
-var __imp_glfwTerminate gengort.PreloadProc
-
-// @brief Terminates the GLFW library.
-// This function destroys all remaining windows and cursors, restores any
-// modified gamma ramps and frees any other allocated resources.  Once this
-// function is called, you must again call
-// @ref glfwInit
-// successfully before
-// you will be able to use most GLFW functions.
-// If GLFW has been successfully initialized, this function should be called
-// before the application exits.  If initialization fails, there is no need to
-// call this function, as it is called by
-// @ref glfwInit
-// before it returns
-// failure.
-// This function has no effect if GLFW is not initialized.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark This function may be called before
-// @ref glfwInit.
-//
-// @warning The contexts of any remaining windows must not be current on any
-// other thread when this function is called.
-//
-// @reentrancy
-// This function must not be called from a callback.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref intro_init
-//
-// @sa
-// @ref glfwInit
-//
-// @since Added in version 1.0.
-func Terminate() { gengort.CCall0(__imp_glfwTerminate.Addr()) }
-
-var __imp_glfwInitHint gengort.PreloadProc
-
-// @brief Sets the specified init hint to the desired value.
-// This function sets hints for the next initialization of GLFW.
-// The values you set hints to are never reset by GLFW, but they only take
-// effect during initialization.  Once GLFW has been initialized, any values
-// you set will be ignored until the library is terminated and initialized
-// again.
-// Some hints are platform specific.  These may be set on any platform but they
-// will only affect their specific platform.  Other platforms will ignore them.
-// Setting these hints requires no platform specific headers or functions.
-//
-// @param hint The [init hint](
-// @ref init_hints)
-// to set.
-//
-// @param value The new value of the init hint.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_INVALID_ENUM
-// and
-// @ref GLFW_INVALID_VALUE.
-//
-// @remarks This function may be called before
-// @ref glfwInit.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa init_hints
-//
-// @sa glfwInit
-//
-// @since Added in version 3.3.
-func InitHint(hint int32, value int32) {
-	gengort.CCall2(__imp_glfwInitHint.Addr(), gengort.MarshallSyscall(hint), gengort.MarshallSyscall(value))
-}
-
-var __imp_glfwInitAllocator gengort.PreloadProc
-
-// @brief Sets the init allocator to the desired value.
-// To use the default allocator, call this function with a `NULL` argument.
-// If you specify an allocator struct, every member must be a valid function
-// pointer.  If any member is `NULL`, this function will emit
-// @ref GLFW_INVALID_VALUE
-// and the init allocator will be unchanged.
-// The functions in the allocator must fulfil a number of requirements.  See the
-// documentation for
-// @ref GLFWallocatefun,
-//
-// @ref GLFWreallocatefun
-// and
-// @ref GLFWdeallocatefun
-// for details.
-//
-// @param allocator The allocator to use at the next initialization, or
-// `NULL` to use the default one.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_INVALID_VALUE.
-//
-// @pointer
-// _lifetime The specified allocator is copied before this function
-// returns.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref init_allocator
-//
-// @sa
-// @ref glfwInit
-//
-// @since Added in version 3.4.
-func InitAllocator(allocator *Allocator) {
-	gengort.CCall1(__imp_glfwInitAllocator.Addr(), gengort.MarshallSyscall(allocator))
-}
-
-var __imp_glfwGetVersion gengort.PreloadProc
-
-// @brief Retrieves the version of the GLFW library.
-// This function retrieves the major, minor and revision numbers of the GLFW
-// library.  It is intended for when you are using GLFW as a shared library and
-// want to ensure that you are using the minimum required version.
-// Any or all of the version arguments may be `NULL`.
-//
-// @param major Where to store the major version number, or `NULL`.
-//
-// @param minor Where to store the minor version number, or `NULL`.
-//
-// @param rev Where to store the revision number, or `NULL`.
-//
-// @errors
-// None.
-//
-// @remark This function may be called before
-// @ref glfwInit.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref intro_version
-//
-// @sa
-// @ref glfwGetVersionString
-//
-// @since Added in version 1.0.
-func GetVersion(major *int32, minor *int32, rev *int32) {
-	gengort.CCall3(__imp_glfwGetVersion.Addr(), gengort.MarshallSyscall(major), gengort.MarshallSyscall(minor), gengort.MarshallSyscall(rev))
-}
-
-var __imp_glfwGetVersionString gengort.PreloadProc
-
-// @brief Returns a string describing the compile-time configuration.
-// This function returns the compile-time generated
-// [version string](
-// @ref intro_version_string)
-// of the GLFW library binary.  It describes
-// the version, platforms, compiler and any platform or operating system specific
-// compile-time options.  It should not be confused with the OpenGL or OpenGL ES version
-// string, queried with `glGetString`.
-// __Do not use the version string__ to parse the GLFW library version.  The
-//
-// @ref glfwGetVersion
-// function provides the version of the running library
-// binary in numerical format.
-// __Do not use the version string__ to parse what platforms are supported.  The
-// @ref glfwPlatformSupported
-// function lets you query platform support.
-//
-// @return The ASCII encoded GLFW version string.
-//
-// @errors
-// None.
-//
-// @remark This function may be called before
-// @ref glfwInit.
-//
-// @pointer
-// _lifetime The returned string is static and compile-time generated.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref intro_version
-//
-// @sa
-// @ref glfwGetVersion
-//
-// @since Added in version 3.0.
-func GetVersionString() *byte {
-	__res := gengort.CCall0(__imp_glfwGetVersionString.Addr())
+// @return The instruction category string or `ZYAN_NULL`, if an invalid category was passed.
+func (category InstructionCategory) GetString() *byte {
+	__res := gengort.CCall1(__imp_ZydisCategoryGetString.Addr(), gengort.MarshallSyscall(category))
 	return gengort.UnmarshallSyscall[*byte](__res)
 }
 
-var __imp_glfwGetError gengort.PreloadProc
+var __imp_ZydisISASetGetString gengort.PreloadProc
 
-// @brief Returns and clears the last error for the calling thread.
-// This function returns and clears the [error code](
-// @ref errors)
-// of the last
-// error that occurred on the calling thread, and optionally a UTF-8 encoded
-// human-readable description of it.  If no error has occurred since the last
-// call, it returns
-// @ref GLFW_NO_ERROR
-// (zero) and the description pointer is
-// set to `NULL`.
+// Returns the specified isa-set string.
 //
-// @param description Where to store the error description pointer, or `NULL`.
+// @param isa_set The isa-set.
 //
-// @return The last error code for the calling thread, or
-// @ref GLFW_NO_ERROR
-// (zero).
-//
-// @errors
-// None.
-//
-// @pointer
-// _lifetime The returned string is allocated and freed by GLFW.  You
-// should not free it yourself.  It is guaranteed to be valid only until the
-// next error occurs or the library is terminated.
-//
-// @remark This function may be called before
-// @ref glfwInit.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref error_handling
-//
-// @sa
-// @ref glfwSetErrorCallback
-//
-// @since Added in version 3.3.
-func GetError(description **byte) int32 {
-	__res := gengort.CCall1(__imp_glfwGetError.Addr(), gengort.MarshallSyscall(description))
-	return gengort.UnmarshallSyscall[int32](__res)
-}
-
-var __imp_glfwSetErrorCallback gengort.PreloadProc
-
-// @brief Sets the error callback.
-// This function sets the error callback, which is called with an error code
-// and a human-readable description each time a GLFW error occurs.
-// The error code is set before the callback is called.  Calling
-// @ref glfwGetError
-// from the error callback will return the same value as the error
-// code argument.
-// The error callback is called on the thread where the error occurred.  If you
-// are using GLFW from multiple threads, your error callback needs to be
-// written accordingly.
-// Because the description string may have been generated specifically for that
-// error, it is not guaranteed to be valid after the callback has returned.  If
-// you wish to use it after the callback returns, you need to make a copy.
-// Once set, the error callback remains set even after the library has been
-// terminated.
-//
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set.
-//
-//
-// For more information about the callback parameters, see the
-// [callback pointer type](
-// @ref GLFWerrorfun).
-//
-// @errors
-// None.
-//
-// @remark This function may be called before
-// @ref glfwInit.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref error_handling
-//
-// @sa
-// @ref glfwGetError
-//
-// @since Added in version 3.0.
-func SetErrorCallback(callback Errorfun) Errorfun {
-	__res := gengort.CCall1(__imp_glfwSetErrorCallback.Addr(), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Errorfun](__res)
-}
-
-var __imp_glfwGetPlatform gengort.PreloadProc
-
-// @brief Returns the currently selected platform.
-// This function returns the platform that was selected during initialization.  The
-// returned value will be one of `GLFW_PLATFORM_WIN32`, `GLFW_PLATFORM_COCOA`,
-// `GLFW_PLATFORM_WAYLAND`, `GLFW_PLATFORM_X11` or `GLFW_PLATFORM_NULL`.
-//
-// @return The currently selected platform, or zero if an error occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref platform
-//
-// @sa
-// @ref glfwPlatformSupported
-//
-// @since Added in version 3.4.
-func GetPlatform() int32 {
-	__res := gengort.CCall0(__imp_glfwGetPlatform.Addr())
-	return gengort.UnmarshallSyscall[int32](__res)
-}
-
-var __imp_glfwPlatformSupported gengort.PreloadProc
-
-// @brief Returns whether the library includes support for the specified platform.
-// This function returns whether the library was compiled with support for the specified
-// platform.  The platform must be one of `GLFW_PLATFORM_WIN32`, `GLFW_PLATFORM_COCOA`,
-// `GLFW_PLATFORM_WAYLAND`, `GLFW_PLATFORM_X11` or `GLFW_PLATFORM_NULL`.
-//
-// @param platform The platform to query.
-//
-// @return `GLFW_TRUE` if the platform is supported, or `GLFW_FALSE` otherwise.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_INVALID_ENUM.
-//
-// @remark This function may be called before
-// @ref glfwInit.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref platform
-//
-// @sa
-// @ref glfwGetPlatform
-//
-// @since Added in version 3.4.
-func PlatformSupported(platform int32) int32 {
-	__res := gengort.CCall1(__imp_glfwPlatformSupported.Addr(), gengort.MarshallSyscall(platform))
-	return gengort.UnmarshallSyscall[int32](__res)
-}
-
-var __imp_glfwGetMonitors gengort.PreloadProc
-
-// @brief Returns the currently connected monitors.
-// This function returns an array of handles for all currently connected
-// monitors.  The primary monitor is always first in the returned array.  If no
-// monitors were found, this function returns `NULL`.
-//
-// @param count Where to store the number of monitors in the returned
-// array.  This is set to zero if an error occurred.
-//
-// @return An array of monitor handles, or `NULL` if no monitors were found or
-// if an [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @pointer
-// _lifetime The returned array is allocated and freed by GLFW.  You
-// should not free it yourself.  It is guaranteed to be valid only until the
-// monitor configuration changes or the library is terminated.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref monitor_monitors
-//
-// @sa
-// @ref monitor_event
-//
-// @sa
-// @ref glfwGetPrimaryMonitor
-//
-// @since Added in version 3.0.
-func GetMonitors(count *int32) **Monitor {
-	__res := gengort.CCall1(__imp_glfwGetMonitors.Addr(), gengort.MarshallSyscall(count))
-	return gengort.UnmarshallSyscall[**Monitor](__res)
-}
-
-var __imp_glfwGetPrimaryMonitor gengort.PreloadProc
-
-// @brief Returns the primary monitor.
-// This function returns the primary monitor.  This is usually the monitor
-// where elements like the task bar or global menu bar are located.
-//
-// @return The primary monitor, or `NULL` if no monitors were found or if an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @remark The primary monitor is always first in the array returned by
-// @ref glfwGetMonitors.
-//
-// @sa
-// @ref monitor_monitors
-//
-// @sa
-// @ref glfwGetMonitors
-//
-// @since Added in version 3.0.
-func GetPrimaryMonitor() *Monitor {
-	__res := gengort.CCall0(__imp_glfwGetPrimaryMonitor.Addr())
-	return gengort.UnmarshallSyscall[*Monitor](__res)
-}
-
-var __imp_glfwGetMonitorPos gengort.PreloadProc
-
-// @brief Returns the position of the monitor's viewport on the virtual screen.
-// This function returns the position, in screen coordinates, of the upper-left
-// corner of the specified monitor.
-// Any or all of the position arguments may be `NULL`.  If an error occurs, all
-// non-`NULL` position arguments will be set to zero.
-//
-// @param monitor The monitor to query.
-//
-// @param xpos Where to store the monitor x-coordinate, or `NULL`.
-//
-// @param ypos Where to store the monitor y-coordinate, or `NULL`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref monitor_properties
-//
-// @since Added in version 3.0.
-func GetMonitorPos(monitor *Monitor, xpos *int32, ypos *int32) {
-	gengort.CCall3(__imp_glfwGetMonitorPos.Addr(), gengort.MarshallSyscall(monitor), gengort.MarshallSyscall(xpos), gengort.MarshallSyscall(ypos))
-}
-
-var __imp_glfwGetMonitorWorkarea gengort.PreloadProc
-
-// @brief Retrieves the work area of the monitor.
-// This function returns the position, in screen coordinates, of the upper-left
-// corner of the work area of the specified monitor along with the work area
-// size in screen coordinates. The work area is defined as the area of the
-// monitor not occluded by the window system task bar where present. If no
-// task bar exists then the work area is the monitor resolution in screen
-// coordinates.
-// Any or all of the position and size arguments may be `NULL`.  If an error
-// occurs, all non-`NULL` position and size arguments will be set to zero.
-//
-// @param monitor The monitor to query.
-//
-// @param xpos Where to store the monitor x-coordinate, or `NULL`.
-//
-// @param ypos Where to store the monitor y-coordinate, or `NULL`.
-//
-// @param width Where to store the monitor width, or `NULL`.
-//
-// @param height Where to store the monitor height, or `NULL`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref monitor_workarea
-//
-// @since Added in version 3.3.
-func GetMonitorWorkarea(monitor *Monitor, xpos *int32, ypos *int32, width *int32, height *int32) {
-	gengort.CCall5(__imp_glfwGetMonitorWorkarea.Addr(), gengort.MarshallSyscall(monitor), gengort.MarshallSyscall(xpos), gengort.MarshallSyscall(ypos), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height))
-}
-
-var __imp_glfwGetMonitorPhysicalSize gengort.PreloadProc
-
-// @brief Returns the physical size of the monitor.
-// This function returns the size, in millimetres, of the display area of the
-// specified monitor.
-// Some platforms do not provide accurate monitor size information, either
-// because the monitor [EDID][] data is incorrect or because the driver does
-// not report it accurately.
-// [EDID]: https://en.wikipedia.org/wiki/Extended_display_identification_data
-// Any or all of the size arguments may be `NULL`.  If an error occurs, all
-// non-`NULL` size arguments will be set to zero.
-//
-// @param monitor The monitor to query.
-//
-// @param widthMM Where to store the width, in millimetres, of the
-// monitor's display area, or `NULL`.
-//
-// @param heightMM Where to store the height, in millimetres, of the
-// monitor's display area, or `NULL`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @remark
-// @win32
-// On Windows 8 and earlier the physical size is calculated from
-// the current resolution and system DPI instead of querying the monitor EDID data.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref monitor_properties
-//
-// @since Added in version 3.0.
-func GetMonitorPhysicalSize(monitor *Monitor, widthMM *int32, heightMM *int32) {
-	gengort.CCall3(__imp_glfwGetMonitorPhysicalSize.Addr(), gengort.MarshallSyscall(monitor), gengort.MarshallSyscall(widthMM), gengort.MarshallSyscall(heightMM))
-}
-
-var __imp_glfwGetMonitorContentScale gengort.PreloadProc
-
-// @brief Retrieves the content scale for the specified monitor.
-// This function retrieves the content scale for the specified monitor.  The
-// content scale is the ratio between the current DPI and the platform's
-// default DPI.  This is especially important for text and any UI elements.  If
-// the pixel dimensions of your UI scaled by this look appropriate on your
-// machine then it should appear at a reasonable size on other machines
-// regardless of their DPI and scaling settings.  This relies on the system DPI
-// and scaling settings being somewhat correct.
-// The content scale may depend on both the monitor resolution and pixel
-// density and on user settings.  It may be very different from the raw DPI
-// calculated from the physical size and current resolution.
-//
-// @param monitor The monitor to query.
-//
-// @param xscale Where to store the x-axis content scale, or `NULL`.
-//
-// @param yscale Where to store the y-axis content scale, or `NULL`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark
-// @wayland
-// Fractional scaling information is not yet available for
-// monitors, so this function only returns integer content scales.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref monitor_scale
-//
-// @sa
-// @ref glfwGetWindowContentScale
-//
-// @since Added in version 3.3.
-func GetMonitorContentScale(monitor *Monitor, xscale *float32, yscale *float32) {
-	gengort.CCall3(__imp_glfwGetMonitorContentScale.Addr(), gengort.MarshallSyscall(monitor), gengort.MarshallSyscall(xscale), gengort.MarshallSyscall(yscale))
-}
-
-var __imp_glfwGetMonitorName gengort.PreloadProc
-
-// @brief Returns the name of the specified monitor.
-// This function returns a human-readable name, encoded as UTF-8, of the
-// specified monitor.  The name typically reflects the make and model of the
-// monitor and is not guaranteed to be unique among the connected monitors.
-//
-// @param monitor The monitor to query.
-//
-// @return The UTF-8 encoded name of the monitor, or `NULL` if an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @pointer
-// _lifetime The returned string is allocated and freed by GLFW.  You
-// should not free it yourself.  It is valid until the specified monitor is
-// disconnected or the library is terminated.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref monitor_properties
-//
-// @since Added in version 3.0.
-func GetMonitorName(monitor *Monitor) *byte {
-	__res := gengort.CCall1(__imp_glfwGetMonitorName.Addr(), gengort.MarshallSyscall(monitor))
+// @return The isa-set string or `ZYAN_NULL`, if an invalid isa-set was passed.
+func (isa_set ISASet) GetString() *byte {
+	__res := gengort.CCall1(__imp_ZydisISASetGetString.Addr(), gengort.MarshallSyscall(isa_set))
 	return gengort.UnmarshallSyscall[*byte](__res)
 }
 
-var __imp_glfwSetMonitorUserPointer gengort.PreloadProc
+var __imp_ZydisISAExtGetString gengort.PreloadProc
 
-// @brief Sets the user pointer of the specified monitor.
-// This function sets the user-defined pointer of the specified monitor.  The
-// current value is retained until the monitor is disconnected.  The initial
-// value is `NULL`.
-// This function may be called from the monitor callback, even for a monitor
-// that is being disconnected.
+// Returns the specified isa-extension string.
 //
-// @param monitor The monitor whose pointer to set.
+// @param isa_ext The isa-extension.
 //
-// @param pointer The new value.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function may be called from any thread.  Access is not
-// synchronized.
-//
-// @sa
-// @ref monitor_userptr
-//
-// @sa
-// @ref glfwGetMonitorUserPointer
-//
-// @since Added in version 3.3.
-func SetMonitorUserPointer(monitor *Monitor, pointer unsafe.Pointer) {
-	gengort.CCall2(__imp_glfwSetMonitorUserPointer.Addr(), gengort.MarshallSyscall(monitor), gengort.MarshallSyscall(pointer))
+// @return The isa-extension string or `ZYAN_NULL`, if an invalid isa-extension was passed.
+func (isa_ext ISAExt) GetString() *byte {
+	__res := gengort.CCall1(__imp_ZydisISAExtGetString.Addr(), gengort.MarshallSyscall(isa_ext))
+	return gengort.UnmarshallSyscall[*byte](__res)
 }
 
-var __imp_glfwGetMonitorUserPointer gengort.PreloadProc
+var __imp_ZydisMnemonicGetString gengort.PreloadProc
 
-// @brief Returns the user pointer of the specified monitor.
-// This function returns the current value of the user-defined pointer of the
-// specified monitor.  The initial value is `NULL`.
-// This function may be called from the monitor callback, even for a monitor
-// that is being disconnected.
+// Returns the specified instruction mnemonic string.
 //
-// @param monitor The monitor whose pointer to return.
+// @param mnemonic The mnemonic.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
+// @return The instruction mnemonic string or `ZYAN_NULL`, if an invalid mnemonic was passed.
+func (mnemonic Mnemonic) GetString() *byte {
+	__res := gengort.CCall1(__imp_ZydisMnemonicGetString.Addr(), gengort.MarshallSyscall(mnemonic))
+	return gengort.UnmarshallSyscall[*byte](__res)
+}
+
+var __imp_ZydisMnemonicGetStringWrapped gengort.PreloadProc
+
+// Returns the specified instruction mnemonic as `ZydisShortString`.
 //
-// @thread
-// _safety This function may be called from any thread.  Access is not
-// synchronized.
+// @param mnemonic The mnemonic.
 //
-// @sa
-// @ref monitor_userptr
+// @return The instruction mnemonic string or `ZYAN_NULL`, if an invalid mnemonic was passed.
+// The `buffer` of the returned struct is guaranteed to be zero-terminated in this special case.
+func (mnemonic Mnemonic) GetStringWrapped() *ShortString {
+	__res := gengort.CCall1(__imp_ZydisMnemonicGetStringWrapped.Addr(), gengort.MarshallSyscall(mnemonic))
+	return gengort.UnmarshallSyscall[*ShortString](__res)
+}
+
+var __imp_ZydisRegisterEncode gengort.PreloadProc
+
+// Returns the register specified by the `register_class` and `id` tuple.
 //
-// @sa
-// @ref glfwSetMonitorUserPointer
+// @param register_class The register class.
 //
-// @since Added in version 3.3.
-func GetMonitorUserPointer(monitor *Monitor) unsafe.Pointer {
-	__res := gengort.CCall1(__imp_glfwGetMonitorUserPointer.Addr(), gengort.MarshallSyscall(monitor))
+// @param id The register id.
+//
+// @return The register specified by the `register_class` and `id` tuple or `ZYDIS_REGISTER_NONE`,
+// if an invalid parameter was passed.
+func (register_class RegisterClass) Encode(id U8) Register {
+	__res := gengort.CCall2(__imp_ZydisRegisterEncode.Addr(), gengort.MarshallSyscall(register_class), gengort.MarshallSyscall(id))
+	return gengort.UnmarshallSyscall[Register](__res)
+}
+
+var __imp_ZydisRegisterGetId gengort.PreloadProc
+
+// Returns the id of the specified register.
+//
+// @param reg The register.
+//
+// @return The id of the specified register, or -1 if an invalid parameter was passed.
+func (reg Register) GetId() I8 {
+	__res := gengort.CCall1(__imp_ZydisRegisterGetId.Addr(), gengort.MarshallSyscall(reg))
+	return gengort.UnmarshallSyscall[I8](__res)
+}
+
+var __imp_ZydisRegisterGetClass gengort.PreloadProc
+
+// Returns the register-class of the specified register.
+//
+// @param reg The register.
+//
+// @return The register-class of the specified register.
+func (reg Register) GetClass() RegisterClass {
+	__res := gengort.CCall1(__imp_ZydisRegisterGetClass.Addr(), gengort.MarshallSyscall(reg))
+	return gengort.UnmarshallSyscall[RegisterClass](__res)
+}
+
+var __imp_ZydisRegisterGetWidth gengort.PreloadProc
+
+// Returns the width of the specified register.
+//
+// @param mode The active machine mode.
+//
+// @param reg The register.
+//
+// @return The width of the specified register, or `ZYDIS_REGISTER_NONE` if the register is
+// invalid for the active machine-mode.
+func (reg Register) GetWidth(mode MachineMode) RegisterWidth {
+	__res := gengort.CCall2(__imp_ZydisRegisterGetWidth.Addr(), gengort.MarshallSyscall(mode), gengort.MarshallSyscall(reg))
+	return gengort.UnmarshallSyscall[RegisterWidth](__res)
+}
+
+var __imp_ZydisRegisterGetLargestEnclosing gengort.PreloadProc
+
+// Returns the largest enclosing register of the given register.
+//
+// @param mode The active machine mode.
+//
+// @param reg The register.
+//
+// @return The largest enclosing register of the given register, or `ZYDIS_REGISTER_NONE` if the
+// register is invalid for the active machine-mode.
+func (reg Register) GetLargestEnclosing(mode MachineMode) Register {
+	__res := gengort.CCall2(__imp_ZydisRegisterGetLargestEnclosing.Addr(), gengort.MarshallSyscall(mode), gengort.MarshallSyscall(reg))
+	return gengort.UnmarshallSyscall[Register](__res)
+}
+
+var __imp_ZydisRegisterGetString gengort.PreloadProc
+
+// Returns the specified register string.
+//
+// @param reg The register.
+//
+// @return The register string or `ZYAN_NULL`, if an invalid register was passed.
+func (reg Register) GetString() *byte {
+	__res := gengort.CCall1(__imp_ZydisRegisterGetString.Addr(), gengort.MarshallSyscall(reg))
+	return gengort.UnmarshallSyscall[*byte](__res)
+}
+
+var __imp_ZydisRegisterGetStringWrapped gengort.PreloadProc
+
+// Returns the specified register string as `ZydisShortString`.
+//
+// @param reg The register.
+//
+// @return The register string or `ZYAN_NULL`, if an invalid register was passed.
+// The `buffer` of the returned struct is guaranteed to be zero-terminated in this special case.
+func (reg Register) GetStringWrapped() *ShortString {
+	__res := gengort.CCall1(__imp_ZydisRegisterGetStringWrapped.Addr(), gengort.MarshallSyscall(reg))
+	return gengort.UnmarshallSyscall[*ShortString](__res)
+}
+
+var __imp_ZydisRegisterClassGetWidth gengort.PreloadProc
+
+// Returns the width of the specified register-class.
+//
+// @param mode The active machine mode.
+//
+// @param register_class The register class.
+//
+// @return The width of the specified register.
+func (register_class RegisterClass) ClassGetWidth(mode MachineMode) RegisterWidth {
+	__res := gengort.CCall2(__imp_ZydisRegisterClassGetWidth.Addr(), gengort.MarshallSyscall(mode), gengort.MarshallSyscall(register_class))
+	return gengort.UnmarshallSyscall[RegisterWidth](__res)
+}
+
+var __imp_ZydisDecoderInit gengort.PreloadProc
+
+// Initializes the given `ZydisDecoder` instance.
+//
+// @param decoder A pointer to the `ZydisDecoder` instance.
+//
+// @param machine_mode The machine mode.
+//
+// @param stack_width The stack width.
+//
+// @return A zyan status code.
+func (decoder *Decoder) Init(machine_mode MachineMode, stack_width StackWidth) Status {
+	__res := gengort.CCall3(__imp_ZydisDecoderInit.Addr(), gengort.MarshallSyscall(decoder), gengort.MarshallSyscall(machine_mode), gengort.MarshallSyscall(stack_width))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisDecoderEnableMode gengort.PreloadProc
+
+// Enables or disables the specified decoder-mode.
+//
+// @param decoder A pointer to the `ZydisDecoder` instance.
+//
+// @param mode The decoder mode.
+//
+// @param enabled `ZYAN_TRUE` to enable, or `ZYAN_FALSE` to disable the specified decoder-mode.
+//
+// @return A zyan status code.
+func (decoder *Decoder) EnableMode(mode DecoderMode, enabled Bool) Status {
+	__res := gengort.CCall3(__imp_ZydisDecoderEnableMode.Addr(), gengort.MarshallSyscall(decoder), gengort.MarshallSyscall(mode), gengort.MarshallSyscall(enabled))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisDecoderDecodeFull gengort.PreloadProc
+
+// Decodes the instruction in the given input `buffer` and returns all details (e.g. operands).
+//
+// @param decoder A pointer to the `ZydisDecoder` instance.
+//
+// @param buffer A pointer to the input buffer.
+//
+// @param length The length of the input buffer. Note that this can be bigger than the
+// actual size of the instruction -- you don't have to know the size up
+// front. This length is merely used to prevent Zydis from doing
+// out-of-bounds reads on your buffer.
+//
+// @param instruction A pointer to the `ZydisDecodedInstruction` struct receiving the details
+// about the decoded instruction.
+//
+// @param operands A pointer to an array with `ZYDIS_MAX_OPERAND_COUNT` entries that
+// receives the decoded operands. The number of operands decoded is
+// determined by the `instruction.operand_count` field. Excess entries are
+// zeroed.
+// This is a convenience function that combines the following functions into one call:
+// - `ZydisDecoderDecodeInstruction`
+// - `ZydisDecoderDecodeOperands`
+// Please refer to `ZydisDecoderDecodeInstruction` if operand decoding is not required or should
+// be done separately (`ZydisDecoderDecodeOperands`).
+// This function is not available in MINIMAL_MODE.
+//
+// @return A zyan status code.
+func (decoder *Decoder) DecodeFull(buffer unsafe.Pointer, length USize, instruction *DecodedInstruction, operands *DecodedOperand) Status {
+	__res := gengort.CCall5(__imp_ZydisDecoderDecodeFull.Addr(), gengort.MarshallSyscall(decoder), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(length), gengort.MarshallSyscall(instruction), gengort.MarshallSyscall(operands))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisDecoderDecodeInstruction gengort.PreloadProc
+
+// Decodes the instruction in the given input `buffer`.
+//
+// @param decoder A pointer to the `ZydisDecoder` instance.
+//
+// @param context A pointer to a decoder context struct which is required for further
+// decoding (e.g. operand decoding using `ZydisDecoderDecodeOperands`) or
+// `ZYAN_NULL` if not needed.
+//
+// @param buffer A pointer to the input buffer.
+//
+// @param length The length of the input buffer. Note that this can be bigger than the
+// actual size of the instruction -- you don't have to know the size up
+// front. This length is merely used to prevent Zydis from doing
+// out-of-bounds reads on your buffer.
+//
+// @param instruction A pointer to the `ZydisDecodedInstruction` struct, that receives the
+// details about the decoded instruction.
+//
+// @return A zyan status code.
+func (decoder *Decoder) DecodeInstruction(context *DecoderContext, buffer unsafe.Pointer, length USize, instruction *DecodedInstruction) Status {
+	__res := gengort.CCall5(__imp_ZydisDecoderDecodeInstruction.Addr(), gengort.MarshallSyscall(decoder), gengort.MarshallSyscall(context), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(length), gengort.MarshallSyscall(instruction))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisDecoderDecodeOperands gengort.PreloadProc
+
+// Decodes the instruction operands.
+//
+// @param decoder A pointer to the `ZydisDecoder` instance.
+//
+// @param context A pointer to the `ZydisDecoderContext` struct.
+//
+// @param instruction A pointer to the `ZydisDecodedInstruction` struct.
+//
+// @param operands The array that receives the decoded operands.
+// Refer to `ZYDIS_MAX_OPERAND_COUNT` or `ZYDIS_MAX_OPERAND_COUNT_VISIBLE`
+// when allocating space for the array to ensure that the buffer size is
+// sufficient to always fit all instruction operands.
+// Refer to `instruction.operand_count` or
+// `instruction.operand_count_visible' when allocating space for the array
+// to ensure that the buffer size is sufficient to fit all operands of
+// the given instruction.
+//
+// @param operand_count The length of the `operands` array.
+// This argument as well limits the maximum amount of operands to decode.
+// If this value is `0`, no operands will be decoded and `ZYAN_NULL` will
+// be accepted for the `operands` argument.
+// This function fails, if `operand_count` is larger than the total number of operands for the
+// given instruction (`instruction.operand_count`).
+// This function is not available in MINIMAL_MODE.
+//
+// @return A zyan status code.
+func (decoder *Decoder) DecodeOperands(context *DecoderContext, instruction *DecodedInstruction, operands *DecodedOperand, operand_count U8) Status {
+	__res := gengort.CCall5(__imp_ZydisDecoderDecodeOperands.Addr(), gengort.MarshallSyscall(decoder), gengort.MarshallSyscall(context), gengort.MarshallSyscall(instruction), gengort.MarshallSyscall(operands), gengort.MarshallSyscall(operand_count))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisEncoderEncodeInstruction gengort.PreloadProc
+
+// Encodes instruction with semantics specified in encoder request structure.
+//
+// @param request A pointer to the `ZydisEncoderRequest` struct.
+//
+// @param buffer A pointer to the output buffer receiving encoded instruction.
+//
+// @param length A pointer to the variable containing length of the output buffer. Upon
+// successful return this variable receives length of the encoded instruction.
+//
+// @return A zyan status code.
+func (request *EncoderRequest) EncodeInstruction(buffer unsafe.Pointer, length *USize) Status {
+	__res := gengort.CCall3(__imp_ZydisEncoderEncodeInstruction.Addr(), gengort.MarshallSyscall(request), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(length))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisEncoderEncodeInstructionAbsolute gengort.PreloadProc
+
+// Encodes instruction with semantics specified in encoder request structure. This function expects
+// absolute addresses inside encoder request instead of `EIP`/`RIP`-relative values. Function
+// predicts final instruction length prior to encoding and writes back calculated relative operands
+// to provided encoder request.
+//
+// @param request A pointer to the `ZydisEncoderRequest` struct.
+//
+// @param buffer A pointer to the output buffer receiving encoded instruction.
+//
+// @param length A pointer to the variable containing length of the output buffer. Upon
+// successful return this variable receives length of the encoded
+// instruction.
+//
+// @param runtime_address The runtime address of the instruction.
+//
+// @return A zyan status code.
+func (request *EncoderRequest) EncodeInstructionAbsolute(buffer unsafe.Pointer, length *USize, runtime_address U64) Status {
+	__res := gengort.CCall4(__imp_ZydisEncoderEncodeInstructionAbsolute.Addr(), gengort.MarshallSyscall(request), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(length), gengort.MarshallSyscall(runtime_address))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisEncoderDecodedInstructionToEncoderRequest gengort.PreloadProc
+
+// Converts decoded instruction to encoder request that can be passed to
+// `ZydisEncoderEncodeInstruction`.
+//
+// @param instruction A pointer to the `ZydisDecodedInstruction` struct.
+//
+// @param operands A pointer to the decoded operands.
+//
+// @param operand_count The operand count.
+//
+// @param request A pointer to the `ZydisEncoderRequest` struct, that receives
+// information necessary for encoder to re-encode the instruction.
+// This function performs simple structure conversion and does minimal sanity checks on the
+// input. There's no guarantee that produced request will be accepted by
+// `ZydisEncoderEncodeInstruction` if malformed `ZydisDecodedInstruction` or malformed
+// `ZydisDecodedOperands` is passed to this function.
+//
+// @return A zyan status code.
+func (request *EncoderRequest) DecodedInstructionToEncoderRequest(instruction *DecodedInstruction, operands *DecodedOperand, operand_count U8) Status {
+	__res := gengort.CCall4(__imp_ZydisEncoderDecodedInstructionToEncoderRequest.Addr(), gengort.MarshallSyscall(instruction), gengort.MarshallSyscall(operands), gengort.MarshallSyscall(operand_count), gengort.MarshallSyscall(request))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisEncoderNopFill gengort.PreloadProc
+
+// Fills provided buffer with `NOP` instructions using longest possible multi-byte instructions.
+//
+// @param buffer A pointer to the output buffer receiving encoded instructions.
+//
+// @param length Size of the output buffer.
+//
+// @return A zyan status code.
+func EncoderNopFill(buffer unsafe.Pointer, length USize) Status {
+	__res := gengort.CCall2(__imp_ZydisEncoderNopFill.Addr(), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(length))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanAllocatorInit gengort.PreloadProc
+
+// Initializes the given `ZyanAllocator` instance.
+//
+// @param allocator A pointer to the `ZyanAllocator` instance.
+//
+// @param allocate The allocate function.
+//
+// @param reallocate The reallocate function.
+//
+// @param deallocate The deallocate function.
+//
+// @return A zyan status code.
+func AllocatorInit(allocator *Allocator, allocate AllocatorAllocate, reallocate AllocatorAllocate, deallocate AllocatorDeallocate) Status {
+	__res := gengort.CCall4(__imp_ZyanAllocatorInit.Addr(), gengort.MarshallSyscall(allocator), gengort.MarshallSyscall(allocate), gengort.MarshallSyscall(reallocate), gengort.MarshallSyscall(deallocate))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanEqualsPointer gengort.PreloadProc
+
+// Defines a default equality comparison function for pointer values.
+//
+// @param left A pointer to the first value.
+//
+// @param right A pointer to the second value.
+//
+// @return Returns `ZYAN_TRUE` if the `left` value equals the `right` one or `ZYAN_FALSE`, if
+// not.
+func EqualsPointer(left *unsafe.Pointer, right *unsafe.Pointer) Bool {
+	__res := gengort.CCall2(__imp_ZyanEqualsPointer.Addr(), gengort.MarshallSyscall(left), gengort.MarshallSyscall(right))
+	return gengort.UnmarshallSyscall[Bool](__res)
+}
+
+var __imp_ZyanEqualsBool gengort.PreloadProc
+
+// Defines a default equality comparison function for `ZyanBool` values.
+//
+// @param left A pointer to the first value.
+//
+// @param right A pointer to the second value.
+//
+// @return Returns `ZYAN_TRUE` if the `left` value equals the `right` one or `ZYAN_FALSE`, if
+// not.
+func EqualsBool(left *Bool, right *Bool) Bool {
+	__res := gengort.CCall2(__imp_ZyanEqualsBool.Addr(), gengort.MarshallSyscall(left), gengort.MarshallSyscall(right))
+	return gengort.UnmarshallSyscall[Bool](__res)
+}
+
+var __imp_ZyanEqualsNumeric8 gengort.PreloadProc
+
+// Defines a default equality comparison function for 8-bit numeric values.
+//
+// @param left A pointer to the first value.
+//
+// @param right A pointer to the second value.
+//
+// @return Returns `ZYAN_TRUE` if the `left` value equals the `right` one or `ZYAN_FALSE`, if
+// not.
+func EqualsNumeric8(left *U8, right *U8) Bool {
+	__res := gengort.CCall2(__imp_ZyanEqualsNumeric8.Addr(), gengort.MarshallSyscall(left), gengort.MarshallSyscall(right))
+	return gengort.UnmarshallSyscall[Bool](__res)
+}
+
+var __imp_ZyanEqualsNumeric16 gengort.PreloadProc
+
+// Defines a default equality comparison function for 16-bit numeric values.
+//
+// @param left A pointer to the first value.
+//
+// @param right A pointer to the second value.
+//
+// @return Returns `ZYAN_TRUE` if the `left` value equals the `right` one or `ZYAN_FALSE`, if
+// not.
+func EqualsNumeric16(left *U16, right *U16) Bool {
+	__res := gengort.CCall2(__imp_ZyanEqualsNumeric16.Addr(), gengort.MarshallSyscall(left), gengort.MarshallSyscall(right))
+	return gengort.UnmarshallSyscall[Bool](__res)
+}
+
+var __imp_ZyanEqualsNumeric32 gengort.PreloadProc
+
+// Defines a default equality comparison function for 32-bit numeric values.
+//
+// @param left A pointer to the first value.
+//
+// @param right A pointer to the second value.
+//
+// @return Returns `ZYAN_TRUE` if the `left` value equals the `right` one or `ZYAN_FALSE`, if
+// not.
+func EqualsNumeric32(left *U32, right *U32) Bool {
+	__res := gengort.CCall2(__imp_ZyanEqualsNumeric32.Addr(), gengort.MarshallSyscall(left), gengort.MarshallSyscall(right))
+	return gengort.UnmarshallSyscall[Bool](__res)
+}
+
+var __imp_ZyanEqualsNumeric64 gengort.PreloadProc
+
+// Defines a default equality comparison function for 64-bit numeric values.
+//
+// @param left A pointer to the first value.
+//
+// @param right A pointer to the second value.
+//
+// @return Returns `ZYAN_TRUE` if the `left` value equals the `right` one or `ZYAN_FALSE`, if
+// not.
+func EqualsNumeric64(left *U64, right *U64) Bool {
+	__res := gengort.CCall2(__imp_ZyanEqualsNumeric64.Addr(), gengort.MarshallSyscall(left), gengort.MarshallSyscall(right))
+	return gengort.UnmarshallSyscall[Bool](__res)
+}
+
+var __imp_ZyanComparePointer gengort.PreloadProc
+
+// Defines a default comparison function for pointer values.
+//
+// @param left A pointer to the first value.
+//
+// @param right A pointer to the second value.
+//
+// @return Returns `0` if the `left` value equals the `right` one, `-1` if the `left` value is
+// less than the `right` one, or `1` if the `left` value is greater than the `right` one.
+func ComparePointer(left *unsafe.Pointer, right *unsafe.Pointer) I32 {
+	__res := gengort.CCall2(__imp_ZyanComparePointer.Addr(), gengort.MarshallSyscall(left), gengort.MarshallSyscall(right))
+	return gengort.UnmarshallSyscall[I32](__res)
+}
+
+var __imp_ZyanCompareBool gengort.PreloadProc
+
+// Defines a default comparison function for `ZyanBool` values.
+//
+// @param left A pointer to the first value.
+//
+// @param right A pointer to the second value.
+//
+// @return Returns `0` if the `left` value equals the `right` one, `-1` if the `left` value is
+// less than the `right` one, or `1` if the `left` value is greater than the `right` one.
+func CompareBool(left *Bool, right *Bool) I32 {
+	__res := gengort.CCall2(__imp_ZyanCompareBool.Addr(), gengort.MarshallSyscall(left), gengort.MarshallSyscall(right))
+	return gengort.UnmarshallSyscall[I32](__res)
+}
+
+var __imp_ZyanCompareNumeric8 gengort.PreloadProc
+
+// Defines a default comparison function for 8-bit numeric values.
+//
+// @param left A pointer to the first value.
+//
+// @param right A pointer to the second value.
+//
+// @return Returns `0` if the `left` value equals the `right` one, `-1` if the `left` value is
+// less than the `right` one, or `1` if the `left` value is greater than the `right` one.
+func CompareNumeric8(left *U8, right *U8) I32 {
+	__res := gengort.CCall2(__imp_ZyanCompareNumeric8.Addr(), gengort.MarshallSyscall(left), gengort.MarshallSyscall(right))
+	return gengort.UnmarshallSyscall[I32](__res)
+}
+
+var __imp_ZyanCompareNumeric16 gengort.PreloadProc
+
+// Defines a default comparison function for 16-bit numeric values.
+//
+// @param left A pointer to the first value.
+//
+// @param right A pointer to the second value.
+//
+// @return Returns `0` if the `left` value equals the `right` one, `-1` if the `left` value is
+// less than the `right` one, or `1` if the `left` value is greater than the `right` one.
+func CompareNumeric16(left *U16, right *U16) I32 {
+	__res := gengort.CCall2(__imp_ZyanCompareNumeric16.Addr(), gengort.MarshallSyscall(left), gengort.MarshallSyscall(right))
+	return gengort.UnmarshallSyscall[I32](__res)
+}
+
+var __imp_ZyanCompareNumeric32 gengort.PreloadProc
+
+// Defines a default comparison function for 32-bit numeric values.
+//
+// @param left A pointer to the first value.
+//
+// @param right A pointer to the second value.
+//
+// @return Returns `0` if the `left` value equals the `right` one, `-1` if the `left` value is
+// less than the `right` one, or `1` if the `left` value is greater than the `right` one.
+func CompareNumeric32(left *U32, right *U32) I32 {
+	__res := gengort.CCall2(__imp_ZyanCompareNumeric32.Addr(), gengort.MarshallSyscall(left), gengort.MarshallSyscall(right))
+	return gengort.UnmarshallSyscall[I32](__res)
+}
+
+var __imp_ZyanCompareNumeric64 gengort.PreloadProc
+
+// Defines a default comparison function for 64-bit numeric values.
+//
+// @param left A pointer to the first value.
+//
+// @param right A pointer to the second value.
+//
+// @return Returns `0` if the `left` value equals the `right` one, `-1` if the `left` value is
+// less than the `right` one, or `1` if the `left` value is greater than the `right` one.
+func CompareNumeric64(left *U64, right *U64) I32 {
+	__res := gengort.CCall2(__imp_ZyanCompareNumeric64.Addr(), gengort.MarshallSyscall(left), gengort.MarshallSyscall(right))
+	return gengort.UnmarshallSyscall[I32](__res)
+}
+
+var __imp_ZyanVectorInitEx gengort.PreloadProc
+
+// Initializes the given `ZyanVector` instance and sets a custom `allocator` and memory
+// allocation/deallocation parameters.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @param element_size The size of a single element in bytes.
+//
+// @param capacity The initial capacity (number of elements).
+//
+// @param destructor A destructor callback that is invoked every time an item is deleted,
+// or `ZYAN_NULL` if not needed.
+//
+// @param allocator A pointer to a `ZyanAllocator` instance.
+//
+// @param growth_factor The growth factor.
+//
+// @param shrink_threshold The shrink threshold.
+//
+// @return A zyan status code.
+// A growth factor of `1` disables overallocation and a shrink threshold of `0` disables
+// dynamic shrinking.
+// Finalization with `ZyanVectorDestroy` is required for all instances created by this function.
+func (vector *Vector) InitEx(element_size USize, capacity USize, destructor MemberProcedure, allocator *Allocator, growth_factor U8, shrink_threshold U8) Status {
+	__res := gengort.CCall7(__imp_ZyanVectorInitEx.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(element_size), gengort.MarshallSyscall(capacity), gengort.MarshallSyscall(destructor), gengort.MarshallSyscall(allocator), gengort.MarshallSyscall(growth_factor), gengort.MarshallSyscall(shrink_threshold))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorInitCustomBuffer gengort.PreloadProc
+
+// Initializes the given `ZyanVector` instance and configures it to use a custom user
+// defined buffer with a fixed size.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @param element_size The size of a single element in bytes.
+//
+// @param buffer A pointer to the buffer that is used as storage for the elements.
+//
+// @param capacity The maximum capacity (number of elements) of the buffer.
+//
+// @param destructor A destructor callback that is invoked every time an item is deleted, or
+// `ZYAN_NULL` if not needed.
+//
+// @return A zyan status code.
+// Finalization is not required for instances created by this function.
+func (vector *Vector) InitCustomBuffer(element_size USize, buffer unsafe.Pointer, capacity USize, destructor MemberProcedure) Status {
+	__res := gengort.CCall5(__imp_ZyanVectorInitCustomBuffer.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(element_size), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(capacity), gengort.MarshallSyscall(destructor))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorDestroy gengort.PreloadProc
+
+// Destroys the given `ZyanVector` instance.
+//
+// @param vector A pointer to the `ZyanVector` instance..
+//
+// @return A zyan status code.
+func (vector *Vector) Destroy() Status {
+	__res := gengort.CCall1(__imp_ZyanVectorDestroy.Addr(), gengort.MarshallSyscall(vector))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorDuplicateEx gengort.PreloadProc
+
+// Initializes a new `ZyanVector` instance by duplicating an existing vector and sets a
+// custom `allocator` and memory allocation/deallocation parameters.
+//
+// @param destination A pointer to the (uninitialized) destination `ZyanVector` instance.
+//
+// @param source A pointer to the source vector.
+//
+// @param capacity The initial capacity (number of elements).
+// This value is automatically adjusted to the size of the source
+// vector, if a smaller value was passed.
+//
+// @param allocator A pointer to a `ZyanAllocator` instance.
+//
+// @param growth_factor The growth factor.
+//
+// @param shrink_threshold The shrink threshold.
+//
+// @return A zyan status code.
+// A growth factor of `1` disables overallocation and a shrink threshold of `0` disables
+// dynamic shrinking.
+// Finalization with `ZyanVectorDestroy` is required for all instances created by this function.
+func (destination *Vector) DuplicateEx(source *Vector, capacity USize, allocator *Allocator, growth_factor U8, shrink_threshold U8) Status {
+	__res := gengort.CCall6(__imp_ZyanVectorDuplicateEx.Addr(), gengort.MarshallSyscall(destination), gengort.MarshallSyscall(source), gengort.MarshallSyscall(capacity), gengort.MarshallSyscall(allocator), gengort.MarshallSyscall(growth_factor), gengort.MarshallSyscall(shrink_threshold))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorDuplicateCustomBuffer gengort.PreloadProc
+
+// Initializes a new `ZyanVector` instance by duplicating an existing vector and
+// configures it to use a custom user defined buffer with a fixed size.
+//
+// @param destination A pointer to the (uninitialized) destination `ZyanVector` instance.
+//
+// @param source A pointer to the source vector.
+//
+// @param buffer A pointer to the buffer that is used as storage for the elements.
+//
+// @param capacity The maximum capacity (number of elements) of the buffer.
+// This function will fail, if the capacity of the buffer is less than the
+// size of the source vector.
+//
+// @return A zyan status code.
+// Finalization is not required for instances created by this function.
+func (destination *Vector) DuplicateCustomBuffer(source *Vector, buffer unsafe.Pointer, capacity USize) Status {
+	__res := gengort.CCall4(__imp_ZyanVectorDuplicateCustomBuffer.Addr(), gengort.MarshallSyscall(destination), gengort.MarshallSyscall(source), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(capacity))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorGet gengort.PreloadProc
+
+// Returns a constant pointer to the element at the given `index`.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @param index The element index.
+//
+// @return A constant pointer to the desired element in the vector or `ZYAN_NULL`, if an error
+// occurred.
+// Note that the returned pointer might get invalid when the vector is resized by either a manual
+// call to the memory-management functions or implicitly by inserting or removing elements.
+// Take a look at `ZyanVectorGetPointer` instead, if you need a function that returns a zyan status
+// code.
+func (vector *Vector) Get(index USize) unsafe.Pointer {
+	__res := gengort.CCall2(__imp_ZyanVectorGet.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(index))
 	return gengort.UnmarshallSyscall[unsafe.Pointer](__res)
 }
 
-var __imp_glfwSetMonitorCallback gengort.PreloadProc
+var __imp_ZyanVectorGetMutable gengort.PreloadProc
 
-// @brief Sets the monitor configuration callback.
-// This function sets the monitor configuration callback, or removes the
-// currently set callback.  This is called when a monitor is connected to or
-// disconnected from the system.
+// Returns a mutable pointer to the element at the given `index`.
 //
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
+// @param vector A pointer to the `ZyanVector` instance.
 //
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
+// @param index The element index.
 //
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWmonitorfun).
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref monitor_event
-//
-// @since Added in version 3.0.
-func SetMonitorCallback(callback Monitorfun) Monitorfun {
-	__res := gengort.CCall1(__imp_glfwSetMonitorCallback.Addr(), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Monitorfun](__res)
-}
-
-var __imp_glfwGetVideoModes gengort.PreloadProc
-
-// @brief Returns the available video modes for the specified monitor.
-// This function returns an array of all video modes supported by the specified
-// monitor.  The returned array is sorted in ascending order, first by color
-// bit depth (the sum of all channel depths), then by resolution area (the
-// product of width and height), then resolution width and finally by refresh
-// rate.
-//
-// @param monitor The monitor to query.
-//
-// @param count Where to store the number of video modes in the returned
-// array.  This is set to zero if an error occurred.
-//
-// @return An array of video modes, or `NULL` if an
-// [error](
-// @ref error_handling)
+// @return A mutable pointer to the desired element in the vector or `ZYAN_NULL`, if an error
 // occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @pointer
-// _lifetime The returned array is allocated and freed by GLFW.  You
-// should not free it yourself.  It is valid until the specified monitor is
-// disconnected, this function is called again for that monitor or the library
-// is terminated.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref monitor_modes
-//
-// @sa
-// @ref glfwGetVideoMode
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Changed to return an array of modes for a specific monitor.
-func GetVideoModes(monitor *Monitor, count *int32) *Vidmode {
-	__res := gengort.CCall2(__imp_glfwGetVideoModes.Addr(), gengort.MarshallSyscall(monitor), gengort.MarshallSyscall(count))
-	return gengort.UnmarshallSyscall[*Vidmode](__res)
+// Note that the returned pointer might get invalid when the vector is resized by either a manual
+// call to the memory-management functions or implicitly by inserting or removing elements.
+// Take a look at `ZyanVectorGetPointerMutable` instead, if you need a function that returns a
+// zyan status code.
+func (vector *Vector) GetMutable(index USize) unsafe.Pointer {
+	__res := gengort.CCall2(__imp_ZyanVectorGetMutable.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(index))
+	return gengort.UnmarshallSyscall[unsafe.Pointer](__res)
 }
 
-var __imp_glfwGetVideoMode gengort.PreloadProc
+var __imp_ZyanVectorGetPointer gengort.PreloadProc
 
-// @brief Returns the current mode of the specified monitor.
-// This function returns the current video mode of the specified monitor.  If
-// you have created a full screen window for that monitor, the return value
-// will depend on whether that window is iconified.
+// Returns a constant pointer to the element at the given `index`.
 //
-// @param monitor The monitor to query.
+// @param vector A pointer to the `ZyanVector` instance.
 //
-// @return The current mode of the monitor, or `NULL` if an
-// [error](
-// @ref error_handling)
-// occurred.
+// @param index The element index.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
+// @param value Receives a constant pointer to the desired element in the vector.
+// Note that the returned pointer might get invalid when the vector is resized by either a manual
+// call to the memory-management functions or implicitly by inserting or removing elements.
 //
-// @pointer
-// _lifetime The returned array is allocated and freed by GLFW.  You
-// should not free it yourself.  It is valid until the specified monitor is
-// disconnected or the library is terminated.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref monitor_modes
-//
-// @sa
-// @ref glfwGetVideoModes
-//
-// @since Added in version 3.0.  Replaces `glfwGetDesktopMode`.
-func GetVideoMode(monitor *Monitor) *Vidmode {
-	__res := gengort.CCall1(__imp_glfwGetVideoMode.Addr(), gengort.MarshallSyscall(monitor))
-	return gengort.UnmarshallSyscall[*Vidmode](__res)
+// @return A zyan status code.
+func (vector *Vector) GetPointer(index USize, value *unsafe.Pointer) Status {
+	__res := gengort.CCall3(__imp_ZyanVectorGetPointer.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(index), gengort.MarshallSyscall(value))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwSetGamma gengort.PreloadProc
+var __imp_ZyanVectorGetPointerMutable gengort.PreloadProc
 
-// @brief Generates a gamma ramp and sets it for the specified monitor.
-// This function generates an appropriately sized gamma ramp from the specified
-// exponent and then calls
-// @ref glfwSetGammaRamp
-// with it.  The value must be
-// a finite number greater than zero.
-// The software controlled gamma ramp is applied _in addition_ to the hardware
-// gamma correction, which today is usually an approximation of sRGB gamma.
-// This means that setting a perfectly linear ramp, or gamma 1.0, will produce
-// the default (usually sRGB-like) behavior.
-// For gamma correct rendering with OpenGL or OpenGL ES, see the
-// @ref GLFW_SRGB_CAPABLE
-// hint.
+// Returns a mutable pointer to the element at the given `index`.
 //
-// @param monitor The monitor whose gamma ramp to set.
+// @param vector A pointer to the `ZyanVector` instance.
 //
-// @param gamma The desired exponent.
+// @param index The element index.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
+// @param value Receives a mutable pointer to the desired element in the vector.
+// Note that the returned pointer might get invalid when the vector is resized by either a manual
+// call to the memory-management functions or implicitly by inserting or removing elements.
 //
-// @ref GLFW_INVALID_VALUE,
-//
-// @ref GLFW_PLATFORM_ERROR
-// and
-// @ref GLFW_FEATURE_UNAVAILABLE
-// (see remarks).
-//
-// @remark
-// @wayland
-// Gamma handling is a privileged protocol, this function
-// will thus never be implemented and emits
-// @ref GLFW_FEATURE_UNAVAILABLE.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref monitor_gamma
-//
-// @since Added in version 3.0.
-func SetGamma(monitor *Monitor, gamma float32) {
-	gengort.CCall2(__imp_glfwSetGamma.Addr(), gengort.MarshallSyscall(monitor), gengort.MarshallSyscall(gamma))
+// @return A zyan status code.
+func (vector *Vector) GetPointerMutable(index USize, value *unsafe.Pointer) Status {
+	__res := gengort.CCall3(__imp_ZyanVectorGetPointerMutable.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(index), gengort.MarshallSyscall(value))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwGetGammaRamp gengort.PreloadProc
+var __imp_ZyanVectorSet gengort.PreloadProc
 
-// @brief Returns the current gamma ramp for the specified monitor.
-// This function returns the current gamma ramp of the specified monitor.
+// Assigns a new value to the element at the given `index`.
 //
-// @param monitor The monitor to query.
+// @param vector A pointer to the `ZyanVector` instance.
 //
-// @return The current gamma ramp, or `NULL` if an
-// [error](
-// @ref error_handling)
-// occurred.
+// @param index The value index.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
+// @param value The value to assign.
 //
-// @ref GLFW_PLATFORM_ERROR
-// and
-// @ref GLFW_FEATURE_UNAVAILABLE
-// (see remarks).
-//
-// @remark
-// @wayland
-// Gamma handling is a privileged protocol, this function
-// will thus never be implemented and emits
-// @ref GLFW_FEATURE_UNAVAILABLE
-// while
-// returning `NULL`.
-//
-// @pointer
-// _lifetime The returned structure and its arrays are allocated and
-// freed by GLFW.  You should not free them yourself.  They are valid until the
-// specified monitor is disconnected, this function is called again for that
-// monitor or the library is terminated.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref monitor_gamma
-//
-// @since Added in version 3.0.
-func GetGammaRamp(monitor *Monitor) *Gammaramp {
-	__res := gengort.CCall1(__imp_glfwGetGammaRamp.Addr(), gengort.MarshallSyscall(monitor))
-	return gengort.UnmarshallSyscall[*Gammaramp](__res)
+// @return A zyan status code.
+func (vector *Vector) Set(index USize, value unsafe.Pointer) Status {
+	__res := gengort.CCall3(__imp_ZyanVectorSet.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(index), gengort.MarshallSyscall(value))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwSetGammaRamp gengort.PreloadProc
+var __imp_ZyanVectorPushBack gengort.PreloadProc
 
-// @brief Sets the current gamma ramp for the specified monitor.
-// This function sets the current gamma ramp for the specified monitor.  The
-// original gamma ramp for that monitor is saved by GLFW the first time this
-// function is called and is restored by
-// @ref glfwTerminate.
-// The software controlled gamma ramp is applied _in addition_ to the hardware
-// gamma correction, which today is usually an approximation of sRGB gamma.
-// This means that setting a perfectly linear ramp, or gamma 1.0, will produce
-// the default (usually sRGB-like) behavior.
-// For gamma correct rendering with OpenGL or OpenGL ES, see the
-// @ref GLFW_SRGB_CAPABLE
-// hint.
+// Adds a new `element` to the end of the vector.
 //
-// @param monitor The monitor whose gamma ramp to set.
+// @param vector A pointer to the `ZyanVector` instance.
 //
-// @param ramp The gamma ramp to use.
+// @param element A pointer to the element to add.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_PLATFORM_ERROR
-// and
-// @ref GLFW_FEATURE_UNAVAILABLE
-// (see remarks).
-//
-// @remark The size of the specified gamma ramp should match the size of the
-// current ramp for that monitor.
-//
-// @remark
-// @win32
-// The gamma ramp size must be 256.
-//
-// @remark
-// @wayland
-// Gamma handling is a privileged protocol, this function
-// will thus never be implemented and emits
-// @ref GLFW_FEATURE_UNAVAILABLE.
-//
-// @pointer
-// _lifetime The specified gamma ramp is copied before this function
-// returns.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref monitor_gamma
-//
-// @since Added in version 3.0.
-func SetGammaRamp(monitor *Monitor, ramp *Gammaramp) {
-	gengort.CCall2(__imp_glfwSetGammaRamp.Addr(), gengort.MarshallSyscall(monitor), gengort.MarshallSyscall(ramp))
+// @return A zyan status code.
+func (vector *Vector) PushBack(element unsafe.Pointer) Status {
+	__res := gengort.CCall2(__imp_ZyanVectorPushBack.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(element))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwDefaultWindowHints gengort.PreloadProc
+var __imp_ZyanVectorInsert gengort.PreloadProc
 
-// @brief Resets all window hints to their default values.
-// This function resets all window hints to their
-// [default values](
-// @ref window_hints_values).
+// Inserts an `element` at the given `index` of the vector.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
+// @param vector A pointer to the `ZyanVector` instance.
 //
-// @thread
-// _safety This function must only be called from the main thread.
+// @param index The insert index.
 //
-// @sa
-// @ref window_hints
+// @param element A pointer to the element to insert.
 //
-// @sa
-// @ref glfwWindowHint
-//
-// @sa
-// @ref glfwWindowHintString
-//
-// @since Added in version 3.0.
-func DefaultWindowHints() { gengort.CCall0(__imp_glfwDefaultWindowHints.Addr()) }
-
-var __imp_glfwWindowHint gengort.PreloadProc
-
-// @brief Sets the specified window hint to the desired value.
-// This function sets hints for the next call to
-// @ref glfwCreateWindow.
-// The
-// hints, once set, retain their values until changed by a call to this
-// function or
-// @ref glfwDefaultWindowHints,
-// or until the library is terminated.
-// Only integer value hints can be set with this function.  String value hints
-// are set with
-// @ref glfwWindowHintString.
-// This function does not check whether the specified hint values are valid.
-// If you set hints to invalid values this will instead be reported by the next
-// call to
-// @ref glfwCreateWindow.
-// Some hints are platform specific.  These may be set on any platform but they
-// will only affect their specific platform.  Other platforms will ignore them.
-// Setting these hints requires no platform specific headers or functions.
-//
-// @param hint The [window hint](
-// @ref window_hints)
-// to set.
-//
-// @param value The new value of the window hint.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_INVALID_ENUM.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_hints
-//
-// @sa
-// @ref glfwWindowHintString
-//
-// @sa
-// @ref glfwDefaultWindowHints
-//
-// @since Added in version 3.0.  Replaces `glfwOpenWindowHint`.
-func WindowHint(hint int32, value int32) {
-	gengort.CCall2(__imp_glfwWindowHint.Addr(), gengort.MarshallSyscall(hint), gengort.MarshallSyscall(value))
+// @return A zyan status code.
+func (vector *Vector) Insert(index USize, element unsafe.Pointer) Status {
+	__res := gengort.CCall3(__imp_ZyanVectorInsert.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(index), gengort.MarshallSyscall(element))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwWindowHintString gengort.PreloadProc
+var __imp_ZyanVectorInsertRange gengort.PreloadProc
 
-// @brief Sets the specified window hint to the desired value.
-// This function sets hints for the next call to
-// @ref glfwCreateWindow.
-// The
-// hints, once set, retain their values until changed by a call to this
-// function or
-// @ref glfwDefaultWindowHints,
-// or until the library is terminated.
-// Only string type hints can be set with this function.  Integer value hints
-// are set with
-// @ref glfwWindowHint.
-// This function does not check whether the specified hint values are valid.
-// If you set hints to invalid values this will instead be reported by the next
-// call to
-// @ref glfwCreateWindow.
-// Some hints are platform specific.  These may be set on any platform but they
-// will only affect their specific platform.  Other platforms will ignore them.
-// Setting these hints requires no platform specific headers or functions.
+// Inserts multiple `elements` at the given `index` of the vector.
 //
-// @param hint The [window hint](
-// @ref window_hints)
-// to set.
+// @param vector A pointer to the `ZyanVector` instance.
 //
-// @param value The new value of the window hint.
+// @param index The insert index.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_INVALID_ENUM.
+// @param elements A pointer to the first element.
 //
-// @pointer
-// _lifetime The specified string is copied before this function
-// returns.
+// @param count The number of elements to insert.
 //
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_hints
-//
-// @sa
-// @ref glfwWindowHint
-//
-// @sa
-// @ref glfwDefaultWindowHints
-//
-// @since Added in version 3.3.
-func WindowHintString(hint int32, value *byte) {
-	gengort.CCall2(__imp_glfwWindowHintString.Addr(), gengort.MarshallSyscall(hint), gengort.MarshallSyscall(value))
+// @return A zyan status code.
+func (vector *Vector) InsertRange(index USize, elements unsafe.Pointer, count USize) Status {
+	__res := gengort.CCall4(__imp_ZyanVectorInsertRange.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(index), gengort.MarshallSyscall(elements), gengort.MarshallSyscall(count))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwCreateWindow gengort.PreloadProc
+var __imp_ZyanVectorEmplace gengort.PreloadProc
 
-// @brief Creates a window and its associated context.
-// This function creates a window and its associated OpenGL or OpenGL ES
-// context.  Most of the options controlling how the window and its context
-// should be created are specified with [window hints](
-// @ref window_hints).
-// Successful creation does not change which context is current.  Before you
-// can use the newly created context, you need to
-// [make it current](
-// @ref context_current).
-// For information about the `share`
-// parameter, see
-// @ref context_sharing.
-// The created window, framebuffer and context may differ from what you
-// requested, as not all parameters and hints are
-// [hard constraints](
-// @ref window_hints_hard).
-// This includes the size of the
-// window, especially for full screen windows.  To query the actual attributes
-// of the created window, framebuffer and context, see
-// @ref glfwGetWindowAttrib,
+// Constructs an `element` in-place at the end of the vector.
 //
-// @ref glfwGetWindowSize
-// and
-// @ref glfwGetFramebufferSize.
-// To create a full screen window, you need to specify the monitor the window
-// will cover.  If no monitor is specified, the window will be windowed mode.
-// Unless you have a way for the user to choose a specific monitor, it is
-// recommended that you pick the primary monitor.  For more information on how
-// to query connected monitors, see
-// @ref monitor_monitors.
-// For full screen windows, the specified size becomes the resolution of the
-// window's _desired video mode_.  As long as a full screen window is not
-// iconified, the supported video mode most closely matching the desired video
-// mode is set for the specified monitor.  For more information about full
-// screen windows, including the creation of so called _windowed full screen_
-// or _borderless full screen_ windows, see
-// @ref window_windowed_full_screen.
-// Once you have created the window, you can switch it between windowed and
-// full screen mode with
-// @ref glfwSetWindowMonitor.
-// This will not affect its
-// OpenGL or OpenGL ES context.
-// By default, newly created windows use the placement recommended by the
-// window system.  To create the window at a specific position, set the
-// @ref GLFW_POSITION_X
-// and
-// @ref GLFW_POSITION_Y
-// window hints before creation.  To
-// restore the default behavior, set either or both hints back to
-// `GLFW_ANY_POSITION`.
-// As long as at least one full screen window is not iconified, the screensaver
-// is prohibited from starting.
-// Window systems put limits on window sizes.  Very large or very small window
-// dimensions may be overridden by the window system on creation.  Check the
-// actual [size](
-// @ref window_size)
-// after creation.
-// The [swap interval](
-// @ref buffer_swap)
-// is not set during window creation and
-// the initial value may vary depending on driver settings and defaults.
+// @param vector A pointer to the `ZyanVector` instance.
 //
-// @param width The desired width, in screen coordinates, of the window.
-// This must be greater than zero.
+// @param element Receives a pointer to the new element.
 //
-// @param height The desired height, in screen coordinates, of the window.
-// This must be greater than zero.
+// @param constructor The constructor callback or `ZYAN_NULL`. The new element will be in
+// undefined state, if no constructor was passed.
 //
-// @param title The initial, UTF-8 encoded window title.
-//
-// @param monitor The monitor to use for full screen mode, or `NULL` for
-// windowed mode.
-//
-// @param share The window whose context to share resources with, or `NULL`
-// to not share resources.
-//
-// @return The handle of the created window, or `NULL` if an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_ENUM,
-//
-// @ref GLFW_INVALID_VALUE,
-//
-// @ref GLFW_API_UNAVAILABLE,
-//
-// @ref GLFW_VERSION_UNAVAILABLE,
-//
-// @ref GLFW_FORMAT_UNAVAILABLE,
-//
-// @ref GLFW_NO_WINDOW_CONTEXT
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark
-// @win32
-// Window creation will fail if the Microsoft GDI software
-// OpenGL implementation is the only one available.
-//
-// @remark
-// @win32
-// If the executable has an icon resource named `GLFW_ICON,` it
-// will be set as the initial icon for the window.  If no such icon is present,
-// the `IDI_APPLICATION` icon will be used instead.  To set a different icon,
-// see
-// @ref glfwSetWindowIcon.
-//
-// @remark
-// @win32
-// The context to share resources with must not be current on
-// any other thread.
-//
-// @remark
-// @macos
-// The OS only supports core profile contexts for OpenGL
-// versions 3.2 and later.  Before creating an OpenGL context of version 3.2 or
-// later you must set the [GLFW_OPENGL_PROFILE](
-// @ref GLFW_OPENGL_PROFILE_hint)
-// hint accordingly.  OpenGL 3.0 and 3.1 contexts are not supported at all
-// on macOS.
-//
-// @remark
-// @macos
-// The GLFW window has no icon, as it is not a document
-// window, but the dock icon will be the same as the application bundle's icon.
-// For more information on bundles, see the
-// [Bundle Programming Guide][bundle-guide] in the Mac Developer Library.
-// [bundle-guide]: https://developer.apple.com/library/mac/documentation/CoreFoundation/Conceptual/CFBundles/
-//
-// @remark
-// @macos
-// The window frame will not be rendered at full resolution on
-// Retina displays unless the
-// [GLFW_SCALE_FRAMEBUFFER](
-// @ref GLFW_SCALE_FRAMEBUFFER_hint)
-// hint is `GLFW_TRUE` and the `NSHighResolutionCapable` key is enabled in the
-// application bundle's `Info.plist`.  For more information, see
-// [High Resolution Guidelines for OS X][hidpi-guide] in the Mac Developer
-// Library.  The GLFW test and example programs use a custom `Info.plist`
-// template for this, which can be found as `CMake/Info.plist.in` in the source
-// tree.
-// [hidpi-guide]: https://developer.apple.com/library/mac/documentation/GraphicsAnimation/Conceptual/HighResolutionOSX/Explained/Explained.html
-//
-// @remark
-// @macos
-// When activating frame autosaving with
-// [GLFW_COCOA_FRAME_NAME](
-// @ref GLFW_COCOA_FRAME_NAME_hint),
-// the specified
-// window size and position may be overridden by previously saved values.
-//
-// @remark
-// @wayland
-// GLFW uses [libdecor][] where available to create its window
-// decorations.  This in turn uses server-side XDG decorations where available
-// and provides high quality client-side decorations on compositors like GNOME.
-// If both XDG decorations and libdecor are unavailable, GLFW falls back to
-// a very simple set of window decorations that only support moving, resizing
-// and the window manager's right-click menu.
-// [libdecor]: https://gitlab.freedesktop.org/libdecor/libdecor
-//
-// @remark
-// @x11
-// Some window managers will not respect the placement of
-// initially hidden windows.
-//
-// @remark
-// @x11
-// Due to the asynchronous nature of X11, it may take a moment for
-// a window to reach its requested state.  This means you may not be able to
-// query the final size, position or other attributes directly after window
-// creation.
-//
-// @remark
-// @x11
-// The class part of the `WM_CLASS` window property will by
-// default be set to the window title passed to this function.  The instance
-// part will use the contents of the `RESOURCE_NAME` environment variable, if
-// present and not empty, or fall back to the window title.  Set the
-// [GLFW_X11_CLASS_NAME](
-// @ref GLFW_X11_CLASS_NAME_hint)
-// and
-// [GLFW_X11_INSTANCE_NAME](
-// @ref GLFW_X11_INSTANCE_NAME_hint)
-// window hints to
-// override this.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_creation
-//
-// @sa
-// @ref glfwDestroyWindow
-//
-// @since Added in version 3.0.  Replaces `glfwOpenWindow`.
-func CreateWindow(width int32, height int32, title *byte, monitor *Monitor, share *Window) *Window {
-	__res := gengort.CCall5(__imp_glfwCreateWindow.Addr(), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height), gengort.MarshallSyscall(title), gengort.MarshallSyscall(monitor), gengort.MarshallSyscall(share))
-	return gengort.UnmarshallSyscall[*Window](__res)
+// @return A zyan status code.
+func (vector *Vector) Emplace(element *unsafe.Pointer, constructor MemberFunction) Status {
+	__res := gengort.CCall3(__imp_ZyanVectorEmplace.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(element), gengort.MarshallSyscall(constructor))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwDestroyWindow gengort.PreloadProc
+var __imp_ZyanVectorEmplaceEx gengort.PreloadProc
 
-// @brief Destroys the specified window and its context.
-// This function destroys the specified window and its context.  On calling
-// this function, no further callbacks will be called for that window.
-// If the context of the specified window is current on the main thread, it is
-// detached before being destroyed.
+// Constructs an `element` in-place and inserts it at the given `index` of the vector.
 //
-// @param window The window to destroy.
+// @param vector A pointer to the `ZyanVector` instance.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
+// @param index The insert index.
 //
-// @note The context of the specified window must not be current on any other
-// thread when this function is called.
+// @param element Receives a pointer to the new element.
 //
-// @reentrancy
-// This function must not be called from a callback.
+// @param constructor The constructor callback or `ZYAN_NULL`. The new element will be in
+// undefined state, if no constructor was passed.
 //
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_creation
-//
-// @sa
-// @ref glfwCreateWindow
-//
-// @since Added in version 3.0.  Replaces `glfwCloseWindow`.
-func DestroyWindow(window *Window) {
-	gengort.CCall1(__imp_glfwDestroyWindow.Addr(), gengort.MarshallSyscall(window))
+// @return A zyan status code.
+func (vector *Vector) EmplaceEx(index USize, element *unsafe.Pointer, constructor MemberFunction) Status {
+	__res := gengort.CCall4(__imp_ZyanVectorEmplaceEx.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(index), gengort.MarshallSyscall(element), gengort.MarshallSyscall(constructor))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwWindowShouldClose gengort.PreloadProc
+var __imp_ZyanVectorSwapElements gengort.PreloadProc
 
-// @brief Checks the close flag of the specified window.
-// This function returns the value of the close flag of the specified window.
+// Swaps the element at `index_first` with the element at `index_second`.
 //
-// @param window The window to query.
+// @param vector A pointer to the `ZyanVector` instance.
 //
-// @return The value of the close flag.
+// @param index_first The index of the first element.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
+// @param index_second The index of the second element.
 //
-// @thread
-// _safety This function may be called from any thread.  Access is not
-// synchronized.
-//
-// @sa
-// @ref window_close
-//
-// @since Added in version 3.0.
-func WindowShouldClose(window *Window) int32 {
-	__res := gengort.CCall1(__imp_glfwWindowShouldClose.Addr(), gengort.MarshallSyscall(window))
-	return gengort.UnmarshallSyscall[int32](__res)
+// @return A zyan status code.
+// This function requires the vector to have spare capacity for one temporary element. Call
+// `ZyanVectorReserve` before this function to increase capacity, if needed.
+func (vector *Vector) SwapElements(index_first USize, index_second USize) Status {
+	__res := gengort.CCall3(__imp_ZyanVectorSwapElements.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(index_first), gengort.MarshallSyscall(index_second))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwSetWindowShouldClose gengort.PreloadProc
+var __imp_ZyanVectorDelete gengort.PreloadProc
 
-// @brief Sets the close flag of the specified window.
-// This function sets the value of the close flag of the specified window.
-// This can be used to override the user's attempt to close the window, or
-// to signal that it should be closed.
+// Deletes the element at the given `index` of the vector.
 //
-// @param window The window whose flag to change.
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @param index The element index.
+//
+// @return A zyan status code.
+func (vector *Vector) Delete(index USize) Status {
+	__res := gengort.CCall2(__imp_ZyanVectorDelete.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(index))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorDeleteRange gengort.PreloadProc
+
+// Deletes multiple elements from the given vector, starting at `index`.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @param index The index of the first element to delete.
+//
+// @param count The number of elements to delete.
+//
+// @return A zyan status code.
+func (vector *Vector) DeleteRange(index USize, count USize) Status {
+	__res := gengort.CCall3(__imp_ZyanVectorDeleteRange.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(index), gengort.MarshallSyscall(count))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorPopBack gengort.PreloadProc
+
+// Removes the last element of the vector.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @return A zyan status code.
+func (vector *Vector) PopBack() Status {
+	__res := gengort.CCall1(__imp_ZyanVectorPopBack.Addr(), gengort.MarshallSyscall(vector))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorClear gengort.PreloadProc
+
+// Erases all elements of the given vector.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @return A zyan status code.
+func (vector *Vector) Clear() Status {
+	__res := gengort.CCall1(__imp_ZyanVectorClear.Addr(), gengort.MarshallSyscall(vector))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorFind gengort.PreloadProc
+
+// Sequentially searches for the first occurrence of `element` in the given vector.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @param element A pointer to the element to search for.
+//
+// @param found_index A pointer to a variable that receives the index of the found element.
+//
+// @param comparison The comparison function to use.
+//
+// @return `ZYAN_STATUS_TRUE` if the element was found, `ZYAN_STATUS_FALSE` if not or a generic
+// zyan status code if an error occurred.
+// The `found_index` is set to `-1`, if the element was not found.
+func (vector *Vector) Find(element unsafe.Pointer, found_index *ISize, comparison EqualityComparison) Status {
+	__res := gengort.CCall4(__imp_ZyanVectorFind.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(element), gengort.MarshallSyscall(found_index), gengort.MarshallSyscall(comparison))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorFindEx gengort.PreloadProc
+
+// Sequentially searches for the first occurrence of `element` in the given vector.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @param element A pointer to the element to search for.
+//
+// @param found_index A pointer to a variable that receives the index of the found element.
+//
+// @param comparison The comparison function to use.
+//
+// @param index The start index.
+//
+// @param count The maximum number of elements to iterate, beginning from the start `index`.
+//
+// @return `ZYAN_STATUS_TRUE` if the element was found, `ZYAN_STATUS_FALSE` if not or a generic
+// zyan status code if an error occurred.
+// The `found_index` is set to `-1`, if the element was not found.
+func (vector *Vector) FindEx(element unsafe.Pointer, found_index *ISize, comparison EqualityComparison, index USize, count USize) Status {
+	__res := gengort.CCall6(__imp_ZyanVectorFindEx.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(element), gengort.MarshallSyscall(found_index), gengort.MarshallSyscall(comparison), gengort.MarshallSyscall(index), gengort.MarshallSyscall(count))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorBinarySearch gengort.PreloadProc
+
+// Searches for the first occurrence of `element` in the given vector using a binary-
+// search algorithm.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @param element A pointer to the element to search for.
+//
+// @param found_index A pointer to a variable that receives the index of the found element.
+//
+// @param comparison The comparison function to use.
+//
+// @return `ZYAN_STATUS_TRUE` if the element was found, `ZYAN_STATUS_FALSE` if not or a generic
+// zyan status code if an error occurred.
+// If found, `found_index` contains the zero-based index of `element`. If not found, `found_index`
+// contains the index of the first entry larger than `element`.
+// This function requires all elements in the vector to be strictly ordered (sorted).
+func (vector *Vector) BinarySearch(element unsafe.Pointer, found_index *USize, comparison Comparison) Status {
+	__res := gengort.CCall4(__imp_ZyanVectorBinarySearch.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(element), gengort.MarshallSyscall(found_index), gengort.MarshallSyscall(comparison))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorBinarySearchEx gengort.PreloadProc
+
+// Searches for the first occurrence of `element` in the given vector using a binary-
+// search algorithm.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @param element A pointer to the element to search for.
+//
+// @param found_index A pointer to a variable that receives the index of the found element.
+//
+// @param comparison The comparison function to use.
+//
+// @param index The start index.
+//
+// @param count The maximum number of elements to iterate, beginning from the start `index`.
+//
+// @return `ZYAN_STATUS_TRUE` if the element was found, `ZYAN_STATUS_FALSE` if not or a generic
+// zyan status code if an error occurred.
+// If found, `found_index` contains the zero-based index of `element`. If not found, `found_index`
+// contains the index of the first entry larger than `element`.
+// This function requires all elements in the vector to be strictly ordered (sorted).
+func (vector *Vector) BinarySearchEx(element unsafe.Pointer, found_index *USize, comparison Comparison, index USize, count USize) Status {
+	__res := gengort.CCall6(__imp_ZyanVectorBinarySearchEx.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(element), gengort.MarshallSyscall(found_index), gengort.MarshallSyscall(comparison), gengort.MarshallSyscall(index), gengort.MarshallSyscall(count))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorResize gengort.PreloadProc
+
+// Resizes the given `ZyanVector` instance.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @param size The new size of the vector.
+//
+// @return A zyan status code.
+func (vector *Vector) Resize(size USize) Status {
+	__res := gengort.CCall2(__imp_ZyanVectorResize.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(size))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorResizeEx gengort.PreloadProc
+
+// Resizes the given `ZyanVector` instance.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @param size The new size of the vector.
+//
+// @param initializer A pointer to a value to be used as initializer for new items.
+//
+// @return A zyan status code.
+func (vector *Vector) ResizeEx(size USize, initializer unsafe.Pointer) Status {
+	__res := gengort.CCall3(__imp_ZyanVectorResizeEx.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(size), gengort.MarshallSyscall(initializer))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorReserve gengort.PreloadProc
+
+// Changes the capacity of the given `ZyanVector` instance.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @param capacity The new minimum capacity of the vector.
+//
+// @return A zyan status code.
+func (vector *Vector) Reserve(capacity USize) Status {
+	__res := gengort.CCall2(__imp_ZyanVectorReserve.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(capacity))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorShrinkToFit gengort.PreloadProc
+
+// Shrinks the capacity of the given vector to match it's size.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @return A zyan status code.
+func (vector *Vector) ShrinkToFit() Status {
+	__res := gengort.CCall1(__imp_ZyanVectorShrinkToFit.Addr(), gengort.MarshallSyscall(vector))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorGetCapacity gengort.PreloadProc
+
+// Returns the current capacity of the vector.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @param capacity Receives the size of the vector.
+//
+// @return A zyan status code.
+func (vector *Vector) GetCapacity(capacity *USize) Status {
+	__res := gengort.CCall2(__imp_ZyanVectorGetCapacity.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(capacity))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanVectorGetSize gengort.PreloadProc
+
+// Returns the current size of the vector.
+//
+// @param vector A pointer to the `ZyanVector` instance.
+//
+// @param size Receives the size of the vector.
+//
+// @return A zyan status code.
+func (vector *Vector) GetSize(size *USize) Status {
+	__res := gengort.CCall2(__imp_ZyanVectorGetSize.Addr(), gengort.MarshallSyscall(vector), gengort.MarshallSyscall(size))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringInitEx gengort.PreloadProc
+
+// Initializes the given `ZyanString` instance and sets a custom `allocator` and memory
+// allocation/deallocation parameters.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @param capacity The initial capacity (number of characters).
+//
+// @param allocator A pointer to a `ZyanAllocator` instance.
+//
+// @param growth_factor The growth factor.
+//
+// @param shrink_threshold The shrink threshold.
+//
+// @return A zyan status code.
+// A growth factor of `1` disables overallocation and a shrink threshold of `0` disables
+// dynamic shrinking.
+// The allocated buffer will be at least one character larger than the given `capacity`, to reserve
+// space for the terminating '
+// \
+// 0'.
+// Finalization with `ZyanStringDestroy` is required for all strings created by this function.
+func (_string *String) InitEx(capacity USize, allocator *Allocator, growth_factor U8, shrink_threshold U8) Status {
+	__res := gengort.CCall5(__imp_ZyanStringInitEx.Addr(), gengort.MarshallSyscall(_string), gengort.MarshallSyscall(capacity), gengort.MarshallSyscall(allocator), gengort.MarshallSyscall(growth_factor), gengort.MarshallSyscall(shrink_threshold))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringInitCustomBuffer gengort.PreloadProc
+
+// Initializes the given `ZyanString` instance and configures it to use a custom user
+// defined buffer with a fixed size.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @param buffer A pointer to the buffer that is used as storage for the string.
+//
+// @param capacity The maximum capacity (number of characters) of the buffer, including
+// the terminating '
+// \
+// 0'.
+//
+// @return A zyan status code.
+// Finalization is not required for strings created by this function.
+func (_string *String) InitCustomBuffer(buffer *byte, capacity USize) Status {
+	__res := gengort.CCall3(__imp_ZyanStringInitCustomBuffer.Addr(), gengort.MarshallSyscall(_string), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(capacity))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringDestroy gengort.PreloadProc
+
+// Destroys the given `ZyanString` instance.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @return A zyan status code.
+func (_string *String) Destroy() Status {
+	__res := gengort.CCall1(__imp_ZyanStringDestroy.Addr(), gengort.MarshallSyscall(_string))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringDuplicateEx gengort.PreloadProc
+
+// Initializes a new `ZyanString` instance by duplicating an existing string and sets a
+// custom `allocator` and memory allocation/deallocation parameters.
+//
+// @param destination A pointer to the (uninitialized) destination `ZyanString` instance.
+//
+// @param source A pointer to the source string.
+//
+// @param capacity The initial capacity (number of characters).
+// This value is automatically adjusted to the size of the source
+// string, if a smaller value was passed.
+//
+// @param allocator A pointer to a `ZyanAllocator` instance.
+//
+// @param growth_factor The growth factor.
+//
+// @param shrink_threshold The shrink threshold.
+//
+// @return A zyan status code.
+// The behavior of this function is undefined, if `source` is a view into the `destination`
+// string or `destination` points to an already initialized `ZyanString` instance.
+// A growth factor of `1` disables overallocation and a shrink threshold of `0` disables
+// dynamic shrinking.
+// The allocated buffer will be at least one character larger than the given `capacity`, to reserve
+// space for the terminating '
+// \
+// 0'.
+// Finalization with `ZyanStringDestroy` is required for all strings created by this function.
+func (destination *String) DuplicateEx(source *StringView, capacity USize, allocator *Allocator, growth_factor U8, shrink_threshold U8) Status {
+	__res := gengort.CCall6(__imp_ZyanStringDuplicateEx.Addr(), gengort.MarshallSyscall(destination), gengort.MarshallSyscall(source), gengort.MarshallSyscall(capacity), gengort.MarshallSyscall(allocator), gengort.MarshallSyscall(growth_factor), gengort.MarshallSyscall(shrink_threshold))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringDuplicateCustomBuffer gengort.PreloadProc
+
+// Initializes a new `ZyanString` instance by duplicating an existing string and
+// configures it to use a custom user defined buffer with a fixed size.
+//
+// @param destination A pointer to the (uninitialized) destination `ZyanString` instance.
+//
+// @param source A pointer to the source string.
+//
+// @param buffer A pointer to the buffer that is used as storage for the string.
+//
+// @param capacity The maximum capacity (number of characters) of the buffer, including the
+// terminating '
+// \
+// 0'.
+// This function will fail, if the capacity of the buffer is less or equal to
+// the size of the source string.
+//
+// @return A zyan status code.
+// The behavior of this function is undefined, if `source` is a view into the `destination`
+// string or `destination` points to an already initialized `ZyanString` instance.
+// Finalization is not required for strings created by this function.
+func (destination *String) DuplicateCustomBuffer(source *StringView, buffer *byte, capacity USize) Status {
+	__res := gengort.CCall4(__imp_ZyanStringDuplicateCustomBuffer.Addr(), gengort.MarshallSyscall(destination), gengort.MarshallSyscall(source), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(capacity))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringConcatEx gengort.PreloadProc
+
+// Initializes a new `ZyanString` instance by concatenating two existing strings and sets
+// a custom `allocator` and memory allocation/deallocation parameters.
+//
+// @param destination A pointer to the (uninitialized) destination `ZyanString` instance.
+// This function will fail, if the destination `ZyanString` instance
+// equals one of the source strings.
+//
+// @param s1 A pointer to the first source string.
+//
+// @param s2 A pointer to the second source string.
+//
+// @param capacity The initial capacity (number of characters).
+// This value is automatically adjusted to the combined size of the
+// source strings, if a smaller value was passed.
+//
+// @param allocator A pointer to a `ZyanAllocator` instance.
+//
+// @param growth_factor The growth factor.
+//
+// @param shrink_threshold The shrink threshold.
+//
+// @return A zyan status code.
+// The behavior of this function is undefined, if `s1` or `s2` are views into the `destination`
+// string or `destination` points to an already initialized `ZyanString` instance.
+// A growth factor of `1` disables overallocation and a shrink threshold of `0` disables
+// dynamic shrinking.
+// The allocated buffer will be at least one character larger than the given `capacity`, to reserve
+// space for the terminating '
+// \
+// 0'.
+// Finalization with `ZyanStringDestroy` is required for all strings created by this function.
+func (destination *String) ConcatEx(s1 *StringView, s2 *StringView, capacity USize, allocator *Allocator, growth_factor U8, shrink_threshold U8) Status {
+	__res := gengort.CCall7(__imp_ZyanStringConcatEx.Addr(), gengort.MarshallSyscall(destination), gengort.MarshallSyscall(s1), gengort.MarshallSyscall(s2), gengort.MarshallSyscall(capacity), gengort.MarshallSyscall(allocator), gengort.MarshallSyscall(growth_factor), gengort.MarshallSyscall(shrink_threshold))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringConcatCustomBuffer gengort.PreloadProc
+
+// Initializes a new `ZyanString` instance by concatenating two existing strings and
+// configures it to use a custom user defined buffer with a fixed size.
+//
+// @param destination A pointer to the (uninitialized) destination `ZyanString` instance.
+// This function will fail, if the destination `ZyanString` instance equals
+// one of the source strings.
+//
+// @param s1 A pointer to the first source string.
+//
+// @param s2 A pointer to the second source string.
+//
+// @param buffer A pointer to the buffer that is used as storage for the string.
+//
+// @param capacity The maximum capacity (number of characters) of the buffer.
+// This function will fail, if the capacity of the buffer is less or equal to
+// the combined size of the source strings.
+//
+// @return A zyan status code.
+// The behavior of this function is undefined, if `s1` or `s2` are views into the `destination`
+// string or `destination` points to an already initialized `ZyanString` instance.
+// Finalization is not required for strings created by this function.
+func (destination *String) ConcatCustomBuffer(s1 *StringView, s2 *StringView, buffer *byte, capacity USize) Status {
+	__res := gengort.CCall5(__imp_ZyanStringConcatCustomBuffer.Addr(), gengort.MarshallSyscall(destination), gengort.MarshallSyscall(s1), gengort.MarshallSyscall(s2), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(capacity))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringViewInsideView gengort.PreloadProc
+
+// Returns a view inside an existing view/string.
+//
+// @param view A pointer to the `ZyanStringView` instance.
+//
+// @param source A pointer to the source string.
+//
+// @return A zyan status code.
+// The `ZYAN_STRING_TO_VEW` macro can be used to pass any `ZyanString` instance as value for the
+// `source` string.
+func (view *StringView) InsideView(source *StringView) Status {
+	__res := gengort.CCall2(__imp_ZyanStringViewInsideView.Addr(), gengort.MarshallSyscall(view), gengort.MarshallSyscall(source))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringViewInsideViewEx gengort.PreloadProc
+
+// Returns a view inside an existing view/string starting from the given `index`.
+//
+// @param view A pointer to the `ZyanStringView` instance.
+//
+// @param source A pointer to the source string.
+//
+// @param index The start index.
+//
+// @param count The number of characters.
+//
+// @return A zyan status code.
+// The `ZYAN_STRING_TO_VEW` macro can be used to pass any `ZyanString` instance as value for the
+// `source` string.
+func (view *StringView) InsideViewEx(source *StringView, index USize, count USize) Status {
+	__res := gengort.CCall4(__imp_ZyanStringViewInsideViewEx.Addr(), gengort.MarshallSyscall(view), gengort.MarshallSyscall(source), gengort.MarshallSyscall(index), gengort.MarshallSyscall(count))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringViewInsideBuffer gengort.PreloadProc
+
+// Returns a view inside a null-terminated C-style string.
+//
+// @param view A pointer to the `ZyanStringView` instance.
+//
+// @param string The C-style string.
+//
+// @return A zyan status code.
+func (view *StringView) InsideBuffer(_string *byte) Status {
+	__res := gengort.CCall2(__imp_ZyanStringViewInsideBuffer.Addr(), gengort.MarshallSyscall(view), gengort.MarshallSyscall(_string))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringViewInsideBufferEx gengort.PreloadProc
+
+// Returns a view inside a character buffer with custom length.
+//
+// @param view A pointer to the `ZyanStringView` instance.
+//
+// @param buffer A pointer to the buffer containing the string characters.
+//
+// @param length The length of the string (number of characters).
+//
+// @return A zyan status code.
+func (view *StringView) InsideBufferEx(buffer *byte, length USize) Status {
+	__res := gengort.CCall3(__imp_ZyanStringViewInsideBufferEx.Addr(), gengort.MarshallSyscall(view), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(length))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringViewGetSize gengort.PreloadProc
+
+// Returns the size (number of characters) of the view.
+//
+// @param view A pointer to the `ZyanStringView` instance.
+//
+// @param size Receives the size (number of characters) of the view.
+//
+// @return A zyan status code.
+func (view *StringView) GetSize(size *USize) Status {
+	__res := gengort.CCall2(__imp_ZyanStringViewGetSize.Addr(), gengort.MarshallSyscall(view), gengort.MarshallSyscall(size))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringViewGetData gengort.PreloadProc
+
+// Returns the C-style string of the given `ZyanString` instance.
+//
+// @warning The string is not guaranteed to be null terminated!
+//
+// @param view A pointer to the `ZyanStringView` instance.
+//
+// @param buffer Receives a pointer to the C-style string.
+//
+// @return A zyan status code.
+func (view *StringView) GetData(buffer **byte) Status {
+	__res := gengort.CCall2(__imp_ZyanStringViewGetData.Addr(), gengort.MarshallSyscall(view), gengort.MarshallSyscall(buffer))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringGetChar gengort.PreloadProc
+
+// Returns the character at the given `index`.
+//
+// @param string A pointer to the `ZyanStringView` instance.
+//
+// @param index The character index.
+//
+// @param value Receives the desired character of the string.
+//
+// @return A zyan status code.
+func (_string *StringView) GetChar(index USize, value *byte) Status {
+	__res := gengort.CCall3(__imp_ZyanStringGetChar.Addr(), gengort.MarshallSyscall(_string), gengort.MarshallSyscall(index), gengort.MarshallSyscall(value))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringGetCharMutable gengort.PreloadProc
+
+// Returns a pointer to the character at the given `index`.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @param index The character index.
+//
+// @param value Receives a pointer to the desired character in the string.
+//
+// @return A zyan status code.
+func (_string *String) GetCharMutable(index USize, value **byte) Status {
+	__res := gengort.CCall3(__imp_ZyanStringGetCharMutable.Addr(), gengort.MarshallSyscall(_string), gengort.MarshallSyscall(index), gengort.MarshallSyscall(value))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringSetChar gengort.PreloadProc
+
+// Assigns a new value to the character at the given `index`.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @param index The character index.
+//
+// @param value The character to assign.
+//
+// @return A zyan status code.
+func (_string *String) SetChar(index USize, value byte) Status {
+	__res := gengort.CCall3(__imp_ZyanStringSetChar.Addr(), gengort.MarshallSyscall(_string), gengort.MarshallSyscall(index), gengort.MarshallSyscall(value))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringInsert gengort.PreloadProc
+
+// Inserts the content of the source string in the destination string at the given `index`.
+//
+// @param destination The destination string.
+//
+// @param index The insert index.
+//
+// @param source The source string.
+//
+// @return A zyan status code.
+func (destination *String) Insert(index USize, source *StringView) Status {
+	__res := gengort.CCall3(__imp_ZyanStringInsert.Addr(), gengort.MarshallSyscall(destination), gengort.MarshallSyscall(index), gengort.MarshallSyscall(source))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringInsertEx gengort.PreloadProc
+
+// Inserts `count` characters of the source string in the destination string at the given
+// `index`.
+//
+// @param destination The destination string.
+//
+// @param destination_index The insert index.
+//
+// @param source The source string.
+//
+// @param source_index The index of the first character to be inserted from the source
+// string.
+//
+// @param count The number of chars to insert from the source string.
+//
+// @return A zyan status code.
+func (destination *String) InsertEx(destination_index USize, source *StringView, source_index USize, count USize) Status {
+	__res := gengort.CCall5(__imp_ZyanStringInsertEx.Addr(), gengort.MarshallSyscall(destination), gengort.MarshallSyscall(destination_index), gengort.MarshallSyscall(source), gengort.MarshallSyscall(source_index), gengort.MarshallSyscall(count))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringAppend gengort.PreloadProc
+
+// Appends the content of the source string to the end of the destination string.
+//
+// @param destination The destination string.
+//
+// @param source The source string.
+//
+// @return A zyan status code.
+func (destination *String) Append(source *StringView) Status {
+	__res := gengort.CCall2(__imp_ZyanStringAppend.Addr(), gengort.MarshallSyscall(destination), gengort.MarshallSyscall(source))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringAppendEx gengort.PreloadProc
+
+// Appends `count` characters of the source string to the end of the destination string.
+//
+// @param destination The destination string.
+//
+// @param source The source string.
+//
+// @param source_index The index of the first character to be appended from the source string.
+//
+// @param count The number of chars to append from the source string.
+//
+// @return A zyan status code.
+func (destination *String) AppendEx(source *StringView, source_index USize, count USize) Status {
+	__res := gengort.CCall4(__imp_ZyanStringAppendEx.Addr(), gengort.MarshallSyscall(destination), gengort.MarshallSyscall(source), gengort.MarshallSyscall(source_index), gengort.MarshallSyscall(count))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringDelete gengort.PreloadProc
+
+// Deletes characters from the given string, starting at `index`.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @param index The index of the first character to delete.
+//
+// @param count The number of characters to delete.
+//
+// @return A zyan status code.
+func (_string *String) Delete(index USize, count USize) Status {
+	__res := gengort.CCall3(__imp_ZyanStringDelete.Addr(), gengort.MarshallSyscall(_string), gengort.MarshallSyscall(index), gengort.MarshallSyscall(count))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringTruncate gengort.PreloadProc
+
+// Deletes all remaining characters from the given string, starting at `index`.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @param index The index of the first character to delete.
+//
+// @return A zyan status code.
+func (_string *String) Truncate(index USize) Status {
+	__res := gengort.CCall2(__imp_ZyanStringTruncate.Addr(), gengort.MarshallSyscall(_string), gengort.MarshallSyscall(index))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringClear gengort.PreloadProc
+
+// Erases the given string.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @return A zyan status code.
+func (_string *String) Clear() Status {
+	__res := gengort.CCall1(__imp_ZyanStringClear.Addr(), gengort.MarshallSyscall(_string))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringLPos gengort.PreloadProc
+
+// Searches for the first occurrence of `needle` in the given `haystack` starting from the
+// left.
+//
+// @param haystack The string to search in.
+//
+// @param needle The sub-string to search for.
+//
+// @param found_index A pointer to a variable that receives the index of the first occurrence of
+// `needle`.
+//
+// @return `ZYAN_STATUS_TRUE`, if the needle was found, `ZYAN_STATUS_FALSE`, if not, or another
+// zyan status code, if an error occured.
+// The `found_index` is set to `-1`, if the needle was not found.
+func (haystack *StringView) LPos(needle *StringView, found_index *ISize) Status {
+	__res := gengort.CCall3(__imp_ZyanStringLPos.Addr(), gengort.MarshallSyscall(haystack), gengort.MarshallSyscall(needle), gengort.MarshallSyscall(found_index))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringLPosEx gengort.PreloadProc
+
+// Searches for the first occurrence of `needle` in the given `haystack` starting from the
+// left.
+//
+// @param haystack The string to search in.
+//
+// @param needle The sub-string to search for.
+//
+// @param found_index A pointer to a variable that receives the index of the first occurrence of
+// `needle`.
+//
+// @param index The start index.
+//
+// @param count The maximum number of characters to iterate, beginning from the start
+// `index`.
+//
+// @return `ZYAN_STATUS_TRUE`, if the needle was found, `ZYAN_STATUS_FALSE`, if not, or another
+// zyan status code, if an error occured.
+// The `found_index` is set to `-1`, if the needle was not found.
+func (haystack *StringView) LPosEx(needle *StringView, found_index *ISize, index USize, count USize) Status {
+	__res := gengort.CCall5(__imp_ZyanStringLPosEx.Addr(), gengort.MarshallSyscall(haystack), gengort.MarshallSyscall(needle), gengort.MarshallSyscall(found_index), gengort.MarshallSyscall(index), gengort.MarshallSyscall(count))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringLPosI gengort.PreloadProc
+
+// Performs a case-insensitive search for the first occurrence of `needle` in the given
+// `haystack` starting from the left.
+//
+// @param haystack The string to search in.
+//
+// @param needle The sub-string to search for.
+//
+// @param found_index A pointer to a variable that receives the index of the first occurrence of
+// `needle`.
+//
+// @return `ZYAN_STATUS_TRUE`, if the needle was found, `ZYAN_STATUS_FALSE`, if not, or another
+// zyan status code, if an error occured.
+// The `found_index` is set to `-1`, if the needle was not found.
+func (haystack *StringView) LPosI(needle *StringView, found_index *ISize) Status {
+	__res := gengort.CCall3(__imp_ZyanStringLPosI.Addr(), gengort.MarshallSyscall(haystack), gengort.MarshallSyscall(needle), gengort.MarshallSyscall(found_index))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringLPosIEx gengort.PreloadProc
+
+// Performs a case-insensitive search for the first occurrence of `needle` in the given
+// `haystack` starting from the left.
+//
+// @param haystack The string to search in.
+//
+// @param needle The sub-string to search for.
+//
+// @param found_index A pointer to a variable that receives the index of the first occurrence of
+// `needle`.
+//
+// @param index The start index.
+//
+// @param count The maximum number of characters to iterate, beginning from the start
+// `index`.
+//
+// @return `ZYAN_STATUS_TRUE`, if the needle was found, `ZYAN_STATUS_FALSE`, if not, or another
+// zyan status code, if an error occurred.
+// The `found_index` is set to `-1`, if the needle was not found.
+func (haystack *StringView) LPosIEx(needle *StringView, found_index *ISize, index USize, count USize) Status {
+	__res := gengort.CCall5(__imp_ZyanStringLPosIEx.Addr(), gengort.MarshallSyscall(haystack), gengort.MarshallSyscall(needle), gengort.MarshallSyscall(found_index), gengort.MarshallSyscall(index), gengort.MarshallSyscall(count))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringRPos gengort.PreloadProc
+
+// Searches for the first occurrence of `needle` in the given `haystack` starting from the
+// right.
+//
+// @param haystack The string to search in.
+//
+// @param needle The sub-string to search for.
+//
+// @param found_index A pointer to a variable that receives the index of the first occurrence of
+// `needle`.
+//
+// @return `ZYAN_STATUS_TRUE`, if the needle was found, `ZYAN_STATUS_FALSE`, if not, or another
+// zyan status code, if an error occurred.
+// The `found_index` is set to `-1`, if the needle was not found.
+func (haystack *StringView) RPos(needle *StringView, found_index *ISize) Status {
+	__res := gengort.CCall3(__imp_ZyanStringRPos.Addr(), gengort.MarshallSyscall(haystack), gengort.MarshallSyscall(needle), gengort.MarshallSyscall(found_index))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringRPosEx gengort.PreloadProc
+
+// Searches for the first occurrence of `needle` in the given `haystack` starting from the
+// right.
+//
+// @param haystack The string to search in.
+//
+// @param needle The sub-string to search for.
+//
+// @param found_index A pointer to a variable that receives the index of the first occurrence of
+// `needle`.
+//
+// @param index The start index.
+//
+// @param count The maximum number of characters to iterate, beginning from the start
+// `index`.
+//
+// @return `ZYAN_STATUS_TRUE`, if the needle was found, `ZYAN_STATUS_FALSE`, if not, or another
+// zyan status code, if an error occurred.
+// The `found_index` is set to `-1`, if the needle was not found.
+func (haystack *StringView) RPosEx(needle *StringView, found_index *ISize, index USize, count USize) Status {
+	__res := gengort.CCall5(__imp_ZyanStringRPosEx.Addr(), gengort.MarshallSyscall(haystack), gengort.MarshallSyscall(needle), gengort.MarshallSyscall(found_index), gengort.MarshallSyscall(index), gengort.MarshallSyscall(count))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringRPosI gengort.PreloadProc
+
+// Performs a case-insensitive search for the first occurrence of `needle` in the given
+// `haystack` starting from the right.
+//
+// @param haystack The string to search in.
+//
+// @param needle The sub-string to search for.
+//
+// @param found_index A pointer to a variable that receives the index of the first occurrence of
+// `needle`.
+//
+// @return `ZYAN_STATUS_TRUE`, if the needle was found, `ZYAN_STATUS_FALSE`, if not, or another
+// zyan status code, if an error occurred.
+// The `found_index` is set to `-1`, if the needle was not found.
+func (haystack *StringView) RPosI(needle *StringView, found_index *ISize) Status {
+	__res := gengort.CCall3(__imp_ZyanStringRPosI.Addr(), gengort.MarshallSyscall(haystack), gengort.MarshallSyscall(needle), gengort.MarshallSyscall(found_index))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringRPosIEx gengort.PreloadProc
+
+// Performs a case-insensitive search for the first occurrence of `needle` in the given
+// `haystack` starting from the right.
+//
+// @param haystack The string to search in.
+//
+// @param needle The sub-string to search for.
+//
+// @param found_index A pointer to a variable that receives the index of the first occurrence of
+// `needle`.
+//
+// @param index The start index.
+//
+// @param count The maximum number of characters to iterate, beginning from the start
+// `index`.
+//
+// @return `ZYAN_STATUS_TRUE`, if the needle was found, `ZYAN_STATUS_FALSE`, if not, or another
+// zyan status code, if an error occurred.
+// The `found_index` is set to `-1`, if the needle was not found.
+func (haystack *StringView) RPosIEx(needle *StringView, found_index *ISize, index USize, count USize) Status {
+	__res := gengort.CCall5(__imp_ZyanStringRPosIEx.Addr(), gengort.MarshallSyscall(haystack), gengort.MarshallSyscall(needle), gengort.MarshallSyscall(found_index), gengort.MarshallSyscall(index), gengort.MarshallSyscall(count))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringCompare gengort.PreloadProc
+
+// Compares two strings.
+//
+// @param s1 The first string
+//
+// @param s2 The second string.
+//
+// @param result Receives the comparison result.
+// Values:
+// - `result
+// <
+// 0` -> The first character that does not match has a lower value
+// in `s1` than in `s2`.
+// - `result == 0` -> The contents of both strings are equal.
+// - `result  > 0` -> The first character that does not match has a greater value
+// in `s1` than in `s2`.
+//
+// @return `ZYAN_STATUS_TRUE`, if the strings are equal, `ZYAN_STATUS_FALSE`, if not, or another
+// zyan status code, if an error occurred.
+func (s1 *StringView) Compare(s2 *StringView, result *I32) Status {
+	__res := gengort.CCall3(__imp_ZyanStringCompare.Addr(), gengort.MarshallSyscall(s1), gengort.MarshallSyscall(s2), gengort.MarshallSyscall(result))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringCompareI gengort.PreloadProc
+
+// Performs a case-insensitive comparison of two strings.
+//
+// @param s1 The first string
+//
+// @param s2 The second string.
+//
+// @param result Receives the comparison result.
+// Values:
+// - `result
+// <
+// 0` -> The first character that does not match has a lower value
+// in `s1` than in `s2`.
+// - `result == 0` -> The contents of both strings are equal.
+// - `result  > 0` -> The first character that does not match has a greater value
+// in `s1` than in `s2`.
+//
+// @return `ZYAN_STATUS_TRUE`, if the strings are equal, `ZYAN_STATUS_FALSE`, if not, or another
+// zyan status code, if an error occurred.
+func (s1 *StringView) CompareI(s2 *StringView, result *I32) Status {
+	__res := gengort.CCall3(__imp_ZyanStringCompareI.Addr(), gengort.MarshallSyscall(s1), gengort.MarshallSyscall(s2), gengort.MarshallSyscall(result))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringToLowerCase gengort.PreloadProc
+
+// Converts the given string to lowercase letters.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @return A zyan status code.
+// This function will fail, if the `ZYAN_STRING_IS_IMMUTABLE` flag is set for the specified
+// `ZyanString` instance.
+func (_string *String) ToLowerCase() Status {
+	__res := gengort.CCall1(__imp_ZyanStringToLowerCase.Addr(), gengort.MarshallSyscall(_string))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringToLowerCaseEx gengort.PreloadProc
+
+// Converts `count` characters of the given string to lowercase letters.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @param index The start index.
+//
+// @param count The number of characters to convert, beginning from the start `index`.
+//
+// @return A zyan status code.
+// This function will fail, if the `ZYAN_STRING_IS_IMMUTABLE` flag is set for the specified
+// `ZyanString` instance.
+func (_string *String) ToLowerCaseEx(index USize, count USize) Status {
+	__res := gengort.CCall3(__imp_ZyanStringToLowerCaseEx.Addr(), gengort.MarshallSyscall(_string), gengort.MarshallSyscall(index), gengort.MarshallSyscall(count))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringToUpperCase gengort.PreloadProc
+
+// Converts the given string to uppercase letters.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @return A zyan status code.
+// This function will fail, if the `ZYAN_STRING_IS_IMMUTABLE` flag is set for the specified
+// `ZyanString` instance.
+func (_string *String) ToUpperCase() Status {
+	__res := gengort.CCall1(__imp_ZyanStringToUpperCase.Addr(), gengort.MarshallSyscall(_string))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringToUpperCaseEx gengort.PreloadProc
+
+// Converts `count` characters of the given string to uppercase letters.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @param index The start index.
+//
+// @param count The number of characters to convert, beginning from the start `index`.
+//
+// @return A zyan status code.
+// This function will fail, if the `ZYAN_STRING_IS_IMMUTABLE` flag is set for the specified
+// `ZyanString` instance.
+func (_string *String) ToUpperCaseEx(index USize, count USize) Status {
+	__res := gengort.CCall3(__imp_ZyanStringToUpperCaseEx.Addr(), gengort.MarshallSyscall(_string), gengort.MarshallSyscall(index), gengort.MarshallSyscall(count))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringResize gengort.PreloadProc
+
+// Resizes the given `ZyanString` instance.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @param size The new size of the string.
+//
+// @return A zyan status code.
+// This function will fail, if the `ZYAN_STRING_IS_IMMUTABLE` flag is set for the specified
+// `ZyanString` instance.
+func (_string *String) Resize(size USize) Status {
+	__res := gengort.CCall2(__imp_ZyanStringResize.Addr(), gengort.MarshallSyscall(_string), gengort.MarshallSyscall(size))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringReserve gengort.PreloadProc
+
+// Changes the capacity of the given `ZyanString` instance.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @param capacity The new minimum capacity of the string.
+//
+// @return A zyan status code.
+// This function will fail, if the `ZYAN_STRING_IS_IMMUTABLE` flag is set for the specified
+// `ZyanString` instance.
+func (_string *String) Reserve(capacity USize) Status {
+	__res := gengort.CCall2(__imp_ZyanStringReserve.Addr(), gengort.MarshallSyscall(_string), gengort.MarshallSyscall(capacity))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringShrinkToFit gengort.PreloadProc
+
+// Shrinks the capacity of the given string to match it's size.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @return A zyan status code.
+// This function will fail, if the `ZYAN_STRING_IS_IMMUTABLE` flag is set for the specified
+// `ZyanString` instance.
+func (_string *String) ShrinkToFit() Status {
+	__res := gengort.CCall1(__imp_ZyanStringShrinkToFit.Addr(), gengort.MarshallSyscall(_string))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringGetCapacity gengort.PreloadProc
+
+// Returns the current capacity of the string.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @param capacity Receives the size of the string.
+//
+// @return A zyan status code.
+func (_string *String) GetCapacity(capacity *USize) Status {
+	__res := gengort.CCall2(__imp_ZyanStringGetCapacity.Addr(), gengort.MarshallSyscall(_string), gengort.MarshallSyscall(capacity))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringGetSize gengort.PreloadProc
+
+// Returns the current size (number of characters) of the string (excluding the
+// terminating zero character).
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @param size Receives the size (number of characters) of the string.
+//
+// @return A zyan status code.
+func (_string *String) GetSize(size *USize) Status {
+	__res := gengort.CCall2(__imp_ZyanStringGetSize.Addr(), gengort.MarshallSyscall(_string), gengort.MarshallSyscall(size))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZyanStringGetData gengort.PreloadProc
+
+// Returns the C-style string of the given `ZyanString` instance.
+//
+// @param string A pointer to the `ZyanString` instance.
+//
+// @param value Receives a pointer to the C-style string.
+//
+// @return A zyan status code.
+func (_string *String) GetData(value **byte) Status {
+	__res := gengort.CCall2(__imp_ZyanStringGetData.Addr(), gengort.MarshallSyscall(_string), gengort.MarshallSyscall(value))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisFormatterTokenGetValue gengort.PreloadProc
+
+// Returns the `type` and the string `value` of the given `token`.
+//
+// @param token A pointer to the `ZydisFormatterToken` struct.
+//
+// @param type Receives the token type.
+//
+// @param value Receives a pointer to the string value of the token.
+//
+// @return A zyan status code.
+func FormatterTokenGetValue(token *FormatterToken, _type *TokenType, value *ConstCharPointer) Status {
+	__res := gengort.CCall3(__imp_ZydisFormatterTokenGetValue.Addr(), gengort.MarshallSyscall(token), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(value))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisFormatterTokenNext gengort.PreloadProc
+
+// Obtains the next `token` linked to the passed one.
+//
+// @param token Receives a pointer to the next `ZydisFormatterToken` struct
+// linked to the passed one.
+//
+// @return A zyan status code.
+func FormatterTokenNext(token **FormatterTokenConst) Status {
+	__res := gengort.CCall1(__imp_ZydisFormatterTokenNext.Addr(), gengort.MarshallSyscall(token))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisFormatterBufferGetToken gengort.PreloadProc
+
+// Returns the current (most recently added) token.
+//
+// @param buffer A pointer to the `ZydisFormatterBuffer` struct.
+//
+// @param token Receives a pointer to the current token.
+//
+// @return A zyan status code.
+// This function returns `ZYAN_STATUS_INVALID_OPERATION`, if the buffer does not contain at least
+// one token.
+func (buffer *FormatterBuffer) GetToken(token **FormatterTokenConst) Status {
+	__res := gengort.CCall2(__imp_ZydisFormatterBufferGetToken.Addr(), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(token))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisFormatterBufferGetString gengort.PreloadProc
+
+// Returns the `ZyanString` instance associated with the given buffer.
+//
+// @param buffer A pointer to the `ZydisFormatterBuffer` struct.
+//
+// @param string Receives a pointer to the `ZyanString` instance associated with the given
+// buffer.
+//
+// @return A zyan status code.
+// This function returns `ZYAN_STATUS_INVALID_OPERATION`, if the buffer does not contain at least
+// one token.
+// The returned string always refers to the literal value of the current (most recently added)
+// token and will remain valid until the buffer is destroyed.
+func (buffer *FormatterBuffer) GetString(_string **String) Status {
+	__res := gengort.CCall2(__imp_ZydisFormatterBufferGetString.Addr(), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(_string))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisFormatterBufferAppend gengort.PreloadProc
+
+// Appends a new token to the `buffer`.
+//
+// @param buffer A pointer to the `ZydisFormatterBuffer` struct.
+//
+// @param type The type of the new token.
+//
+// @return A zyan status code.
+// Note that the `ZyanString` instance returned by `ZydisFormatterBufferGetString` will
+// automatically be updated by calling this function.
+func (buffer *FormatterBuffer) Append(_type TokenType) Status {
+	__res := gengort.CCall2(__imp_ZydisFormatterBufferAppend.Addr(), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(_type))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisFormatterBufferRemember gengort.PreloadProc
+
+// Returns a snapshot of the buffer-state.
+//
+// @param buffer A pointer to the `ZydisFormatterBuffer` struct.
+//
+// @param state Receives a snapshot of the buffer-state.
+//
+// @return A zyan status code.
+// Note that the buffer-state is saved inside the buffer itself and thus becomes invalid as soon
+// as the buffer gets overwritten or destroyed.
+func (buffer *FormatterBuffer) Remember(state *UPointer) Status {
+	__res := gengort.CCall2(__imp_ZydisFormatterBufferRemember.Addr(), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(state))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisFormatterBufferRestore gengort.PreloadProc
+
+// Restores a previously saved buffer-state.
+//
+// @param buffer A pointer to the `ZydisFormatterBuffer` struct.
+//
+// @param state The buffer-state to restore.
+//
+// @return A zyan status code.
+// All tokens added after obtaining the given `state` snapshot will be removed. This function
+// does NOT restore any string content.
+// Note that the `ZyanString` instance returned by `ZydisFormatterBufferGetString` will
+// automatically be updated by calling this function.
+func (buffer *FormatterBuffer) Restore(state UPointer) Status {
+	__res := gengort.CCall2(__imp_ZydisFormatterBufferRestore.Addr(), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(state))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisFormatterInit gengort.PreloadProc
+
+// Initializes the given `ZydisFormatter` instance.
+//
+// @param formatter A pointer to the `ZydisFormatter` instance.
+//
+// @param style The base formatter style (either `AT
+// &T
+// ` or `Intel` style).
+//
+// @return A zyan status code.
+func (formatter *Formatter) Init(style FormatterStyle) Status {
+	__res := gengort.CCall2(__imp_ZydisFormatterInit.Addr(), gengort.MarshallSyscall(formatter), gengort.MarshallSyscall(style))
+	return gengort.UnmarshallSyscall[Status](__res)
+}
+
+var __imp_ZydisFormatterSetProperty gengort.PreloadProc
+
+// Changes the value of the specified formatter `property`.
+//
+// @param formatter A pointer to the `ZydisFormatter` instance.
+//
+// @param property The id of the formatter-property.
 //
 // @param value The new value.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function may be called from any thread.  Access is not
-// synchronized.
-//
-// @sa
-// @ref window_close
-//
-// @since Added in version 3.0.
-func SetWindowShouldClose(window *Window, value int32) {
-	gengort.CCall2(__imp_glfwSetWindowShouldClose.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(value))
+// @return A zyan status code.
+// This function returns `ZYAN_STATUS_INVALID_OPERATION` if a property can't be changed for the
+// current formatter-style.
+func (formatter *Formatter) SetProperty(property FormatterProperty, value UPointer) Status {
+	__res := gengort.CCall3(__imp_ZydisFormatterSetProperty.Addr(), gengort.MarshallSyscall(formatter), gengort.MarshallSyscall(property), gengort.MarshallSyscall(value))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwGetWindowTitle gengort.PreloadProc
+var __imp_ZydisFormatterSetHook gengort.PreloadProc
 
-// @brief Returns the title of the specified window.
-// This function returns the window title, encoded as UTF-8, of the specified
-// window.  This is the title set previously by
-// @ref glfwCreateWindow
-// or
-// @ref glfwSetWindowTitle.
-//
-// @param window The window to query.
-//
-// @return The UTF-8 encoded window title, or `NULL` if an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @remark The returned title is currently a copy of the title last set by
-// @ref glfwCreateWindow
-// or
-// @ref glfwSetWindowTitle.
-// It does not include any
-// additional text which may be appended by the platform or another program.
-//
-// @pointer
-// _lifetime The returned string is allocated and freed by GLFW.  You
-// should not free it yourself.  It is valid until the next call to
-// @ref glfwGetWindowTitle
-// or
-// @ref glfwSetWindowTitle,
-// or until the library is
-// terminated.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_title
-//
-// @sa
-// @ref glfwSetWindowTitle
-//
-// @since Added in version 3.4.
-func GetWindowTitle(window *Window) *byte {
-	__res := gengort.CCall1(__imp_glfwGetWindowTitle.Addr(), gengort.MarshallSyscall(window))
-	return gengort.UnmarshallSyscall[*byte](__res)
-}
-
-var __imp_glfwSetWindowTitle gengort.PreloadProc
-
-// @brief Sets the title of the specified window.
-// This function sets the window title, encoded as UTF-8, of the specified
-// window.
-//
-// @param window The window whose title to change.
+// Replaces a formatter function with a custom callback and/or retrieves the currently
+// used function.
 //
-// @param title The UTF-8 encoded window title.
+// @param formatter A pointer to the `ZydisFormatter` instance.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
+// @param type The formatter function-type.
 //
-// @remark
-// @macos
-// The window title will not be updated until the next time you
-// process events.
+// @param callback A pointer to a variable that contains the pointer of the callback function
+// and receives the pointer of the currently used function.
 //
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_title
-//
-// @sa
-// @ref glfwGetWindowTitle
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Added window handle parameter.
-func SetWindowTitle(window *Window, title *byte) {
-	gengort.CCall2(__imp_glfwSetWindowTitle.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(title))
-}
-
-var __imp_glfwSetWindowIcon gengort.PreloadProc
-
-// @brief Sets the icon for the specified window.
-// This function sets the icon of the specified window.  If passed an array of
-// candidate images, those of or closest to the sizes desired by the system are
-// selected.  If no images are specified, the window reverts to its default
-// icon.
-// The pixels are 32-bit, little-endian, non-premultiplied RGBA, i.e. eight
-// bits per channel with the red channel first.  They are arranged canonically
-// as packed sequential rows, starting from the top-left corner.
-// The desired image sizes varies depending on platform and system settings.
-// The selected images will be rescaled as needed.  Good sizes include 16x16,
-// 32x32 and 48x48.
-//
-// @param window The window whose icon to set.
-//
-// @param count The number of images in the specified array, or zero to
-// revert to the default window icon.
-//
-// @param images The images to create the icon from.  This is ignored if
-// count is zero.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_VALUE,
-//
-// @ref GLFW_PLATFORM_ERROR
-// and
-// @ref GLFW_FEATURE_UNAVAILABLE
-// (see remarks).
-//
-// @pointer
-// _lifetime The specified image data is copied before this function
-// returns.
-//
-// @remark
-// @macos
-// Regular windows do not have icons on macOS.  This function
-// will emit
-// @ref GLFW_FEATURE_UNAVAILABLE.
-// The dock icon will be the same as
-// the application bundle's icon.  For more information on bundles, see the
-// [Bundle Programming Guide][bundle-guide] in the Mac Developer Library.
-// [bundle-guide]: https://developer.apple.com/library/mac/documentation/CoreFoundation/Conceptual/CFBundles/
-//
-// @remark
-// @wayland
-// There is no existing protocol to change an icon, the
-// window will thus inherit the one defined in the application's desktop file.
-// This function will emit
-// @ref GLFW_FEATURE_UNAVAILABLE.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_icon
-//
-// @since Added in version 3.2.
-func SetWindowIcon(window *Window, count int32, images *Image) {
-	gengort.CCall3(__imp_glfwSetWindowIcon.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(count), gengort.MarshallSyscall(images))
-}
-
-var __imp_glfwGetWindowPos gengort.PreloadProc
-
-// @brief Retrieves the position of the content area of the specified window.
-// This function retrieves the position, in screen coordinates, of the
-// upper-left corner of the content area of the specified window.
-// Any or all of the position arguments may be `NULL`.  If an error occurs, all
-// non-`NULL` position arguments will be set to zero.
-//
-// @param window The window to query.
-//
-// @param xpos Where to store the x-coordinate of the upper-left corner of
-// the content area, or `NULL`.
-//
-// @param ypos Where to store the y-coordinate of the upper-left corner of
-// the content area, or `NULL`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_PLATFORM_ERROR
-// and
-// @ref GLFW_FEATURE_UNAVAILABLE
-// (see remarks).
-//
-// @remark
-// @wayland
-// There is no way for an application to retrieve the global
-// position of its windows.  This function will emit
-// @ref GLFW_FEATURE_UNAVAILABLE.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_pos
-//
-// @sa
-// @ref glfwSetWindowPos
-//
-// @since Added in version 3.0.
-func GetWindowPos(window *Window, xpos *int32, ypos *int32) {
-	gengort.CCall3(__imp_glfwGetWindowPos.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(xpos), gengort.MarshallSyscall(ypos))
-}
-
-var __imp_glfwSetWindowPos gengort.PreloadProc
-
-// @brief Sets the position of the content area of the specified window.
-// This function sets the position, in screen coordinates, of the upper-left
-// corner of the content area of the specified windowed mode window.  If the
-// window is a full screen window, this function does nothing.
-// __Do not use this function__ to move an already visible window unless you
-// have very good reasons for doing so, as it will confuse and annoy the user.
-// The window manager may put limits on what positions are allowed.  GLFW
-// cannot and should not override these limits.
-//
-// @param window The window to query.
-//
-// @param xpos The x-coordinate of the upper-left corner of the content area.
-//
-// @param ypos The y-coordinate of the upper-left corner of the content area.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_PLATFORM_ERROR
-// and
-// @ref GLFW_FEATURE_UNAVAILABLE
-// (see remarks).
-//
-// @remark
-// @wayland
-// There is no way for an application to set the global
-// position of its windows.  This function will emit
-// @ref GLFW_FEATURE_UNAVAILABLE.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_pos
-//
-// @sa
-// @ref glfwGetWindowPos
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Added window handle parameter.
-func SetWindowPos(window *Window, xpos int32, ypos int32) {
-	gengort.CCall3(__imp_glfwSetWindowPos.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(xpos), gengort.MarshallSyscall(ypos))
-}
-
-var __imp_glfwGetWindowSize gengort.PreloadProc
-
-// @brief Retrieves the size of the content area of the specified window.
-// This function retrieves the size, in screen coordinates, of the content area
-// of the specified window.  If you wish to retrieve the size of the
-// framebuffer of the window in pixels, see
-// @ref glfwGetFramebufferSize.
-// Any or all of the size arguments may be `NULL`.  If an error occurs, all
-// non-`NULL` size arguments will be set to zero.
-//
-// @param window The window whose size to retrieve.
-//
-// @param width Where to store the width, in screen coordinates, of the
-// content area, or `NULL`.
-//
-// @param height Where to store the height, in screen coordinates, of the
-// content area, or `NULL`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_size
-//
-// @sa
-// @ref glfwSetWindowSize
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Added window handle parameter.
-func GetWindowSize(window *Window, width *int32, height *int32) {
-	gengort.CCall3(__imp_glfwGetWindowSize.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height))
+// @return A zyan status code.
+// Call this function with `callback` pointing to a `ZYAN_NULL` value to retrieve the currently
+// used function without replacing it.
+// This function returns `ZYAN_STATUS_INVALID_OPERATION` if a function can't be replaced for the
+// current formatter-style.
+func (formatter *Formatter) SetHook(_type FormatterFunction, callback *unsafe.Pointer) Status {
+	__res := gengort.CCall3(__imp_ZydisFormatterSetHook.Addr(), gengort.MarshallSyscall(formatter), gengort.MarshallSyscall(_type), gengort.MarshallSyscall(callback))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwSetWindowSizeLimits gengort.PreloadProc
+var __imp_ZydisFormatterFormatInstruction gengort.PreloadProc
 
-// @brief Sets the size limits of the specified window.
-// This function sets the size limits of the content area of the specified
-// window.  If the window is full screen, the size limits only take effect
-// once it is made windowed.  If the window is not resizable, this function
-// does nothing.
-// The size limits are applied immediately to a windowed mode window and may
-// cause it to be resized.
-// The maximum dimensions must be greater than or equal to the minimum
-// dimensions and all must be greater than or equal to zero.
-//
-// @param window The window to set limits for.
-//
-// @param minwidth The minimum width, in screen coordinates, of the content
-// area, or `GLFW_DONT_CARE`.
+// Formats the given instruction and writes it into the output buffer.
 //
-// @param minheight The minimum height, in screen coordinates, of the
-// content area, or `GLFW_DONT_CARE`.
+// @param formatter A pointer to the `ZydisFormatter` instance.
 //
-// @param maxwidth The maximum width, in screen coordinates, of the content
-// area, or `GLFW_DONT_CARE`.
+// @param instruction A pointer to the `ZydisDecodedInstruction` struct.
 //
-// @param maxheight The maximum height, in screen coordinates, of the
-// content area, or `GLFW_DONT_CARE`.
+// @param operands A pointer to the decoded operands array.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
+// @param operand_count The length of the `operands` array. Must be equal to or greater than
+// the value of `instruction->operand_count_visible`.
 //
-// @ref GLFW_INVALID_VALUE
-// and
-// @ref GLFW_PLATFORM_ERROR.
+// @param buffer A pointer to the output buffer.
 //
-// @remark If you set size limits and an aspect ratio that conflict, the
-// results are undefined.
+// @param length The length of the output buffer (in characters).
 //
-// @remark
-// @wayland
-// The size limits will not be applied until the window is
-// actually resized, either by the user or by the compositor.
+// @param runtime_address The runtime address of the instruction or `ZYDIS_RUNTIME_ADDRESS_NONE`
+// to print relative addresses.
 //
-// @thread
-// _safety This function must only be called from the main thread.
+// @param user_data A pointer to user-defined data which can be used in custom formatter
+// callbacks. Can be `ZYAN_NULL`.
 //
-// @sa
-// @ref window_sizelimits
-//
-// @sa
-// @ref glfwSetWindowAspectRatio
-//
-// @since Added in version 3.2.
-func SetWindowSizeLimits(window *Window, minwidth int32, minheight int32, maxwidth int32, maxheight int32) {
-	gengort.CCall5(__imp_glfwSetWindowSizeLimits.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(minwidth), gengort.MarshallSyscall(minheight), gengort.MarshallSyscall(maxwidth), gengort.MarshallSyscall(maxheight))
-}
-
-var __imp_glfwSetWindowAspectRatio gengort.PreloadProc
-
-// @brief Sets the aspect ratio of the specified window.
-// This function sets the required aspect ratio of the content area of the
-// specified window.  If the window is full screen, the aspect ratio only takes
-// effect once it is made windowed.  If the window is not resizable, this
-// function does nothing.
-// The aspect ratio is specified as a numerator and a denominator and both
-// values must be greater than zero.  For example, the common 16:9 aspect ratio
-// is specified as 16 and 9, respectively.
-// If the numerator and denominator is set to `GLFW_DONT_CARE` then the aspect
-// ratio limit is disabled.
-// The aspect ratio is applied immediately to a windowed mode window and may
-// cause it to be resized.
-//
-// @param window The window to set limits for.
-//
-// @param numer The numerator of the desired aspect ratio, or
-// `GLFW_DONT_CARE`.
-//
-// @param denom The denominator of the desired aspect ratio, or
-// `GLFW_DONT_CARE`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_VALUE
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark If you set size limits and an aspect ratio that conflict, the
-// results are undefined.
-//
-// @remark
-// @wayland
-// The aspect ratio will not be applied until the window is
-// actually resized, either by the user or by the compositor.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_sizelimits
-//
-// @sa
-// @ref glfwSetWindowSizeLimits
-//
-// @since Added in version 3.2.
-func SetWindowAspectRatio(window *Window, numer int32, denom int32) {
-	gengort.CCall3(__imp_glfwSetWindowAspectRatio.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(numer), gengort.MarshallSyscall(denom))
-}
-
-var __imp_glfwSetWindowSize gengort.PreloadProc
-
-// @brief Sets the size of the content area of the specified window.
-// This function sets the size, in screen coordinates, of the content area of
-// the specified window.
-// For full screen windows, this function updates the resolution of its desired
-// video mode and switches to the video mode closest to it, without affecting
-// the window's context.  As the context is unaffected, the bit depths of the
-// framebuffer remain unchanged.
-// If you wish to update the refresh rate of the desired video mode in addition
-// to its resolution, see
-// @ref glfwSetWindowMonitor.
-// The window manager may put limits on what sizes are allowed.  GLFW cannot
-// and should not override these limits.
-//
-// @param window The window to resize.
-//
-// @param width The desired width, in screen coordinates, of the window
-// content area.
-//
-// @param height The desired height, in screen coordinates, of the window
-// content area.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_size
-//
-// @sa
-// @ref glfwGetWindowSize
-//
-// @sa
-// @ref glfwSetWindowMonitor
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Added window handle parameter.
-func SetWindowSize(window *Window, width int32, height int32) {
-	gengort.CCall3(__imp_glfwSetWindowSize.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height))
-}
-
-var __imp_glfwGetFramebufferSize gengort.PreloadProc
-
-// @brief Retrieves the size of the framebuffer of the specified window.
-// This function retrieves the size, in pixels, of the framebuffer of the
-// specified window.  If you wish to retrieve the size of the window in screen
-// coordinates, see
-// @ref glfwGetWindowSize.
-// Any or all of the size arguments may be `NULL`.  If an error occurs, all
-// non-`NULL` size arguments will be set to zero.
-//
-// @param window The window whose framebuffer to query.
-//
-// @param width Where to store the width, in pixels, of the framebuffer,
-// or `NULL`.
-//
-// @param height Where to store the height, in pixels, of the framebuffer,
-// or `NULL`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_fbsize
-//
-// @sa
-// @ref glfwSetFramebufferSizeCallback
-//
-// @since Added in version 3.0.
-func GetFramebufferSize(window *Window, width *int32, height *int32) {
-	gengort.CCall3(__imp_glfwGetFramebufferSize.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height))
-}
-
-var __imp_glfwGetWindowFrameSize gengort.PreloadProc
-
-// @brief Retrieves the size of the frame of the window.
-// This function retrieves the size, in screen coordinates, of each edge of the
-// frame of the specified window.  This size includes the title bar, if the
-// window has one.  The size of the frame may vary depending on the
-// [window-related hints](
-// @ref window_hints_wnd)
-// used to create it.
-// Because this function retrieves the size of each window frame edge and not
-// the offset along a particular coordinate axis, the retrieved values will
-// always be zero or positive.
-// Any or all of the size arguments may be `NULL`.  If an error occurs, all
-// non-`NULL` size arguments will be set to zero.
-//
-// @param window The window whose frame size to query.
-//
-// @param left Where to store the size, in screen coordinates, of the left
-// edge of the window frame, or `NULL`.
-//
-// @param top Where to store the size, in screen coordinates, of the top
-// edge of the window frame, or `NULL`.
-//
-// @param right Where to store the size, in screen coordinates, of the
-// right edge of the window frame, or `NULL`.
-//
-// @param bottom Where to store the size, in screen coordinates, of the
-// bottom edge of the window frame, or `NULL`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_size
-//
-// @since Added in version 3.1.
-func GetWindowFrameSize(window *Window, left *int32, top *int32, right *int32, bottom *int32) {
-	gengort.CCall5(__imp_glfwGetWindowFrameSize.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(left), gengort.MarshallSyscall(top), gengort.MarshallSyscall(right), gengort.MarshallSyscall(bottom))
-}
-
-var __imp_glfwGetWindowContentScale gengort.PreloadProc
-
-// @brief Retrieves the content scale for the specified window.
-// This function retrieves the content scale for the specified window.  The
-// content scale is the ratio between the current DPI and the platform's
-// default DPI.  This is especially important for text and any UI elements.  If
-// the pixel dimensions of your UI scaled by this look appropriate on your
-// machine then it should appear at a reasonable size on other machines
-// regardless of their DPI and scaling settings.  This relies on the system DPI
-// and scaling settings being somewhat correct.
-// On platforms where each monitors can have its own content scale, the window
-// content scale will depend on which monitor the system considers the window
-// to be on.
-//
-// @param window The window to query.
-//
-// @param xscale Where to store the x-axis content scale, or `NULL`.
-//
-// @param yscale Where to store the y-axis content scale, or `NULL`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_scale
-//
-// @sa
-// @ref glfwSetWindowContentScaleCallback
-//
-// @sa
-// @ref glfwGetMonitorContentScale
-//
-// @since Added in version 3.3.
-func GetWindowContentScale(window *Window, xscale *float32, yscale *float32) {
-	gengort.CCall3(__imp_glfwGetWindowContentScale.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(xscale), gengort.MarshallSyscall(yscale))
-}
-
-var __imp_glfwGetWindowOpacity gengort.PreloadProc
-
-// @brief Returns the opacity of the whole window.
-// This function returns the opacity of the window, including any decorations.
-// The opacity (or alpha) value is a positive finite number between zero and
-// one, where zero is fully transparent and one is fully opaque.  If the system
-// does not support whole window transparency, this function always returns one.
-// The initial opacity value for newly created windows is one.
-//
-// @param window The window to query.
-//
-// @return The opacity value of the specified window.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_transparency
-//
-// @sa
-// @ref glfwSetWindowOpacity
-//
-// @since Added in version 3.3.
-func GetWindowOpacity(window *Window) float32 {
-	__res := gengort.CCall1(__imp_glfwGetWindowOpacity.Addr(), gengort.MarshallSyscall(window))
-	return gengort.UnmarshallSyscall[float32](__res)
-}
-
-var __imp_glfwSetWindowOpacity gengort.PreloadProc
-
-// @brief Sets the opacity of the whole window.
-// This function sets the opacity of the window, including any decorations.
-// The opacity (or alpha) value is a positive finite number between zero and
-// one, where zero is fully transparent and one is fully opaque.
-// The initial opacity value for newly created windows is one.
-// A window created with framebuffer transparency may not use whole window
-// transparency.  The results of doing this are undefined.
-//
-// @param window The window to set the opacity for.
-//
-// @param opacity The desired opacity of the specified window.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_PLATFORM_ERROR
-// and
-// @ref GLFW_FEATURE_UNAVAILABLE
-// (see remarks).
-//
-// @remark
-// @wayland
-// There is no way to set an opacity factor for a window.
-// This function will emit
-// @ref GLFW_FEATURE_UNAVAILABLE.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_transparency
-//
-// @sa
-// @ref glfwGetWindowOpacity
-//
-// @since Added in version 3.3.
-func SetWindowOpacity(window *Window, opacity float32) {
-	gengort.CCall2(__imp_glfwSetWindowOpacity.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(opacity))
-}
-
-var __imp_glfwIconifyWindow gengort.PreloadProc
-
-// @brief Iconifies the specified window.
-// This function iconifies (minimizes) the specified window if it was
-// previously restored.  If the window is already iconified, this function does
-// nothing.
-// If the specified window is a full screen window, GLFW restores the original
-// video mode of the monitor.  The window's desired video mode is set again
-// when the window is restored.
-//
-// @param window The window to iconify.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark
-// @wayland
-// Once a window is iconified,
-// @ref glfwRestoreWindow
-// won’t
-// be able to restore it.  This is a design decision of the xdg-shell
-// protocol.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_iconify
-//
-// @sa
-// @ref glfwRestoreWindow
-//
-// @sa
-// @ref glfwMaximizeWindow
-//
-// @since Added in version 2.1.
-//
-// @glfw3
-// Added window handle parameter.
-func IconifyWindow(window *Window) {
-	gengort.CCall1(__imp_glfwIconifyWindow.Addr(), gengort.MarshallSyscall(window))
-}
-
-var __imp_glfwRestoreWindow gengort.PreloadProc
-
-// @brief Restores the specified window.
-// This function restores the specified window if it was previously iconified
-// (minimized) or maximized.  If the window is already restored, this function
-// does nothing.
-// If the specified window is an iconified full screen window, its desired
-// video mode is set again for its monitor when the window is restored.
-//
-// @param window The window to restore.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_iconify
-//
-// @sa
-// @ref glfwIconifyWindow
-//
-// @sa
-// @ref glfwMaximizeWindow
-//
-// @since Added in version 2.1.
-//
-// @glfw3
-// Added window handle parameter.
-func RestoreWindow(window *Window) {
-	gengort.CCall1(__imp_glfwRestoreWindow.Addr(), gengort.MarshallSyscall(window))
+// @return A zyan status code.
+func (formatter *Formatter) FormatInstruction(instruction *DecodedInstruction, operands *DecodedOperand, operand_count U8, buffer *byte, length USize, runtime_address U64, user_data unsafe.Pointer) Status {
+	__res := gengort.CCall8(__imp_ZydisFormatterFormatInstruction.Addr(), gengort.MarshallSyscall(formatter), gengort.MarshallSyscall(instruction), gengort.MarshallSyscall(operands), gengort.MarshallSyscall(operand_count), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(length), gengort.MarshallSyscall(runtime_address), gengort.MarshallSyscall(user_data))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwMaximizeWindow gengort.PreloadProc
+var __imp_ZydisFormatterFormatOperand gengort.PreloadProc
 
-// @brief Maximizes the specified window.
-// This function maximizes the specified window if it was previously not
-// maximized.  If the window is already maximized, this function does nothing.
-// If the specified window is a full screen window, this function does nothing.
-//
-// @param window The window to maximize.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @par Thread Safety
-// This function may only be called from the main thread.
-//
-// @sa
-// @ref window_iconify
-//
-// @sa
-// @ref glfwIconifyWindow
+// Formats the given operand and writes it into the output buffer.
 //
-// @sa
-// @ref glfwRestoreWindow
+// @param formatter A pointer to the `ZydisFormatter` instance.
 //
-// @since Added in GLFW 3.2.
-func MaximizeWindow(window *Window) {
-	gengort.CCall1(__imp_glfwMaximizeWindow.Addr(), gengort.MarshallSyscall(window))
-}
-
-var __imp_glfwShowWindow gengort.PreloadProc
-
-// @brief Makes the specified window visible.
-// This function makes the specified window visible if it was previously
-// hidden.  If the window is already visible or is in full screen mode, this
-// function does nothing.
-// By default, windowed mode windows are focused when shown
-// Set the [GLFW_FOCUS_ON_SHOW](
-// @ref GLFW_FOCUS_ON_SHOW_hint)
-// window hint
-// to change this behavior for all newly created windows, or change the
-// behavior for an existing window with
-// @ref glfwSetWindowAttrib.
-//
-// @param window The window to make visible.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark
-// @wayland
-// Because Wayland wants every frame of the desktop to be
-// complete, this function does not immediately make the window visible.
-// Instead it will become visible the next time the window framebuffer is
-// updated after this call.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_hide
-//
-// @sa
-// @ref glfwHideWindow
-//
-// @since Added in version 3.0.
-func ShowWindow(window *Window) {
-	gengort.CCall1(__imp_glfwShowWindow.Addr(), gengort.MarshallSyscall(window))
-}
-
-var __imp_glfwHideWindow gengort.PreloadProc
-
-// @brief Hides the specified window.
-// This function hides the specified window if it was previously visible.  If
-// the window is already hidden or is in full screen mode, this function does
-// nothing.
-//
-// @param window The window to hide.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_hide
-//
-// @sa
-// @ref glfwShowWindow
-//
-// @since Added in version 3.0.
-func HideWindow(window *Window) {
-	gengort.CCall1(__imp_glfwHideWindow.Addr(), gengort.MarshallSyscall(window))
-}
-
-var __imp_glfwFocusWindow gengort.PreloadProc
-
-// @brief Brings the specified window to front and sets input focus.
-// This function brings the specified window to front and sets input focus.
-// The window should already be visible and not iconified.
-// By default, both windowed and full screen mode windows are focused when
-// initially created.  Set the [GLFW_FOCUSED](
-// @ref GLFW_FOCUSED_hint)
-// to
-// disable this behavior.
-// Also by default, windowed mode windows are focused when shown
-// with
-// @ref glfwShowWindow.
-// Set the
-// [GLFW_FOCUS_ON_SHOW](
-// @ref GLFW_FOCUS_ON_SHOW_hint)
-// to disable this behavior.
-// __Do not use this function__ to steal focus from other applications unless
-// you are certain that is what the user wants.  Focus stealing can be
-// extremely disruptive.
-// For a less disruptive way of getting the user's attention, see
-// [attention requests](
-// @ref window_attention).
-//
-// @param window The window to give input focus.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark
-// @wayland
-// The compositor will likely ignore focus requests unless
-// another window created by the same application already has input focus.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_focus
-//
-// @sa
-// @ref window_attention
-//
-// @since Added in version 3.2.
-func FocusWindow(window *Window) {
-	gengort.CCall1(__imp_glfwFocusWindow.Addr(), gengort.MarshallSyscall(window))
-}
-
-var __imp_glfwRequestWindowAttention gengort.PreloadProc
-
-// @brief Requests user attention to the specified window.
-// This function requests user attention to the specified window.  On
-// platforms where this is not supported, attention is requested to the
-// application as a whole.
-// Once the user has given attention, usually by focusing the window or
-// application, the system will end the request automatically.
-//
-// @param window The window to request attention to.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark
-// @macos
-// Attention is requested to the application as a whole, not the
-// specific window.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_attention
-//
-// @since Added in version 3.3.
-func RequestWindowAttention(window *Window) {
-	gengort.CCall1(__imp_glfwRequestWindowAttention.Addr(), gengort.MarshallSyscall(window))
-}
-
-var __imp_glfwGetWindowMonitor gengort.PreloadProc
-
-// @brief Returns the monitor that the window uses for full screen mode.
-// This function returns the handle of the monitor that the specified window is
-// in full screen on.
-//
-// @param window The window to query.
+// @param instruction A pointer to the `ZydisDecodedInstruction` struct.
 //
-// @return The monitor, or `NULL` if the window is in windowed mode or an
-// [error](
-// @ref error_handling)
-// occurred.
+// @param operand A pointer to the `ZydisDecodedOperand` struct of the operand to format.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
+// @param buffer A pointer to the output buffer.
 //
-// @thread
-// _safety This function must only be called from the main thread.
+// @param length The length of the output buffer (in characters).
 //
-// @sa
-// @ref window_monitor
+// @param runtime_address The runtime address of the instruction or `ZYDIS_RUNTIME_ADDRESS_NONE`
+// to print relative addresses.
 //
-// @sa
-// @ref glfwSetWindowMonitor
+// @param user_data A pointer to user-defined data which can be used in custom formatter
+// callbacks. Can be `ZYAN_NULL`.
 //
-// @since Added in version 3.0.
-func GetWindowMonitor(window *Window) *Monitor {
-	__res := gengort.CCall1(__imp_glfwGetWindowMonitor.Addr(), gengort.MarshallSyscall(window))
-	return gengort.UnmarshallSyscall[*Monitor](__res)
-}
-
-var __imp_glfwSetWindowMonitor gengort.PreloadProc
-
-// @brief Sets the mode, monitor, video mode and placement of a window.
-// This function sets the monitor that the window uses for full screen mode or,
-// if the monitor is `NULL`, makes it windowed mode.
-// When setting a monitor, this function updates the width, height and refresh
-// rate of the desired video mode and switches to the video mode closest to it.
-// The window position is ignored when setting a monitor.
-// When the monitor is `NULL`, the position, width and height are used to
-// place the window content area.  The refresh rate is ignored when no monitor
-// is specified.
-// If you only wish to update the resolution of a full screen window or the
-// size of a windowed mode window, see
-// @ref glfwSetWindowSize.
-// When a window transitions from full screen to windowed mode, this function
-// restores any previous window settings such as whether it is decorated,
-// floating, resizable, has size or aspect ratio limits, etc.
-//
-// @param window The window whose monitor, size or video mode to set.
-//
-// @param monitor The desired monitor, or `NULL` to set windowed mode.
-//
-// @param xpos The desired x-coordinate of the upper-left corner of the
-// content area.
-//
-// @param ypos The desired y-coordinate of the upper-left corner of the
-// content area.
-//
-// @param width The desired with, in screen coordinates, of the content
-// area or video mode.
-//
-// @param height The desired height, in screen coordinates, of the content
-// area or video mode.
-//
-// @param refreshRate The desired refresh rate, in Hz, of the video mode,
-// or `GLFW_DONT_CARE`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark The OpenGL or OpenGL ES context will not be destroyed or otherwise
-// affected by any resizing or mode switching, although you may need to update
-// your viewport if the framebuffer size has changed.
-//
-// @remark
-// @wayland
-// The desired window position is ignored, as there is no way
-// for an application to set this property.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_monitor
-//
-// @sa
-// @ref window_full_screen
-//
-// @sa
-// @ref glfwGetWindowMonitor
-//
-// @sa
-// @ref glfwSetWindowSize
-//
-// @since Added in version 3.2.
-func SetWindowMonitor(window *Window, monitor *Monitor, xpos int32, ypos int32, width int32, height int32, refreshRate int32) {
-	gengort.CCall7(__imp_glfwSetWindowMonitor.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(monitor), gengort.MarshallSyscall(xpos), gengort.MarshallSyscall(ypos), gengort.MarshallSyscall(width), gengort.MarshallSyscall(height), gengort.MarshallSyscall(refreshRate))
+// @return A zyan status code.
+// Use `ZydisFormatterFormatInstruction` or `ZydisFormatterFormatInstructionEx` to format a
+// complete instruction.
+func (formatter *Formatter) FormatOperand(instruction *DecodedInstruction, operand *DecodedOperand, buffer *byte, length USize, runtime_address U64, user_data unsafe.Pointer) Status {
+	__res := gengort.CCall7(__imp_ZydisFormatterFormatOperand.Addr(), gengort.MarshallSyscall(formatter), gengort.MarshallSyscall(instruction), gengort.MarshallSyscall(operand), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(length), gengort.MarshallSyscall(runtime_address), gengort.MarshallSyscall(user_data))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwGetWindowAttrib gengort.PreloadProc
+var __imp_ZydisFormatterTokenizeInstruction gengort.PreloadProc
 
-// @brief Returns an attribute of the specified window.
-// This function returns the value of an attribute of the specified window or
-// its OpenGL or OpenGL ES context.
-//
-// @param window The window to query.
-//
-// @param attrib The [window attribute](
-// @ref window_attribs)
-// whose value to
-// return.
-//
-// @return The value of the attribute, or zero if an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_ENUM
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark Framebuffer related hints are not window attributes.  See
-// @ref window_attribs_fb
-// for more information.
-//
-// @remark Zero is a valid value for many window and context related
-// attributes so you cannot use a return value of zero as an indication of
-// errors.  However, this function should not fail as long as it is passed
-// valid arguments and the library has been [initialized](
-// @ref intro_init).
-//
-// @remark
-// @wayland
-// The Wayland protocol provides no way to check whether a
-// window is iconfied, so
-// @ref GLFW_ICONIFIED
-// always returns `GLFW_FALSE`.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_attribs
-//
-// @sa
-// @ref glfwSetWindowAttrib
-//
-// @since Added in version 3.0.  Replaces `glfwGetWindowParam` and
-// `glfwGetGLVersion`.
-func GetWindowAttrib(window *Window, attrib int32) int32 {
-	__res := gengort.CCall2(__imp_glfwGetWindowAttrib.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(attrib))
-	return gengort.UnmarshallSyscall[int32](__res)
-}
-
-var __imp_glfwSetWindowAttrib gengort.PreloadProc
-
-// @brief Sets an attribute of the specified window.
-// This function sets the value of an attribute of the specified window.
-// The supported attributes are [GLFW_DECORATED](
-// @ref GLFW_DECORATED_attrib),
-// [GLFW_RESIZABLE](
-// @ref GLFW_RESIZABLE_attrib),
-// [GLFW_FLOATING](
-// @ref GLFW_FLOATING_attrib),
-// [GLFW_AUTO_ICONIFY](
-// @ref GLFW_AUTO_ICONIFY_attrib)
-// and
-// [GLFW_FOCUS_ON_SHOW](
-// @ref GLFW_FOCUS_ON_SHOW_attrib).
-// [GLFW_MOUSE_PASSTHROUGH](
-// @ref GLFW_MOUSE_PASSTHROUGH_attrib)
-// Some of these attributes are ignored for full screen windows.  The new
-// value will take effect if the window is later made windowed.
-// Some of these attributes are ignored for windowed mode windows.  The new
-// value will take effect if the window is later made full screen.
-//
-// @param window The window to set the attribute for.
-//
-// @param attrib A supported window attribute.
-//
-// @param value `GLFW_TRUE` or `GLFW_FALSE`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_ENUM,
-//
-// @ref GLFW_INVALID_VALUE,
-//
-// @ref GLFW_PLATFORM_ERROR
-// and
-// @ref GLFW_FEATURE_UNAVAILABLE
-// (see remarks).
-//
-// @remark Calling
-// @ref glfwGetWindowAttrib
-// will always return the latest
-// value, even if that value is ignored by the current mode of the window.
-//
-// @remark
-// @wayland
-// The [GLFW_FLOATING](
-// @ref GLFW_FLOATING_attrib)
-// window attribute is
-// not supported.  Setting this will emit
-// @ref GLFW_FEATURE_UNAVAILABLE.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_attribs
-//
-// @sa
-// @ref glfwGetWindowAttrib
-//
-// @since Added in version 3.3.
-func SetWindowAttrib(window *Window, attrib int32, value int32) {
-	gengort.CCall3(__imp_glfwSetWindowAttrib.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(attrib), gengort.MarshallSyscall(value))
-}
-
-var __imp_glfwSetWindowUserPointer gengort.PreloadProc
-
-// @brief Sets the user pointer of the specified window.
-// This function sets the user-defined pointer of the specified window.  The
-// current value is retained until the window is destroyed.  The initial value
-// is `NULL`.
-//
-// @param window The window whose pointer to set.
-//
-// @param pointer The new value.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
+// Tokenizes the given instruction and writes it into the output buffer.
 //
-// @thread
-// _safety This function may be called from any thread.  Access is not
-// synchronized.
+// @param formatter A pointer to the `ZydisFormatter` instance.
 //
-// @sa
-// @ref window_userptr
+// @param instruction A pointer to the `ZydisDecodedInstruction` struct.
 //
-// @sa
-// @ref glfwGetWindowUserPointer
+// @param operands A pointer to the decoded operands array.
 //
-// @since Added in version 3.0.
-func SetWindowUserPointer(window *Window, pointer unsafe.Pointer) {
-	gengort.CCall2(__imp_glfwSetWindowUserPointer.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(pointer))
-}
-
-var __imp_glfwGetWindowUserPointer gengort.PreloadProc
-
-// @brief Returns the user pointer of the specified window.
-// This function returns the current value of the user-defined pointer of the
-// specified window.  The initial value is `NULL`.
+// @param operand_count The length of the `operands` array. Must be equal to or greater than
+// the value of `instruction->operand_count_visible`.
 //
-// @param window The window whose pointer to return.
+// @param buffer A pointer to the output buffer.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
+// @param length The length of the output buffer (in bytes).
 //
-// @thread
-// _safety This function may be called from any thread.  Access is not
-// synchronized.
+// @param runtime_address The runtime address of the instruction or `ZYDIS_RUNTIME_ADDRESS_NONE`
+// to print relative addresses.
 //
-// @sa
-// @ref window_userptr
+// @param token Receives a pointer to the first token in the output buffer.
 //
-// @sa
-// @ref glfwSetWindowUserPointer
+// @param user_data A pointer to user-defined data which can be used in custom formatter
+// callbacks. Can be `ZYAN_NULL`.
 //
-// @since Added in version 3.0.
-func GetWindowUserPointer(window *Window) unsafe.Pointer {
-	__res := gengort.CCall1(__imp_glfwGetWindowUserPointer.Addr(), gengort.MarshallSyscall(window))
-	return gengort.UnmarshallSyscall[unsafe.Pointer](__res)
+// @return A zyan status code.
+func (formatter *Formatter) TokenizeInstruction(instruction *DecodedInstruction, operands *DecodedOperand, operand_count U8, buffer unsafe.Pointer, length USize, runtime_address U64, token **FormatterTokenConst, user_data unsafe.Pointer) Status {
+	__res := gengort.CCall9(__imp_ZydisFormatterTokenizeInstruction.Addr(), gengort.MarshallSyscall(formatter), gengort.MarshallSyscall(instruction), gengort.MarshallSyscall(operands), gengort.MarshallSyscall(operand_count), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(length), gengort.MarshallSyscall(runtime_address), gengort.MarshallSyscall(token), gengort.MarshallSyscall(user_data))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwSetWindowPosCallback gengort.PreloadProc
+var __imp_ZydisFormatterTokenizeOperand gengort.PreloadProc
 
-// @brief Sets the position callback for the specified window.
-// This function sets the position callback of the specified window, which is
-// called when the window is moved.  The callback is provided with the
-// position, in screen coordinates, of the upper-left corner of the content
-// area of the window.
-//
-// @param window The window whose callback to set.
+// Tokenizes the given operand and writes it into the output buffer.
 //
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
+// @param formatter A pointer to the `ZydisFormatter` instance.
 //
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
+// @param instruction A pointer to the `ZydisDecodedInstruction` struct.
 //
+// @param operand A pointer to the `ZydisDecodedOperand` struct of the operand to format.
 //
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWwindowposfun).
+// @param buffer A pointer to the output buffer.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
+// @param length The length of the output buffer (in bytes).
 //
-// @remark
-// @wayland
-// This callback will never be called, as there is no way for
-// an application to know its global position.
+// @param runtime_address The runtime address of the instruction or `ZYDIS_RUNTIME_ADDRESS_NONE`
+// to print relative addresses.
 //
-// @thread
-// _safety This function must only be called from the main thread.
+// @param token Receives a pointer to the first token in the output buffer.
 //
-// @sa
-// @ref window_pos
+// @param user_data A pointer to user-defined data which can be used in custom formatter
+// callbacks. Can be `ZYAN_NULL`.
 //
-// @since Added in version 3.0.
-func SetWindowPosCallback(window *Window, callback Windowposfun) Windowposfun {
-	__res := gengort.CCall2(__imp_glfwSetWindowPosCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Windowposfun](__res)
+// @return A zyan status code.
+// Use `ZydisFormatterTokenizeInstruction` to tokenize a complete instruction.
+func (formatter *Formatter) TokenizeOperand(instruction *DecodedInstruction, operand *DecodedOperand, buffer unsafe.Pointer, length USize, runtime_address U64, token **FormatterTokenConst, user_data unsafe.Pointer) Status {
+	__res := gengort.CCall8(__imp_ZydisFormatterTokenizeOperand.Addr(), gengort.MarshallSyscall(formatter), gengort.MarshallSyscall(instruction), gengort.MarshallSyscall(operand), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(length), gengort.MarshallSyscall(runtime_address), gengort.MarshallSyscall(token), gengort.MarshallSyscall(user_data))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwSetWindowSizeCallback gengort.PreloadProc
+var __imp_ZydisGetInstructionSegments gengort.PreloadProc
 
-// @brief Sets the size callback for the specified window.
-// This function sets the size callback of the specified window, which is
-// called when the window is resized.  The callback is provided with the size,
-// in screen coordinates, of the content area of the window.
-//
-// @param window The window whose callback to set.
-//
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
-//
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWwindowsizefun).
+// Returns offsets and sizes of all logical instruction segments (e.g. `OPCODE`,
+// `MODRM`, ...).
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
+// @param instruction A pointer to the `ZydisDecodedInstruction` struct.
 //
-// @thread
-// _safety This function must only be called from the main thread.
+// @param segments Receives the instruction segments information.
 //
-// @sa
-// @ref window_size
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Added window handle parameter and return value.
-func SetWindowSizeCallback(window *Window, callback Windowsizefun) Windowsizefun {
-	__res := gengort.CCall2(__imp_glfwSetWindowSizeCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Windowsizefun](__res)
-}
-
-var __imp_glfwSetWindowCloseCallback gengort.PreloadProc
-
-// @brief Sets the close callback for the specified window.
-// This function sets the close callback of the specified window, which is
-// called when the user attempts to close the window, for example by clicking
-// the close widget in the title bar.
-// The close flag is set before this callback is called, but you can modify it
-// at any time with
-// @ref glfwSetWindowShouldClose.
-// The close callback is not triggered by
-// @ref glfwDestroyWindow.
-//
-// @param window The window whose callback to set.
-//
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
-//
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWwindowclosefun).
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @remark
-// @macos
-// Selecting Quit from the application menu will trigger the
-// close callback for all windows.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_close
-//
-// @since Added in version 2.5.
-//
-// @glfw3
-// Added window handle parameter and return value.
-func SetWindowCloseCallback(window *Window, callback Windowclosefun) Windowclosefun {
-	__res := gengort.CCall2(__imp_glfwSetWindowCloseCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Windowclosefun](__res)
+// @return A zyan status code.
+func GetInstructionSegments(instruction *DecodedInstruction, segments *InstructionSegments) Status {
+	__res := gengort.CCall2(__imp_ZydisGetInstructionSegments.Addr(), gengort.MarshallSyscall(instruction), gengort.MarshallSyscall(segments))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwSetWindowRefreshCallback gengort.PreloadProc
+var __imp_ZydisDisassembleIntel gengort.PreloadProc
 
-// @brief Sets the refresh callback for the specified window.
-// This function sets the refresh callback of the specified window, which is
-// called when the content area of the window needs to be redrawn, for example
-// if the window has been exposed after having been covered by another window.
-// On compositing window systems such as Aero, Compiz, Aqua or Wayland, where
-// the window contents are saved off-screen, this callback may be called only
-// very infrequently or never at all.
-//
-// @param window The window whose callback to set.
-//
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
-//
+// Disassemble an instruction and format it to human-readable text in a single step (Intel syntax).
 //
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWwindowrefreshfun).
+// @param machine_mode The machine mode to assume when disassembling. When in doubt, pass
+// `ZYDIS_MACHINE_MODE_LONG_64` for what is typically referred to as
+// "64-bit mode" or `ZYDIS_MACHINE_MODE_LEGACY_32` for "32-bit mode".
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
+// @param runtime_address The program counter (`eip` / `rip`) to assume when formatting the
+// instruction. Many instructions behave differently depending on the
+// address they are located at.
 //
-// @thread
-// _safety This function must only be called from the main thread.
+// @param buffer A pointer to the raw instruction bytes that you wish to decode.
 //
-// @sa
-// @ref window_refresh
+// @param length The length of the input buffer. Note that this can be bigger than the
+// actual size of the instruction -- you don't have to know the size up
+// front. This length is merely used to prevent Zydis from doing
+// out-of-bounds reads on your buffer.
 //
-// @since Added in version 2.5.
+// @param instruction A pointer to receive the decoded instruction information. Can be
+// uninitialized and reused on later calls.
+// This is a convenience function intended as a quick path for getting started with using Zydis.
+// It internally calls a range of other more advanced functions to obtain all commonly needed
+// information about the instruction. It is likely that you won't need most of this information in
+// practice, so it is advisable to instead call these more advanced functions directly if you're
+// concerned about performance.
+// This function essentially combines the following more advanced functions into a single call:
+// - `ZydisDecoderInit`
+// - `ZydisDecoderDecodeInstruction`
+// - `ZydisDecoderDecodeOperands`
+// - `ZydisFormatterInit`
+// - `ZydisFormatterFormatInstruction`
 //
-// @glfw3
-// Added window handle parameter and return value.
-func SetWindowRefreshCallback(window *Window, callback Windowrefreshfun) Windowrefreshfun {
-	__res := gengort.CCall2(__imp_glfwSetWindowRefreshCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Windowrefreshfun](__res)
+// @return A zyan status code.
+func DisassembleIntel(machine_mode MachineMode, runtime_address U64, buffer unsafe.Pointer, length USize, instruction *DisassembledInstruction) Status {
+	__res := gengort.CCall5(__imp_ZydisDisassembleIntel.Addr(), gengort.MarshallSyscall(machine_mode), gengort.MarshallSyscall(runtime_address), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(length), gengort.MarshallSyscall(instruction))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwSetWindowFocusCallback gengort.PreloadProc
+var __imp_ZydisDisassembleATT gengort.PreloadProc
 
-// @brief Sets the focus callback for the specified window.
-// This function sets the focus callback of the specified window, which is
-// called when the window gains or loses input focus.
-// After the focus callback is called for a window that lost input focus,
-// synthetic key and mouse button release events will be generated for all such
-// that had been pressed.  For more information, see
-// @ref glfwSetKeyCallback
-// and
-// @ref glfwSetMouseButtonCallback.
-//
-// @param window The window whose callback to set.
-//
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
-//
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWwindowfocusfun).
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_focus
-//
-// @since Added in version 3.0.
-func SetWindowFocusCallback(window *Window, callback Windowfocusfun) Windowfocusfun {
-	__res := gengort.CCall2(__imp_glfwSetWindowFocusCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Windowfocusfun](__res)
-}
-
-var __imp_glfwSetWindowIconifyCallback gengort.PreloadProc
-
-// @brief Sets the iconify callback for the specified window.
-// This function sets the iconification callback of the specified window, which
-// is called when the window is iconified or restored.
-//
-// @param window The window whose callback to set.
-//
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
-//
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWwindowiconifyfun).
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
+// Disassemble an instruction and format it to human-readable text in a single step (AT
+// &T
+// syntax).
 //
-// @sa
-// @ref window_iconify
-//
-// @since Added in version 3.0.
-func SetWindowIconifyCallback(window *Window, callback Windowiconifyfun) Windowiconifyfun {
-	__res := gengort.CCall2(__imp_glfwSetWindowIconifyCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Windowiconifyfun](__res)
+// @copydetails ZydisDisassembleIntel
+func DisassembleATT(machine_mode MachineMode, runtime_address U64, buffer unsafe.Pointer, length USize, instruction *DisassembledInstruction) Status {
+	__res := gengort.CCall5(__imp_ZydisDisassembleATT.Addr(), gengort.MarshallSyscall(machine_mode), gengort.MarshallSyscall(runtime_address), gengort.MarshallSyscall(buffer), gengort.MarshallSyscall(length), gengort.MarshallSyscall(instruction))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwSetWindowMaximizeCallback gengort.PreloadProc
+var __imp_ZydisCalcAbsoluteAddress gengort.PreloadProc
 
-// @brief Sets the maximize callback for the specified window.
-// This function sets the maximization callback of the specified window, which
-// is called when the window is maximized or restored.
-//
-// @param window The window whose callback to set.
-//
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
+// Calculates the absolute address value for the given instruction operand.
 //
+// @param instruction A pointer to the `ZydisDecodedInstruction` struct.
 //
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWwindowmaximizefun).
+// @param operand A pointer to the `ZydisDecodedOperand` struct.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
+// @param runtime_address The runtime address of the instruction.
 //
-// @thread
-// _safety This function must only be called from the main thread.
+// @param result_address A pointer to the memory that receives the absolute address.
 //
-// @sa
-// @ref window_maximize
-//
-// @since Added in version 3.3.
-func SetWindowMaximizeCallback(window *Window, callback Windowmaximizefun) Windowmaximizefun {
-	__res := gengort.CCall2(__imp_glfwSetWindowMaximizeCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Windowmaximizefun](__res)
+// @return A zyan status code.
+// You should use this function in the following cases:
+// - `IMM` operands with relative address (e.g. `JMP`, `CALL`, ...)
+// - `MEM` operands with `RIP`/`EIP`-relative address (e.g. `MOV RAX, [RIP+0x12345678]`)
+// - `MEM` operands with absolute address (e.g. `MOV RAX, [0x12345678]`)
+// - The displacement needs to get truncated and zero extended
+func CalcAbsoluteAddress(instruction *DecodedInstruction, operand *DecodedOperand, runtime_address U64, result_address *U64) Status {
+	__res := gengort.CCall4(__imp_ZydisCalcAbsoluteAddress.Addr(), gengort.MarshallSyscall(instruction), gengort.MarshallSyscall(operand), gengort.MarshallSyscall(runtime_address), gengort.MarshallSyscall(result_address))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwSetFramebufferSizeCallback gengort.PreloadProc
+var __imp_ZydisCalcAbsoluteAddressEx gengort.PreloadProc
 
-// @brief Sets the framebuffer resize callback for the specified window.
-// This function sets the framebuffer resize callback of the specified window,
-// which is called when the framebuffer of the specified window is resized.
-//
-// @param window The window whose callback to set.
+// Calculates the absolute address value for the given instruction operand.
 //
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
+// @param instruction A pointer to the `ZydisDecodedInstruction` struct.
 //
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
+// @param operand A pointer to the `ZydisDecodedOperand` struct.
 //
+// @param runtime_address The runtime address of the instruction.
 //
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWframebuffersizefun).
+// @param register_context A pointer to the `ZydisRegisterContext` struct.
 //
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
+// @param result_address A pointer to the memory that receives the absolute target-address.
 //
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_fbsize
-//
-// @since Added in version 3.0.
-func SetFramebufferSizeCallback(window *Window, callback Framebuffersizefun) Framebuffersizefun {
-	__res := gengort.CCall2(__imp_glfwSetFramebufferSizeCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Framebuffersizefun](__res)
+// @return A zyan status code.
+// This function behaves like `ZydisCalcAbsoluteAddress` but takes an additional register-context
+// argument to allow calculation of addresses depending on runtime register values.
+// Note that `IP/EIP/RIP` from the register-context will be ignored in favor of the passed
+// runtime-address.
+func CalcAbsoluteAddressEx(instruction *DecodedInstruction, operand *DecodedOperand, runtime_address U64, register_context *RegisterContext, result_address *U64) Status {
+	__res := gengort.CCall5(__imp_ZydisCalcAbsoluteAddressEx.Addr(), gengort.MarshallSyscall(instruction), gengort.MarshallSyscall(operand), gengort.MarshallSyscall(runtime_address), gengort.MarshallSyscall(register_context), gengort.MarshallSyscall(result_address))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwSetWindowContentScaleCallback gengort.PreloadProc
+var __imp_ZydisGetVersion gengort.PreloadProc
 
-// @brief Sets the window content scale callback for the specified window.
-// This function sets the window content scale callback of the specified window,
-// which is called when the content scale of the specified window changes.
-//
-// @param window The window whose callback to set.
+// Returns the zydis version.
 //
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
-//
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWwindowcontentscalefun).
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref window_scale
-//
-// @sa
-// @ref glfwGetWindowContentScale
-//
-// @since Added in version 3.3.
-func SetWindowContentScaleCallback(window *Window, callback Windowcontentscalefun) Windowcontentscalefun {
-	__res := gengort.CCall2(__imp_glfwSetWindowContentScaleCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Windowcontentscalefun](__res)
-}
-
-var __imp_glfwPollEvents gengort.PreloadProc
-
-// @brief Processes all pending events.
-// This function processes only those events that are already in the event
-// queue and then returns immediately.  Processing events will cause the window
-// and input callbacks associated with those events to be called.
-// On some platforms, a window move, resize or menu operation will cause event
-// processing to block.  This is due to how event processing is designed on
-// those platforms.  You can use the
-// [window refresh callback](
-// @ref window_refresh)
-// to redraw the contents of
-// your window when necessary during such operations.
-// Do not assume that callbacks you set will _only_ be called in response to
-// event processing functions like this one.  While it is necessary to poll for
-// events, window systems that require GLFW to register callbacks of its own
-// can pass events to GLFW in response to many window system function calls.
-// GLFW will pass those events on to the application callbacks before
-// returning.
-// Event processing is not required for joystick input to work.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @reentrancy
-// This function must not be called from a callback.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref events
-//
-// @sa
-// @ref glfwWaitEvents
-//
-// @sa
-// @ref glfwWaitEventsTimeout
-//
-// @since Added in version 1.0.
-func PollEvents() { gengort.CCall0(__imp_glfwPollEvents.Addr()) }
-
-var __imp_glfwWaitEvents gengort.PreloadProc
-
-// @brief Waits until events are queued and processes them.
-// This function puts the calling thread to sleep until at least one event is
-// available in the event queue.  Once one or more events are available,
-// it behaves exactly like
-// @ref glfwPollEvents,
-// i.e. the events in the queue
-// are processed and the function then returns immediately.  Processing events
-// will cause the window and input callbacks associated with those events to be
-// called.
-// Since not all events are associated with callbacks, this function may return
-// without a callback having been called even if you are monitoring all
-// callbacks.
-// On some platforms, a window move, resize or menu operation will cause event
-// processing to block.  This is due to how event processing is designed on
-// those platforms.  You can use the
-// [window refresh callback](
-// @ref window_refresh)
-// to redraw the contents of
-// your window when necessary during such operations.
-// Do not assume that callbacks you set will _only_ be called in response to
-// event processing functions like this one.  While it is necessary to poll for
-// events, window systems that require GLFW to register callbacks of its own
-// can pass events to GLFW in response to many window system function calls.
-// GLFW will pass those events on to the application callbacks before
-// returning.
-// Event processing is not required for joystick input to work.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @reentrancy
-// This function must not be called from a callback.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref events
-//
-// @sa
-// @ref glfwPollEvents
-//
-// @sa
-// @ref glfwWaitEventsTimeout
-//
-// @since Added in version 2.5.
-func WaitEvents() { gengort.CCall0(__imp_glfwWaitEvents.Addr()) }
-
-var __imp_glfwWaitEventsTimeout gengort.PreloadProc
-
-// @brief Waits with timeout until events are queued and processes them.
-// This function puts the calling thread to sleep until at least one event is
-// available in the event queue, or until the specified timeout is reached.  If
-// one or more events are available, it behaves exactly like
-// @ref glfwPollEvents,
-// i.e. the events in the queue are processed and the function
-// then returns immediately.  Processing events will cause the window and input
-// callbacks associated with those events to be called.
-// The timeout value must be a positive finite number.
-// Since not all events are associated with callbacks, this function may return
-// without a callback having been called even if you are monitoring all
-// callbacks.
-// On some platforms, a window move, resize or menu operation will cause event
-// processing to block.  This is due to how event processing is designed on
-// those platforms.  You can use the
-// [window refresh callback](
-// @ref window_refresh)
-// to redraw the contents of
-// your window when necessary during such operations.
-// Do not assume that callbacks you set will _only_ be called in response to
-// event processing functions like this one.  While it is necessary to poll for
-// events, window systems that require GLFW to register callbacks of its own
-// can pass events to GLFW in response to many window system function calls.
-// GLFW will pass those events on to the application callbacks before
-// returning.
-// Event processing is not required for joystick input to work.
-//
-// @param timeout The maximum amount of time, in seconds, to wait.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_VALUE
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @reentrancy
-// This function must not be called from a callback.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref events
-//
-// @sa
-// @ref glfwPollEvents
-//
-// @sa
-// @ref glfwWaitEvents
-//
-// @since Added in version 3.2.
-func WaitEventsTimeout(timeout float64) {
-	gengort.CCall1(__imp_glfwWaitEventsTimeout.Addr(), gengort.MarshallSyscall(timeout))
+// @return The zydis version.
+// Use the macros provided in this file to extract the major, minor, patch and build part from the
+// returned version value.
+func GetVersion() U64 {
+	__res := gengort.CCall0(__imp_ZydisGetVersion.Addr())
+	return gengort.UnmarshallSyscall[U64](__res)
 }
-
-var __imp_glfwPostEmptyEvent gengort.PreloadProc
 
-// @brief Posts an empty event to the event queue.
-// This function posts an empty event from the current thread to the event
-// queue, causing
-// @ref glfwWaitEvents
-// or
-// @ref glfwWaitEventsTimeout
-// to return.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref events
-//
-// @sa
-// @ref glfwWaitEvents
-//
-// @sa
-// @ref glfwWaitEventsTimeout
-//
-// @since Added in version 3.1.
-func PostEmptyEvent() { gengort.CCall0(__imp_glfwPostEmptyEvent.Addr()) }
+var __imp_ZydisIsFeatureEnabled gengort.PreloadProc
 
-var __imp_glfwGetInputMode gengort.PreloadProc
-
-// @brief Returns the value of an input option for the specified window.
-// This function returns the value of an input option for the specified window.
-// The mode must be one of
-// @ref GLFW_CURSOR,
-//
-// @ref GLFW_STICKY_KEYS,
-//
-// @ref GLFW_STICKY_MOUSE_BUTTONS,
+// Checks, if the specified feature is enabled in the current zydis library instance.
 //
-// @ref GLFW_LOCK_KEY_MODS
-// or
+// @param feature The feature.
 //
-// @ref GLFW_RAW_MOUSE_MOTION.
-//
-// @param window The window to query.
-//
-// @param mode One of `GLFW_CURSOR`, `GLFW_STICKY_KEYS`,
-// `GLFW_STICKY_MOUSE_BUTTONS`, `GLFW_LOCK_KEY_MODS` or
-// `GLFW_RAW_MOUSE_MOTION`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_INVALID_ENUM.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref glfwSetInputMode
-//
-// @since Added in version 3.0.
-func GetInputMode(window *Window, mode int32) int32 {
-	__res := gengort.CCall2(__imp_glfwGetInputMode.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(mode))
-	return gengort.UnmarshallSyscall[int32](__res)
-}
-
-var __imp_glfwSetInputMode gengort.PreloadProc
-
-// @brief Sets an input option for the specified window.
-// This function sets an input mode option for the specified window.  The mode
-// must be one of
-// @ref GLFW_CURSOR,
-//
-// @ref GLFW_STICKY_KEYS,
-//
-// @ref GLFW_STICKY_MOUSE_BUTTONS,
-//
-// @ref GLFW_LOCK_KEY_MODS
-//
-// @ref GLFW_RAW_MOUSE_MOTION,
-// or
-// @ref GLFW_UNLIMITED_MOUSE_BUTTONS.
-// If the mode is `GLFW_CURSOR`, the value must be one of the following cursor
-// modes:
-// - `GLFW_CURSOR_NORMAL` makes the cursor visible and behaving normally.
-// - `GLFW_CURSOR_HIDDEN` makes the cursor invisible when it is over the
-// content area of the window but does not restrict the cursor from leaving.
-// - `GLFW_CURSOR_DISABLED` hides and grabs the cursor, providing virtual
-// and unlimited cursor movement.  This is useful for implementing for
-// example 3D camera controls.
-// - `GLFW_CURSOR_CAPTURED` makes the cursor visible and confines it to the
-// content area of the window.
-// If the mode is `GLFW_STICKY_KEYS`, the value must be either `GLFW_TRUE` to
-// enable sticky keys, or `GLFW_FALSE` to disable it.  If sticky keys are
-// enabled, a key press will ensure that
-// @ref glfwGetKey
-// returns `GLFW_PRESS`
-// the next time it is called even if the key had been released before the
-// call.  This is useful when you are only interested in whether keys have been
-// pressed but not when or in which order.
-// If the mode is `GLFW_STICKY_MOUSE_BUTTONS`, the value must be either
-// `GLFW_TRUE` to enable sticky mouse buttons, or `GLFW_FALSE` to disable it.
-// If sticky mouse buttons are enabled, a mouse button press will ensure that
-//
-// @ref glfwGetMouseButton
-// returns `GLFW_PRESS` the next time it is called even
-// if the mouse button had been released before the call.  This is useful when
-// you are only interested in whether mouse buttons have been pressed but not
-// when or in which order.
-// If the mode is `GLFW_LOCK_KEY_MODS`, the value must be either `GLFW_TRUE` to
-// enable lock key modifier bits, or `GLFW_FALSE` to disable them.  If enabled,
-// callbacks that receive modifier bits will also have the
-// @ref GLFW_MOD_CAPS_LOCK
-// bit set when the event was generated with Caps Lock on,
-// and the
-// @ref GLFW_MOD_NUM_LOCK
-// bit when Num Lock was on.
-// If the mode is `GLFW_RAW_MOUSE_MOTION`, the value must be either `GLFW_TRUE`
-// to enable raw (unscaled and unaccelerated) mouse motion when the cursor is
-// disabled, or `GLFW_FALSE` to disable it.  If raw motion is not supported,
-// attempting to set this will emit
-// @ref GLFW_FEATURE_UNAVAILABLE.
-// Call
-// @ref glfwRawMouseMotionSupported
-// to check for support.
-// If the mode is `GLFW_UNLIMITED_MOUSE_BUTTONS`, the value must be either
-// `GLFW_TRUE` to disable the mouse button limit when calling the mouse button
-// callback, or `GLFW_FALSE` to limit the mouse buttons sent to the callback
-// to the mouse button token values up to `GLFW_MOUSE_BUTTON_LAST`.
-//
-// @param window The window whose input mode to set.
-//
-// @param mode One of `GLFW_CURSOR`, `GLFW_STICKY_KEYS`,
-// `GLFW_STICKY_MOUSE_BUTTONS`, `GLFW_LOCK_KEY_MODS` or
-// `GLFW_RAW_MOUSE_MOTION`.
-//
-// @param value The new value of the specified input mode.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_ENUM,
-//
-// @ref GLFW_PLATFORM_ERROR
-// and
-// @ref GLFW_FEATURE_UNAVAILABLE
-// (see above).
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref glfwGetInputMode
-//
-// @since Added in version 3.0.  Replaces `glfwEnable` and `glfwDisable`.
-func SetInputMode(window *Window, mode int32, value int32) {
-	gengort.CCall3(__imp_glfwSetInputMode.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(mode), gengort.MarshallSyscall(value))
-}
-
-var __imp_glfwRawMouseMotionSupported gengort.PreloadProc
-
-// @brief Returns whether raw mouse motion is supported.
-// This function returns whether raw mouse motion is supported on the current
-// system.  This status does not change after GLFW has been initialized so you
-// only need to check this once.  If you attempt to enable raw motion on
-// a system that does not support it,
-// @ref GLFW_PLATFORM_ERROR
-// will be emitted.
-// Raw mouse motion is closer to the actual motion of the mouse across
-// a surface.  It is not affected by the scaling and acceleration applied to
-// the motion of the desktop cursor.  That processing is suitable for a cursor
-// while raw motion is better for controlling for example a 3D camera.  Because
-// of this, raw mouse motion is only provided when the cursor is disabled.
-//
-// @return `GLFW_TRUE` if raw mouse motion is supported on the current machine,
-// or `GLFW_FALSE` otherwise.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref raw_mouse_motion
-//
-// @sa
-// @ref glfwSetInputMode
-//
-// @since Added in version 3.3.
-func RawMouseMotionSupported() int32 {
-	__res := gengort.CCall0(__imp_glfwRawMouseMotionSupported.Addr())
-	return gengort.UnmarshallSyscall[int32](__res)
-}
-
-var __imp_glfwGetKeyName gengort.PreloadProc
-
-// @brief Returns the layout-specific name of the specified printable key.
-// This function returns the name of the specified printable key, encoded as
-// UTF-8.  This is typically the character that key would produce without any
-// modifier keys, intended for displaying key bindings to the user.  For dead
-// keys, it is typically the diacritic it would add to a character.
-// __Do not use this function__ for [text input](
-// @ref input_char).
-// You will
-// break text input for many languages even if it happens to work for yours.
-// If the key is `GLFW_KEY_UNKNOWN`, the scancode is used to identify the key,
-// otherwise the scancode is ignored.  If you specify a non-printable key, or
-// `GLFW_KEY_UNKNOWN` and a scancode that maps to a non-printable key, this
-// function returns `NULL` but does not emit an error.
-// This behavior allows you to always pass in the arguments in the
-// [key callback](
-// @ref input_key)
-// without modification.
-// The printable keys are:
-// - `GLFW_KEY_APOSTROPHE`
-// - `GLFW_KEY_COMMA`
-// - `GLFW_KEY_MINUS`
-// - `GLFW_KEY_PERIOD`
-// - `GLFW_KEY_SLASH`
-// - `GLFW_KEY_SEMICOLON`
-// - `GLFW_KEY_EQUAL`
-// - `GLFW_KEY_LEFT_BRACKET`
-// - `GLFW_KEY_RIGHT_BRACKET`
-// - `GLFW_KEY_BACKSLASH`
-// - `GLFW_KEY_WORLD_1`
-// - `GLFW_KEY_WORLD_2`
-// - `GLFW_KEY_0` to `GLFW_KEY_9`
-// - `GLFW_KEY_A` to `GLFW_KEY_Z`
-// - `GLFW_KEY_KP_0` to `GLFW_KEY_KP_9`
-// - `GLFW_KEY_KP_DECIMAL`
-// - `GLFW_KEY_KP_DIVIDE`
-// - `GLFW_KEY_KP_MULTIPLY`
-// - `GLFW_KEY_KP_SUBTRACT`
-// - `GLFW_KEY_KP_ADD`
-// - `GLFW_KEY_KP_EQUAL`
-// Names for printable keys depend on keyboard layout, while names for
-// non-printable keys are the same across layouts but depend on the application
-// language and should be localized along with other user interface text.
-//
-// @param key The key to query, or `GLFW_KEY_UNKNOWN`.
-//
-// @param scancode The scancode of the key to query.
-//
-// @return The UTF-8 encoded, layout-specific name of the key, or `NULL`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_VALUE,
-//
-// @ref GLFW_INVALID_ENUM
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark The contents of the returned string may change when a keyboard
-// layout change event is received.
-//
-// @pointer
-// _lifetime The returned string is allocated and freed by GLFW.  You
-// should not free it yourself.  It is valid until the library is terminated.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref input_key_name
-//
-// @since Added in version 3.2.
-func GetKeyName(key int32, scancode int32) *byte {
-	__res := gengort.CCall2(__imp_glfwGetKeyName.Addr(), gengort.MarshallSyscall(key), gengort.MarshallSyscall(scancode))
-	return gengort.UnmarshallSyscall[*byte](__res)
-}
-
-var __imp_glfwGetKeyScancode gengort.PreloadProc
-
-// @brief Returns the platform-specific scancode of the specified key.
-// This function returns the platform-specific scancode of the specified key.
-// If the specified [key token](
-// @ref keys)
-// corresponds to a physical key not
-// supported on the current platform then this method will return `-1`.
-// Calling this function with anything other than a key token will return `-1`
-// and generate a
-// @ref GLFW_INVALID_ENUM
-// error.
-//
-// @param key Any [key token](
-// @ref keys).
-//
-// @return The platform-specific scancode for the key, or `-1` if the key is
-// not supported on the current platform or an [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_INVALID_ENUM.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref input_key
-//
-// @since Added in version 3.3.
-func GetKeyScancode(key int32) int32 {
-	__res := gengort.CCall1(__imp_glfwGetKeyScancode.Addr(), gengort.MarshallSyscall(key))
-	return gengort.UnmarshallSyscall[int32](__res)
-}
-
-var __imp_glfwGetKey gengort.PreloadProc
-
-// @brief Returns the last reported state of a keyboard key for the specified
-// window.
-// This function returns the last state reported for the specified key to the
-// specified window.  The returned state is one of `GLFW_PRESS` or
-// `GLFW_RELEASE`.  The action `GLFW_REPEAT` is only reported to the key callback.
-// If the
-// @ref GLFW_STICKY_KEYS
-// input mode is enabled, this function returns
-// `GLFW_PRESS` the first time you call it for a key that was pressed, even if
-// that key has already been released.
-// The key functions deal with physical keys, with [key tokens](
-// @ref keys)
-// named after their use on the standard US keyboard layout.  If you want to
-// input text, use the Unicode character callback instead.
-// The [modifier key bit masks](
-// @ref mods)
-// are not key tokens and cannot be
-// used with this function.
-// __Do not use this function__ to implement [text input](
-// @ref input_char).
-//
-// @param window The desired window.
-//
-// @param key The desired [keyboard key](
-// @ref keys).
-// `GLFW_KEY_UNKNOWN` is
-// not a valid key for this function.
-//
-// @return One of `GLFW_PRESS` or `GLFW_RELEASE`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_INVALID_ENUM.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref input_key
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Added window handle parameter.
-func GetKey(window *Window, key int32) int32 {
-	__res := gengort.CCall2(__imp_glfwGetKey.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(key))
-	return gengort.UnmarshallSyscall[int32](__res)
-}
-
-var __imp_glfwGetMouseButton gengort.PreloadProc
-
-// @brief Returns the last reported state of a mouse button for the specified
-// window.
-// This function returns the last state reported for the specified mouse button
-// to the specified window.  The returned state is one of `GLFW_PRESS` or
-// `GLFW_RELEASE`.
-// If the
-// @ref GLFW_STICKY_MOUSE_BUTTONS
-// input mode is enabled, this function
-// returns `GLFW_PRESS` the first time you call it for a mouse button that was
-// pressed, even if that mouse button has already been released.
-// The
-// @ref GLFW_UNLIMITED_MOUSE_BUTTONS
-// input mode does not effect the
-// limit on buttons which can be polled with this function.
-//
-// @param window The desired window.
-//
-// @param button The desired [mouse button token](
-// @ref buttons).
-//
-// @return One of `GLFW_PRESS` or `GLFW_RELEASE`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_INVALID_ENUM.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref input_mouse_button
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Added window handle parameter.
-func GetMouseButton(window *Window, button int32) int32 {
-	__res := gengort.CCall2(__imp_glfwGetMouseButton.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(button))
-	return gengort.UnmarshallSyscall[int32](__res)
-}
-
-var __imp_glfwGetCursorPos gengort.PreloadProc
-
-// @brief Retrieves the position of the cursor relative to the content area of
-// the window.
-// This function returns the position of the cursor, in screen coordinates,
-// relative to the upper-left corner of the content area of the specified
-// window.
-// If the cursor is disabled (with `GLFW_CURSOR_DISABLED`) then the cursor
-// position is unbounded and limited only by the minimum and maximum values of
-// a `double`.
-// The coordinate can be converted to their integer equivalents with the
-// `floor` function.  Casting directly to an integer type works for positive
-// coordinates, but fails for negative ones.
-// Any or all of the position arguments may be `NULL`.  If an error occurs, all
-// non-`NULL` position arguments will be set to zero.
-//
-// @param window The desired window.
-//
-// @param xpos Where to store the cursor x-coordinate, relative to the
-// left edge of the content area, or `NULL`.
-//
-// @param ypos Where to store the cursor y-coordinate, relative to the to
-// top edge of the content area, or `NULL`.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref cursor_pos
-//
-// @sa
-// @ref glfwSetCursorPos
-//
-// @since Added in version 3.0.  Replaces `glfwGetMousePos`.
-func GetCursorPos(window *Window, xpos *float64, ypos *float64) {
-	gengort.CCall3(__imp_glfwGetCursorPos.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(xpos), gengort.MarshallSyscall(ypos))
-}
-
-var __imp_glfwSetCursorPos gengort.PreloadProc
-
-// @brief Sets the position of the cursor, relative to the content area of the
-// window.
-// This function sets the position, in screen coordinates, of the cursor
-// relative to the upper-left corner of the content area of the specified
-// window.  The window must have input focus.  If the window does not have
-// input focus when this function is called, it fails silently.
-// __Do not use this function__ to implement things like camera controls.  GLFW
-// already provides the `GLFW_CURSOR_DISABLED` cursor mode that hides the
-// cursor, transparently re-centers it and provides unconstrained cursor
-// motion.  See
-// @ref glfwSetInputMode
-// for more information.
-// If the cursor mode is `GLFW_CURSOR_DISABLED` then the cursor position is
-// unconstrained and limited only by the minimum and maximum values of
-// a `double`.
-//
-// @param window The desired window.
-//
-// @param xpos The desired x-coordinate, relative to the left edge of the
-// content area.
-//
-// @param ypos The desired y-coordinate, relative to the top edge of the
-// content area.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_PLATFORM_ERROR
-// and
-// @ref GLFW_FEATURE_UNAVAILABLE
-// (see remarks).
-//
-// @remark
-// @wayland
-// This function will only work when the cursor mode is
-// `GLFW_CURSOR_DISABLED`, otherwise it will emit
-// @ref GLFW_FEATURE_UNAVAILABLE.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref cursor_pos
-//
-// @sa
-// @ref glfwGetCursorPos
-//
-// @since Added in version 3.0.  Replaces `glfwSetMousePos`.
-func SetCursorPos(window *Window, xpos float64, ypos float64) {
-	gengort.CCall3(__imp_glfwSetCursorPos.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(xpos), gengort.MarshallSyscall(ypos))
-}
-
-var __imp_glfwCreateCursor gengort.PreloadProc
-
-// @brief Creates a custom cursor.
-// Creates a new custom cursor image that can be set for a window with
-// @ref glfwSetCursor.
-// The cursor can be destroyed with
-// @ref glfwDestroyCursor.
-// Any remaining cursors are destroyed by
-// @ref glfwTerminate.
-// The pixels are 32-bit, little-endian, non-premultiplied RGBA, i.e. eight
-// bits per channel with the red channel first.  They are arranged canonically
-// as packed sequential rows, starting from the top-left corner.
-// The cursor hotspot is specified in pixels, relative to the upper-left corner
-// of the cursor image.  Like all other coordinate systems in GLFW, the X-axis
-// points to the right and the Y-axis points down.
-//
-// @param image The desired cursor image.
-//
-// @param xhot The desired x-coordinate, in pixels, of the cursor hotspot.
-//
-// @param yhot The desired y-coordinate, in pixels, of the cursor hotspot.
-//
-// @return The handle of the created cursor, or `NULL` if an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_VALUE
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @pointer
-// _lifetime The specified image data is copied before this function
-// returns.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref cursor_object
-//
-// @sa
-// @ref glfwDestroyCursor
-//
-// @sa
-// @ref glfwCreateStandardCursor
-//
-// @since Added in version 3.1.
-func CreateCursor(image *Image, xhot int32, yhot int32) *Cursor {
-	__res := gengort.CCall3(__imp_glfwCreateCursor.Addr(), gengort.MarshallSyscall(image), gengort.MarshallSyscall(xhot), gengort.MarshallSyscall(yhot))
-	return gengort.UnmarshallSyscall[*Cursor](__res)
-}
-
-var __imp_glfwCreateStandardCursor gengort.PreloadProc
-
-// @brief Creates a cursor with a standard shape.
-// Returns a cursor with a standard shape, that can be set for a window with
-//
-// @ref glfwSetCursor.
-// The images for these cursors come from the system
-// cursor theme and their exact appearance will vary between platforms.
-// Most of these shapes are guaranteed to exist on every supported platform but
-// a few may not be present.  See the table below for details.
-// Cursor shape                   | Windows | macOS | X11    | Wayland
-// ------------------------------ | ------- | ----- | ------ | -------
-//
-// @ref GLFW_ARROW_CURSOR
-// | Yes     | Yes   | Yes    | Yes
-//
-// @ref GLFW_IBEAM_CURSOR
-// | Yes     | Yes   | Yes    | Yes
-//
-// @ref GLFW_CROSSHAIR_CURSOR
-// | Yes     | Yes   | Yes    | Yes
-//
-// @ref GLFW_POINTING_HAND_CURSOR
-// | Yes     | Yes   | Yes    | Yes
-//
-// @ref GLFW_RESIZE_EW_CURSOR
-// | Yes     | Yes   | Yes    | Yes
-//
-// @ref GLFW_RESIZE_NS_CURSOR
-// | Yes     | Yes   | Yes    | Yes
-//
-// @ref GLFW_RESIZE_NWSE_CURSOR
-// | Yes     | Yes
-// 1
-// | Maybe
-// 2
-// | Maybe
-// 2
-//
-// @ref GLFW_RESIZE_NESW_CURSOR
-// | Yes     | Yes
-// 1
-// | Maybe
-// 2
-// | Maybe
-// 2
-//
-// @ref GLFW_RESIZE_ALL_CURSOR
-// | Yes     | Yes   | Yes    | Yes
-//
-// @ref GLFW_NOT_ALLOWED_CURSOR
-// | Yes     | Yes   | Maybe
-// 2
-// | Maybe
-// 2
-// 1) This uses a private system API and may fail in the future.
-// 2) This uses a newer standard that not all cursor themes support.
-// If the requested shape is not available, this function emits a
-// @ref GLFW_CURSOR_UNAVAILABLE
-// error and returns `NULL`.
-//
-// @param shape One of the [standard shapes](
-// @ref shapes).
-//
-// @return A new cursor ready to use or `NULL` if an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_ENUM,
-//
-// @ref GLFW_CURSOR_UNAVAILABLE
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref cursor_standard
-//
-// @sa
-// @ref glfwCreateCursor
-//
-// @since Added in version 3.1.
-func CreateStandardCursor(shape int32) *Cursor {
-	__res := gengort.CCall1(__imp_glfwCreateStandardCursor.Addr(), gengort.MarshallSyscall(shape))
-	return gengort.UnmarshallSyscall[*Cursor](__res)
-}
-
-var __imp_glfwDestroyCursor gengort.PreloadProc
-
-// @brief Destroys a cursor.
-// This function destroys a cursor previously created with
-// @ref glfwCreateCursor.
-// Any remaining cursors will be destroyed by
-// @ref glfwTerminate.
-// If the specified cursor is current for any window, that window will be
-// reverted to the default cursor.  This does not affect the cursor mode.
-//
-// @param cursor The cursor object to destroy.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @reentrancy
-// This function must not be called from a callback.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref cursor_object
-//
-// @sa
-// @ref glfwCreateCursor
-//
-// @since Added in version 3.1.
-func DestroyCursor(cursor *Cursor) {
-	gengort.CCall1(__imp_glfwDestroyCursor.Addr(), gengort.MarshallSyscall(cursor))
-}
-
-var __imp_glfwSetCursor gengort.PreloadProc
-
-// @brief Sets the cursor for the window.
-// This function sets the cursor image to be used when the cursor is over the
-// content area of the specified window.  The set cursor will only be visible
-// when the [cursor mode](
-// @ref cursor_mode)
-// of the window is
-// `GLFW_CURSOR_NORMAL`.
-// On some platforms, the set cursor may not be visible unless the window also
-// has input focus.
-//
-// @param window The window to set the cursor for.
-//
-// @param cursor The cursor to set, or `NULL` to switch back to the default
-// arrow cursor.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref cursor_object
-//
-// @since Added in version 3.1.
-func SetCursor(window *Window, cursor *Cursor) {
-	gengort.CCall2(__imp_glfwSetCursor.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(cursor))
+// @return `ZYAN_STATUS_TRUE` if the feature is enabled, `ZYAN_STATUS_FALSE` if not. Another
+// zyan status code, if an error occured.
+func IsFeatureEnabled(feature Feature) Status {
+	__res := gengort.CCall1(__imp_ZydisIsFeatureEnabled.Addr(), gengort.MarshallSyscall(feature))
+	return gengort.UnmarshallSyscall[Status](__res)
 }
 
-var __imp_glfwSetKeyCallback gengort.PreloadProc
-
-// @brief Sets the key callback.
-// This function sets the key callback of the specified window, which is called
-// when a key is pressed, repeated or released.
-// The key functions deal with physical keys, with layout independent
-// [key tokens](
-// @ref keys)
-// named after their values in the standard US keyboard
-// layout.  If you want to input text, use the
-// [character callback](
-// @ref glfwSetCharCallback)
-// instead.
-// When a window loses input focus, it will generate synthetic key release
-// events for all pressed keys with associated key tokens.  You can tell these
-// events from user-generated events by the fact that the synthetic ones are
-// generated after the focus loss event has been processed, i.e. after the
-// [window focus callback](
-// @ref glfwSetWindowFocusCallback)
-// has been called.
-// The scancode of a key is specific to that platform or sometimes even to that
-// machine.  Scancodes are intended to allow users to bind keys that don't have
-// a GLFW key token.  Such keys have `key` set to `GLFW_KEY_UNKNOWN`, their
-// state is not saved and so it cannot be queried with
-// @ref glfwGetKey.
-// Sometimes GLFW needs to generate synthetic key events, in which case the
-// scancode may be zero.
-//
-// @param window The window whose callback to set.
-//
-// @param callback The new key callback, or `NULL` to remove the currently
-// set callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
-//
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWkeyfun).
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref input_key
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Added window handle parameter and return value.
-func SetKeyCallback(window *Window, callback Keyfun) Keyfun {
-	__res := gengort.CCall2(__imp_glfwSetKeyCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Keyfun](__res)
+// The buffer that contains the actual (null-terminated) string.
+func (s ShortString) Data() *byte {
+	return gengort.ReadBitcast[*byte](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwSetCharCallback gengort.PreloadProc
 
-// @brief Sets the Unicode character callback.
-// This function sets the character callback of the specified window, which is
-// called when a Unicode character is input.
-// The character callback is intended for Unicode text input.  As it deals with
-// characters, it is keyboard layout dependent, whereas the
-// [key callback](
-// @ref glfwSetKeyCallback)
-// is not.  Characters do not map 1:1
-// to physical keys, as a key may produce zero, one or more characters.  If you
-// want to know whether a specific physical key was pressed or released, see
-// the key callback instead.
-// The character callback behaves as system text input normally does and will
-// not be called if modifier keys are held down that would prevent normal text
-// input on that platform, for example a Super (Command) key on macOS or Alt key
-// on Windows.
-//
-// @param window The window whose callback to set.
-//
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
-//
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWcharfun).
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref input_char
-//
-// @since Added in version 2.4.
-//
-// @glfw3
-// Added window handle parameter and return value.
-func SetCharCallback(window *Window, callback Charfun) Charfun {
-	__res := gengort.CCall2(__imp_glfwSetCharCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Charfun](__res)
+// The buffer that contains the actual (null-terminated) string.
+func (s *ShortString) SetData(v *byte) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
 
-var __imp_glfwSetCharModsCallback gengort.PreloadProc
-
-// @brief Sets the Unicode character with modifiers callback.
-// This function sets the character with modifiers callback of the specified
-// window, which is called when a Unicode character is input regardless of what
-// modifier keys are used.
-// The character with modifiers callback is intended for implementing custom
-// Unicode character input.  For regular Unicode text input, see the
-// [character callback](
-// @ref glfwSetCharCallback).
-// Like the character
-// callback, the character with modifiers callback deals with characters and is
-// keyboard layout dependent.  Characters do not map 1:1 to physical keys, as
-// a key may produce zero, one or more characters.  If you want to know whether
-// a specific physical key was pressed or released, see the
-// [key callback](
-// @ref glfwSetKeyCallback)
-// instead.
-//
-// @param window The window whose callback to set.
-//
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWcharmodsfun).
-//
-// @deprecated Scheduled for removal in version 4.0.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref input_char
-//
-// @since Added in version 3.1.
-func SetCharModsCallback(window *Window, callback Charmodsfun) Charmodsfun {
-	__res := gengort.CCall2(__imp_glfwSetCharModsCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Charmodsfun](__res)
+// The length (number of characters) of the string (without 0-termination).
+func (s ShortString) Size() U8 {
+	return gengort.ReadBitcast[U8](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 8))
 }
 
-var __imp_glfwSetMouseButtonCallback gengort.PreloadProc
-
-// @brief Sets the mouse button callback.
-// This function sets the mouse button callback of the specified window, which
-// is called when a mouse button is pressed or released.
-// When a window loses input focus, it will generate synthetic mouse button
-// release events for all pressed mouse buttons with associated button tokens.
-// You can tell these events from user-generated events by the fact that the
-// synthetic ones are generated after the focus loss event has been processed,
-// i.e. after the [window focus callback](
-// @ref glfwSetWindowFocusCallback)
-// has
-// been called.
-// The reported `button` value can be higher than `GLFW_MOUSE_BUTTON_LAST` if
-// the button does not have an associated [button token](
-// @ref buttons)
-// and the
-//
-// @ref GLFW_UNLIMITED_MOUSE_BUTTONS
-// input mode is set.
-//
-// @param window The window whose callback to set.
-//
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
-//
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWmousebuttonfun).
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref input_mouse_button
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Added window handle parameter and return value.
-func SetMouseButtonCallback(window *Window, callback Mousebuttonfun) Mousebuttonfun {
-	__res := gengort.CCall2(__imp_glfwSetMouseButtonCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Mousebuttonfun](__res)
+// The length (number of characters) of the string (without 0-termination).
+func (s *ShortString) SetSize(v U8) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 8), v)
 }
-
-var __imp_glfwSetCursorPosCallback gengort.PreloadProc
-
-// @brief Sets the cursor position callback.
-// This function sets the cursor position callback of the specified window,
-// which is called when the cursor is moved.  The callback is provided with the
-// position, in screen coordinates, relative to the upper-left corner of the
-// content area of the window.
-//
-// @param window The window whose callback to set.
-//
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
-//
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWcursorposfun).
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref cursor_pos
-//
-// @since Added in version 3.0.  Replaces `glfwSetMousePosCallback`.
-func SetCursorPosCallback(window *Window, callback Cursorposfun) Cursorposfun {
-	__res := gengort.CCall2(__imp_glfwSetCursorPosCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Cursorposfun](__res)
+func (s DecodedOperandImmValue_) U() U64 {
+	return gengort.ReadBitcast[U64](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwSetCursorEnterCallback gengort.PreloadProc
-
-// @brief Sets the cursor enter/leave callback.
-// This function sets the cursor boundary crossing callback of the specified
-// window, which is called when the cursor enters or leaves the content area of
-// the window.
-//
-// @param window The window whose callback to set.
-//
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
-//
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWcursorenterfun).
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref cursor_enter
-//
-// @since Added in version 3.0.
-func SetCursorEnterCallback(window *Window, callback Cursorenterfun) Cursorenterfun {
-	__res := gengort.CCall2(__imp_glfwSetCursorEnterCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Cursorenterfun](__res)
+func (s *DecodedOperandImmValue_) SetU(v U64) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
-
-var __imp_glfwSetScrollCallback gengort.PreloadProc
-
-// @brief Sets the scroll callback.
-// This function sets the scroll callback of the specified window, which is
-// called when a scrolling device is used, such as a mouse wheel or scrolling
-// area of a touchpad.
-// The scroll callback receives all scrolling input, like that from a mouse
-// wheel or a touchpad scrolling area.
-//
-// @param window The window whose callback to set.
-//
-// @param callback The new scroll callback, or `NULL` to remove the
-// currently set callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
-//
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWscrollfun).
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref scrolling
-//
-// @since Added in version 3.0.  Replaces `glfwSetMouseWheelCallback`.
-func SetScrollCallback(window *Window, callback Scrollfun) Scrollfun {
-	__res := gengort.CCall2(__imp_glfwSetScrollCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Scrollfun](__res)
+func (s DecodedOperandImmValue_) S() I64 {
+	return gengort.ReadBitcast[I64](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwSetDropCallback gengort.PreloadProc
-
-// @brief Sets the path drop callback.
-// This function sets the path drop callback of the specified window, which is
-// called when one or more dragged paths are dropped on the window.
-// Because the path array and its strings may have been generated specifically
-// for that event, they are not guaranteed to be valid after the callback has
-// returned.  If you wish to use them after the callback returns, you need to
-// make a deep copy.
-//
-// @param window The window whose callback to set.
-//
-// @param callback The new file drop callback, or `NULL` to remove the
-// currently set callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
-//
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWdropfun).
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref path_drop
-//
-// @since Added in version 3.1.
-func SetDropCallback(window *Window, callback Dropfun) Dropfun {
-	__res := gengort.CCall2(__imp_glfwSetDropCallback.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Dropfun](__res)
+func (s *DecodedOperandImmValue_) SetS(v I64) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
-
-var __imp_glfwJoystickPresent gengort.PreloadProc
-
-// @brief Returns whether the specified joystick is present.
-// This function returns whether the specified joystick is present.
-// There is no need to call this function before other functions that accept
-// a joystick ID, as they all check for presence before performing any other
-// work.
-//
-// @param jid The [joystick](
-// @ref joysticks)
-// to query.
-//
-// @return `GLFW_TRUE` if the joystick is present, or `GLFW_FALSE` otherwise.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_ENUM
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref joystick
-//
-// @since Added in version 3.0.  Replaces `glfwGetJoystickParam`.
-func JoystickPresent(jid int32) int32 {
-	__res := gengort.CCall1(__imp_glfwJoystickPresent.Addr(), gengort.MarshallSyscall(jid))
-	return gengort.UnmarshallSyscall[int32](__res)
+func (s Anon5338_5) Reg() DecodedOperandReg {
+	return gengort.ReadBitcast[DecodedOperandReg](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwGetJoystickAxes gengort.PreloadProc
-
-// @brief Returns the values of all axes of the specified joystick.
-// This function returns the values of all axes of the specified joystick.
-// Each element in the array is a value between -1.0 and 1.0.
-// If the specified joystick is not present this function will return `NULL`
-// but will not generate an error.  This can be used instead of first calling
-//
-// @ref glfwJoystickPresent.
-//
-// @param jid The [joystick](
-// @ref joysticks)
-// to query.
-//
-// @param count Where to store the number of axis values in the returned
-// array.  This is set to zero if the joystick is not present or an error
-// occurred.
-//
-// @return An array of axis values, or `NULL` if the joystick is not present or
-// an [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_ENUM
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @pointer
-// _lifetime The returned array is allocated and freed by GLFW.  You
-// should not free it yourself.  It is valid until the specified joystick is
-// disconnected or the library is terminated.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref joystick_axis
-//
-// @since Added in version 3.0.  Replaces `glfwGetJoystickPos`.
-func GetJoystickAxes(jid int32, count *int32) *float32 {
-	__res := gengort.CCall2(__imp_glfwGetJoystickAxes.Addr(), gengort.MarshallSyscall(jid), gengort.MarshallSyscall(count))
-	return gengort.UnmarshallSyscall[*float32](__res)
+func (s *Anon5338_5) SetReg(v DecodedOperandReg) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
-
-var __imp_glfwGetJoystickButtons gengort.PreloadProc
-
-// @brief Returns the state of all buttons of the specified joystick.
-// This function returns the state of all buttons of the specified joystick.
-// Each element in the array is either `GLFW_PRESS` or `GLFW_RELEASE`.
-// For backward compatibility with earlier versions that did not have
-// @ref glfwGetJoystickHats,
-// the button array also includes all hats, each
-// represented as four buttons.  The hats are in the same order as returned by
-// __glfwGetJoystickHats__ and are in the order _up_, _right_, _down_ and
-// _left_.  To disable these extra buttons, set the
-// @ref GLFW_JOYSTICK_HAT_BUTTONS
-// init hint before initialization.
-// If the specified joystick is not present this function will return `NULL`
-// but will not generate an error.  This can be used instead of first calling
-//
-// @ref glfwJoystickPresent.
-//
-// @param jid The [joystick](
-// @ref joysticks)
-// to query.
-//
-// @param count Where to store the number of button states in the returned
-// array.  This is set to zero if the joystick is not present or an error
-// occurred.
-//
-// @return An array of button states, or `NULL` if the joystick is not present
-// or an [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_ENUM
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @pointer
-// _lifetime The returned array is allocated and freed by GLFW.  You
-// should not free it yourself.  It is valid until the specified joystick is
-// disconnected or the library is terminated.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref joystick_button
-//
-// @since Added in version 2.2.
-//
-// @glfw3
-// Changed to return a dynamic array.
-func GetJoystickButtons(jid int32, count *int32) *uint8 {
-	__res := gengort.CCall2(__imp_glfwGetJoystickButtons.Addr(), gengort.MarshallSyscall(jid), gengort.MarshallSyscall(count))
-	return gengort.UnmarshallSyscall[*uint8](__res)
+func (s Anon5338_5) Mem() DecodedOperandMem {
+	return gengort.ReadBitcast[DecodedOperandMem](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwGetJoystickHats gengort.PreloadProc
-
-// @brief Returns the state of all hats of the specified joystick.
-// This function returns the state of all hats of the specified joystick.
-// Each element in the array is one of the following values:
-// Name                  | Value
-// ----                  | -----
-// `GLFW_HAT_CENTERED`   | 0
-// `GLFW_HAT_UP`         | 1
-// `GLFW_HAT_RIGHT`      | 2
-// `GLFW_HAT_DOWN`       | 4
-// `GLFW_HAT_LEFT`       | 8
-// `GLFW_HAT_RIGHT_UP`   | `GLFW_HAT_RIGHT`
-// \
-// | `GLFW_HAT_UP`
-// `GLFW_HAT_RIGHT_DOWN` | `GLFW_HAT_RIGHT`
-// \
-// | `GLFW_HAT_DOWN`
-// `GLFW_HAT_LEFT_UP`    | `GLFW_HAT_LEFT`
-// \
-// | `GLFW_HAT_UP`
-// `GLFW_HAT_LEFT_DOWN`  | `GLFW_HAT_LEFT`
-// \
-// | `GLFW_HAT_DOWN`
-// The diagonal directions are bitwise combinations of the primary (up, right,
-// down and left) directions and you can test for these individually by ANDing
-// it with the corresponding direction.
-//
-// If the specified joystick is not present this function will return `NULL`
-// but will not generate an error.  This can be used instead of first calling
-//
-// @ref glfwJoystickPresent.
-//
-// @param jid The [joystick](
-// @ref joysticks)
-// to query.
-//
-// @param count Where to store the number of hat states in the returned
-// array.  This is set to zero if the joystick is not present or an error
-// occurred.
-//
-// @return An array of hat states, or `NULL` if the joystick is not present
-// or an [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_ENUM
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @pointer
-// _lifetime The returned array is allocated and freed by GLFW.  You
-// should not free it yourself.  It is valid until the specified joystick is
-// disconnected, this function is called again for that joystick or the library
-// is terminated.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref joystick_hat
-//
-// @since Added in version 3.3.
-func GetJoystickHats(jid int32, count *int32) *uint8 {
-	__res := gengort.CCall2(__imp_glfwGetJoystickHats.Addr(), gengort.MarshallSyscall(jid), gengort.MarshallSyscall(count))
-	return gengort.UnmarshallSyscall[*uint8](__res)
+func (s *Anon5338_5) SetMem(v DecodedOperandMem) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
-
-var __imp_glfwGetJoystickName gengort.PreloadProc
-
-// @brief Returns the name of the specified joystick.
-// This function returns the name, encoded as UTF-8, of the specified joystick.
-// The returned string is allocated and freed by GLFW.  You should not free it
-// yourself.
-// If the specified joystick is not present this function will return `NULL`
-// but will not generate an error.  This can be used instead of first calling
-//
-// @ref glfwJoystickPresent.
-//
-// @param jid The [joystick](
-// @ref joysticks)
-// to query.
-//
-// @return The UTF-8 encoded name of the joystick, or `NULL` if the joystick
-// is not present or an [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_ENUM
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @pointer
-// _lifetime The returned string is allocated and freed by GLFW.  You
-// should not free it yourself.  It is valid until the specified joystick is
-// disconnected or the library is terminated.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref joystick_name
-//
-// @since Added in version 3.0.
-func GetJoystickName(jid int32) *byte {
-	__res := gengort.CCall1(__imp_glfwGetJoystickName.Addr(), gengort.MarshallSyscall(jid))
-	return gengort.UnmarshallSyscall[*byte](__res)
+func (s Anon5338_5) Ptr() DecodedOperandPtr {
+	return gengort.ReadBitcast[DecodedOperandPtr](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwGetJoystickGUID gengort.PreloadProc
-
-// @brief Returns the SDL compatible GUID of the specified joystick.
-// This function returns the SDL compatible GUID, as a UTF-8 encoded
-// hexadecimal string, of the specified joystick.  The returned string is
-// allocated and freed by GLFW.  You should not free it yourself.
-// The GUID is what connects a joystick to a gamepad mapping.  A connected
-// joystick will always have a GUID even if there is no gamepad mapping
-// assigned to it.
-// If the specified joystick is not present this function will return `NULL`
-// but will not generate an error.  This can be used instead of first calling
-//
-// @ref glfwJoystickPresent.
-// The GUID uses the format introduced in SDL 2.0.5.  This GUID tries to
-// uniquely identify the make and model of a joystick but does not identify
-// a specific unit, e.g. all wired Xbox 360 controllers will have the same
-// GUID on that platform.  The GUID for a unit may vary between platforms
-// depending on what hardware information the platform specific APIs provide.
-//
-// @param jid The [joystick](
-// @ref joysticks)
-// to query.
-//
-// @return The UTF-8 encoded GUID of the joystick, or `NULL` if the joystick
-// is not present or an [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_INVALID_ENUM
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @pointer
-// _lifetime The returned string is allocated and freed by GLFW.  You
-// should not free it yourself.  It is valid until the specified joystick is
-// disconnected or the library is terminated.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref gamepad
-//
-// @since Added in version 3.3.
-func GetJoystickGUID(jid int32) *byte {
-	__res := gengort.CCall1(__imp_glfwGetJoystickGUID.Addr(), gengort.MarshallSyscall(jid))
-	return gengort.UnmarshallSyscall[*byte](__res)
+func (s *Anon5338_5) SetPtr(v DecodedOperandPtr) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
-
-var __imp_glfwSetJoystickUserPointer gengort.PreloadProc
-
-// @brief Sets the user pointer of the specified joystick.
-// This function sets the user-defined pointer of the specified joystick.  The
-// current value is retained until the joystick is disconnected.  The initial
-// value is `NULL`.
-// This function may be called from the joystick callback, even for a joystick
-// that is being disconnected.
-//
-// @param jid The joystick whose pointer to set.
-//
-// @param pointer The new value.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function may be called from any thread.  Access is not
-// synchronized.
-//
-// @sa
-// @ref joystick_userptr
-//
-// @sa
-// @ref glfwGetJoystickUserPointer
-//
-// @since Added in version 3.3.
-func SetJoystickUserPointer(jid int32, pointer unsafe.Pointer) {
-	gengort.CCall2(__imp_glfwSetJoystickUserPointer.Addr(), gengort.MarshallSyscall(jid), gengort.MarshallSyscall(pointer))
+func (s Anon5338_5) Imm() DecodedOperandImm {
+	return gengort.ReadBitcast[DecodedOperandImm](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwGetJoystickUserPointer gengort.PreloadProc
-
-// @brief Returns the user pointer of the specified joystick.
-// This function returns the current value of the user-defined pointer of the
-// specified joystick.  The initial value is `NULL`.
-// This function may be called from the joystick callback, even for a joystick
-// that is being disconnected.
-//
-// @param jid The joystick whose pointer to return.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function may be called from any thread.  Access is not
-// synchronized.
-//
-// @sa
-// @ref joystick_userptr
-//
-// @sa
-// @ref glfwSetJoystickUserPointer
-//
-// @since Added in version 3.3.
-func GetJoystickUserPointer(jid int32) unsafe.Pointer {
-	__res := gengort.CCall1(__imp_glfwGetJoystickUserPointer.Addr(), gengort.MarshallSyscall(jid))
-	return gengort.UnmarshallSyscall[unsafe.Pointer](__res)
+func (s *Anon5338_5) SetImm(v DecodedOperandImm) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
-
-var __imp_glfwJoystickIsGamepad gengort.PreloadProc
-
-// @brief Returns whether the specified joystick has a gamepad mapping.
-// This function returns whether the specified joystick is both present and has
-// a gamepad mapping.
-// If the specified joystick is present but does not have a gamepad mapping
-// this function will return `GLFW_FALSE` but will not generate an error.  Call
-//
-// @ref glfwJoystickPresent
-// to check if a joystick is present regardless of
-// whether it has a mapping.
-//
-// @param jid The [joystick](
-// @ref joysticks)
-// to query.
-//
-// @return `GLFW_TRUE` if a joystick is both present and has a gamepad mapping,
-// or `GLFW_FALSE` otherwise.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_INVALID_ENUM.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref gamepad
-//
-// @sa
-// @ref glfwGetGamepadState
-//
-// @since Added in version 3.3.
-func JoystickIsGamepad(jid int32) int32 {
-	__res := gengort.CCall1(__imp_glfwJoystickIsGamepad.Addr(), gengort.MarshallSyscall(jid))
-	return gengort.UnmarshallSyscall[int32](__res)
+func (s Anon6217_5) Rex() DecodedInstructionRawRex {
+	return gengort.ReadBitcast[DecodedInstructionRawRex](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwSetJoystickCallback gengort.PreloadProc
-
-// @brief Sets the joystick configuration callback.
-// This function sets the joystick configuration callback, or removes the
-// currently set callback.  This is called when a joystick is connected to or
-// disconnected from the system.
-// For joystick connection and disconnection events to be delivered on all
-// platforms, you need to call one of the [event processing](
-// @ref events)
-// functions.  Joystick disconnection may also be detected and the callback
-// called by joystick functions.  The function will then return whatever it
-// returns if the joystick is not present.
-//
-// @param callback The new callback, or `NULL` to remove the currently set
-// callback.
-//
-// @return The previously set callback, or `NULL` if no callback was set or the
-// library had not been [initialized](
-// @ref intro_init).
-//
-//
-// For more information about the callback parameters, see the
-// [function pointer type](
-// @ref GLFWjoystickfun).
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref joystick_event
-//
-// @since Added in version 3.2.
-func SetJoystickCallback(callback Joystickfun) Joystickfun {
-	__res := gengort.CCall1(__imp_glfwSetJoystickCallback.Addr(), gengort.MarshallSyscall(callback))
-	return gengort.UnmarshallSyscall[Joystickfun](__res)
+func (s *Anon6217_5) SetRex(v DecodedInstructionRawRex) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
-
-var __imp_glfwUpdateGamepadMappings gengort.PreloadProc
-
-// @brief Adds the specified SDL_GameControllerDB gamepad mappings.
-// This function parses the specified ASCII encoded string and updates the
-// internal list with any gamepad mappings it finds.  This string may
-// contain either a single gamepad mapping or many mappings separated by
-// newlines.  The parser supports the full format of the `gamecontrollerdb.txt`
-// source file including empty lines and comments.
-// See
-// @ref gamepad_mapping
-// for a description of the format.
-// If there is already a gamepad mapping for a given GUID in the internal list,
-// it will be replaced by the one passed to this function.  If the library is
-// terminated and re-initialized the internal list will revert to the built-in
-// default.
-//
-// @param string The string containing the gamepad mappings.
-//
-// @return `GLFW_TRUE` if successful, or `GLFW_FALSE` if an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_INVALID_VALUE.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref gamepad
-//
-// @sa
-// @ref glfwJoystickIsGamepad
-//
-// @sa
-// @ref glfwGetGamepadName
-//
-// @since Added in version 3.3.
-func UpdateGamepadMappings(_string *byte) int32 {
-	__res := gengort.CCall1(__imp_glfwUpdateGamepadMappings.Addr(), gengort.MarshallSyscall(_string))
-	return gengort.UnmarshallSyscall[int32](__res)
+func (s Anon6217_5) Xop() DecodedInstructionRawXop {
+	return gengort.ReadBitcast[DecodedInstructionRawXop](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwGetGamepadName gengort.PreloadProc
-
-// @brief Returns the human-readable gamepad name for the specified joystick.
-// This function returns the human-readable name of the gamepad from the
-// gamepad mapping assigned to the specified joystick.
-// If the specified joystick is not present or does not have a gamepad mapping
-// this function will return `NULL` but will not generate an error.  Call
-//
-// @ref glfwJoystickPresent
-// to check whether it is present regardless of
-// whether it has a mapping.
-//
-// @param jid The [joystick](
-// @ref joysticks)
-// to query.
-//
-// @return The UTF-8 encoded name of the gamepad, or `NULL` if the
-// joystick is not present, does not have a mapping or an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_INVALID_ENUM.
-//
-// @pointer
-// _lifetime The returned string is allocated and freed by GLFW.  You
-// should not free it yourself.  It is valid until the specified joystick is
-// disconnected, the gamepad mappings are updated or the library is terminated.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref gamepad
-//
-// @sa
-// @ref glfwJoystickIsGamepad
-//
-// @since Added in version 3.3.
-func GetGamepadName(jid int32) *byte {
-	__res := gengort.CCall1(__imp_glfwGetGamepadName.Addr(), gengort.MarshallSyscall(jid))
-	return gengort.UnmarshallSyscall[*byte](__res)
+func (s *Anon6217_5) SetXop(v DecodedInstructionRawXop) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
-
-var __imp_glfwGetGamepadState gengort.PreloadProc
-
-// @brief Retrieves the state of the specified joystick remapped as a gamepad.
-// This function retrieves the state of the specified joystick remapped to
-// an Xbox-like gamepad.
-// If the specified joystick is not present or does not have a gamepad mapping
-// this function will return `GLFW_FALSE` but will not generate an error.  Call
-//
-// @ref glfwJoystickPresent
-// to check whether it is present regardless of
-// whether it has a mapping.
-// The Guide button may not be available for input as it is often hooked by the
-// system or the Steam client.
-// Not all devices have all the buttons or axes provided by
-// @ref GLFWgamepadstate.
-// Unavailable buttons and axes will always report
-// `GLFW_RELEASE` and 0.0 respectively.
-//
-// @param jid The [joystick](
-// @ref joysticks)
-// to query.
-//
-// @param state The gamepad input state of the joystick.
-//
-// @return `GLFW_TRUE` if successful, or `GLFW_FALSE` if no joystick is
-// connected, it has no gamepad mapping or an [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_INVALID_ENUM.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref gamepad
-//
-// @sa
-// @ref glfwUpdateGamepadMappings
-//
-// @sa
-// @ref glfwJoystickIsGamepad
-//
-// @since Added in version 3.3.
-func GetGamepadState(jid int32, state *Gamepadstate) int32 {
-	__res := gengort.CCall2(__imp_glfwGetGamepadState.Addr(), gengort.MarshallSyscall(jid), gengort.MarshallSyscall(state))
-	return gengort.UnmarshallSyscall[int32](__res)
+func (s Anon6217_5) Vex() DecodedInstructionRawVex {
+	return gengort.ReadBitcast[DecodedInstructionRawVex](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwSetClipboardString gengort.PreloadProc
-
-// @brief Sets the clipboard to the specified string.
-// This function sets the system clipboard to the specified, UTF-8 encoded
-// string.
-//
-// @param window Deprecated.  Any valid window or `NULL`.
-//
-// @param string A UTF-8 encoded string.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark
-// @win32
-// The clipboard on Windows has a single global lock for reading and
-// writing.  GLFW tries to acquire it a few times, which is almost always enough.  If it
-// cannot acquire the lock then this function emits
-// @ref GLFW_PLATFORM_ERROR
-// and returns.
-// It is safe to try this multiple times.
-//
-// @pointer
-// _lifetime The specified string is copied before this function
-// returns.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref clipboard
-//
-// @sa
-// @ref glfwGetClipboardString
-//
-// @since Added in version 3.0.
-func SetClipboardString(window *Window, _string *byte) {
-	gengort.CCall2(__imp_glfwSetClipboardString.Addr(), gengort.MarshallSyscall(window), gengort.MarshallSyscall(_string))
+func (s *Anon6217_5) SetVex(v DecodedInstructionRawVex) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
-
-var __imp_glfwGetClipboardString gengort.PreloadProc
-
-// @brief Returns the contents of the clipboard as a string.
-// This function returns the contents of the system clipboard, if it contains
-// or is convertible to a UTF-8 encoded string.  If the clipboard is empty or
-// if its contents cannot be converted, `NULL` is returned and a
-// @ref GLFW_FORMAT_UNAVAILABLE
-// error is generated.
-//
-// @param window Deprecated.  Any valid window or `NULL`.
-//
-// @return The contents of the clipboard as a UTF-8 encoded string, or `NULL`
-// if an [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_FORMAT_UNAVAILABLE
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark
-// @win32
-// The clipboard on Windows has a single global lock for reading and
-// writing.  GLFW tries to acquire it a few times, which is almost always enough.  If it
-// cannot acquire the lock then this function emits
-// @ref GLFW_PLATFORM_ERROR
-// and returns.
-// It is safe to try this multiple times.
-//
-// @pointer
-// _lifetime The returned string is allocated and freed by GLFW.  You
-// should not free it yourself.  It is valid until the next call to
-// @ref glfwGetClipboardString
-// or
-// @ref glfwSetClipboardString,
-// or until the library
-// is terminated.
-//
-// @thread
-// _safety This function must only be called from the main thread.
-//
-// @sa
-// @ref clipboard
-//
-// @sa
-// @ref glfwSetClipboardString
-//
-// @since Added in version 3.0.
-func GetClipboardString(window *Window) *byte {
-	__res := gengort.CCall1(__imp_glfwGetClipboardString.Addr(), gengort.MarshallSyscall(window))
-	return gengort.UnmarshallSyscall[*byte](__res)
+func (s Anon6217_5) Evex() DecodedInstructionRawEvex {
+	return gengort.ReadBitcast[DecodedInstructionRawEvex](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwGetTime gengort.PreloadProc
-
-// @brief Returns the GLFW time.
-// This function returns the current GLFW time, in seconds.  Unless the time
-// has been set using
-// @ref glfwSetTime
-// it measures time elapsed since GLFW was
-// initialized.
-// This function and
-// @ref glfwSetTime
-// are helper functions on top of
-// @ref glfwGetTimerFrequency
-// and
-// @ref glfwGetTimerValue.
-// The resolution of the timer is system dependent, but is usually on the order
-// of a few micro- or nanoseconds.  It uses the highest-resolution monotonic
-// time source on each operating system.
-//
-// @return The current time, in seconds, or zero if an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function may be called from any thread.  Reading and
-// writing of the internal base time is not atomic, so it needs to be
-// externally synchronized with calls to
-// @ref glfwSetTime.
-//
-// @sa
-// @ref time
-//
-// @since Added in version 1.0.
-func GetTime() float64 {
-	__res := gengort.CCall0(__imp_glfwGetTime.Addr())
-	return gengort.UnmarshallSyscall[float64](__res)
+func (s *Anon6217_5) SetEvex(v DecodedInstructionRawEvex) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
-
-var __imp_glfwSetTime gengort.PreloadProc
-
-// @brief Sets the GLFW time.
-// This function sets the current GLFW time, in seconds.  The value must be
-// a positive finite number less than or equal to 18446744073.0, which is
-// approximately 584.5 years.
-// This function and
-// @ref glfwGetTime
-// are helper functions on top of
-// @ref glfwGetTimerFrequency
-// and
-// @ref glfwGetTimerValue.
-//
-// @param time The new value, in seconds.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_INVALID_VALUE.
-//
-// @remark The upper limit of GLFW time is calculated as
-// floor((2
-// 64
-// - 1) / 10
-// 9
-// ) and is due to implementations
-// storing nanoseconds in 64 bits.  The limit may be increased in the future.
-//
-// @thread
-// _safety This function may be called from any thread.  Reading and
-// writing of the internal base time is not atomic, so it needs to be
-// externally synchronized with calls to
-// @ref glfwGetTime.
-//
-// @sa
-// @ref time
-//
-// @since Added in version 2.2.
-func SetTime(time float64) { gengort.CCall1(__imp_glfwSetTime.Addr(), gengort.MarshallSyscall(time)) }
-
-var __imp_glfwGetTimerValue gengort.PreloadProc
-
-// @brief Returns the current value of the raw timer.
-// This function returns the current value of the raw timer, measured in
-// 1
-//
-// /
-//
-// frequency seconds.  To get the frequency, call
-// @ref glfwGetTimerFrequency.
-//
-// @return The value of the timer, or zero if an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref time
-//
-// @sa
-// @ref glfwGetTimerFrequency
-//
-// @since Added in version 3.2.
-func GetTimerValue() uint64 {
-	__res := gengort.CCall0(__imp_glfwGetTimerValue.Addr())
-	return gengort.UnmarshallSyscall[uint64](__res)
+func (s Anon6217_5) Mvex() DecodedInstructionRawMvex {
+	return gengort.ReadBitcast[DecodedInstructionRawMvex](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwGetTimerFrequency gengort.PreloadProc
-
-// @brief Returns the frequency, in Hz, of the raw timer.
-// This function returns the frequency, in Hz, of the raw timer.
-//
-// @return The frequency of the timer, in Hz, or zero if an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref time
-//
-// @sa
-// @ref glfwGetTimerValue
-//
-// @since Added in version 3.2.
-func GetTimerFrequency() uint64 {
-	__res := gengort.CCall0(__imp_glfwGetTimerFrequency.Addr())
-	return gengort.UnmarshallSyscall[uint64](__res)
+func (s *Anon6217_5) SetMvex(v DecodedInstructionRawMvex) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
-
-var __imp_glfwMakeContextCurrent gengort.PreloadProc
-
-// @brief Makes the context of the specified window current for the calling
-// thread.
-// This function makes the OpenGL or OpenGL ES context of the specified window
-// current on the calling thread.  It can also detach the current context from
-// the calling thread without making a new one current by passing in `NULL`.
-// A context must only be made current on a single thread at a time and each
-// thread can have only a single current context at a time.  Making a context
-// current detaches any previously current context on the calling thread.
-// When moving a context between threads, you must detach it (make it
-// non-current) on the old thread before making it current on the new one.
-// By default, making a context non-current implicitly forces a pipeline flush.
-// On machines that support `GL_KHR_context_flush_control`, you can control
-// whether a context performs this flush by setting the
-// [GLFW_CONTEXT_RELEASE_BEHAVIOR](
-// @ref GLFW_CONTEXT_RELEASE_BEHAVIOR_hint)
-// hint.
-// The specified window must have an OpenGL or OpenGL ES context.  Specifying
-// a window without a context will generate a
-// @ref GLFW_NO_WINDOW_CONTEXT
-// error.
-//
-// @param window The window whose context to make current, or `NULL` to
-// detach the current context.
-//
-// @remarks If the previously current context was created via a different
-// context creation API than the one passed to this function, GLFW will still
-// detach the previous one from its API before making the new one current.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_NO_WINDOW_CONTEXT
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref context_current
-//
-// @sa
-// @ref glfwGetCurrentContext
-//
-// @since Added in version 3.0.
-func MakeContextCurrent(window *Window) {
-	gengort.CCall1(__imp_glfwMakeContextCurrent.Addr(), gengort.MarshallSyscall(window))
+func (s DecodedInstructionRawImmValue_) U() U64 {
+	return gengort.ReadBitcast[U64](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwGetCurrentContext gengort.PreloadProc
-
-// @brief Returns the window whose context is current on the calling thread.
-// This function returns the window whose OpenGL or OpenGL ES context is
-// current on the calling thread.
-//
-// @return The window whose context is current, or `NULL` if no window's
-// context is current.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref context_current
-//
-// @sa
-// @ref glfwMakeContextCurrent
-//
-// @since Added in version 3.0.
-func GetCurrentContext() *Window {
-	__res := gengort.CCall0(__imp_glfwGetCurrentContext.Addr())
-	return gengort.UnmarshallSyscall[*Window](__res)
+func (s *DecodedInstructionRawImmValue_) SetU(v U64) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
-
-var __imp_glfwSwapBuffers gengort.PreloadProc
-
-// @brief Swaps the front and back buffers of the specified window.
-// This function swaps the front and back buffers of the specified window when
-// rendering with OpenGL or OpenGL ES.  If the swap interval is greater than
-// zero, the GPU driver waits the specified number of screen updates before
-// swapping the buffers.
-// The specified window must have an OpenGL or OpenGL ES context.  Specifying
-// a window without a context will generate a
-// @ref GLFW_NO_WINDOW_CONTEXT
-// error.
-// This function does not apply to Vulkan.  If you are rendering with Vulkan,
-// see `vkQueuePresentKHR` instead.
-//
-// @param window The window whose buffers to swap.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_NO_WINDOW_CONTEXT
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark __EGL:__ The context of the specified window must be current on the
-// calling thread.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref buffer_swap
-//
-// @sa
-// @ref glfwSwapInterval
-//
-// @since Added in version 1.0.
-//
-// @glfw3
-// Added window handle parameter.
-func SwapBuffers(window *Window) {
-	gengort.CCall1(__imp_glfwSwapBuffers.Addr(), gengort.MarshallSyscall(window))
+func (s DecodedInstructionRawImmValue_) S() I64 {
+	return gengort.ReadBitcast[I64](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwSwapInterval gengort.PreloadProc
-
-// @brief Sets the swap interval for the current context.
-// This function sets the swap interval for the current OpenGL or OpenGL ES
-// context, i.e. the number of screen updates to wait from the time
-// @ref glfwSwapBuffers
-// was called before swapping the buffers and returning.  This
-// is sometimes called _vertical synchronization_, _vertical retrace
-// synchronization_ or just _vsync_.
-// A context that supports either of the `WGL_EXT_swap_control_tear` and
-// `GLX_EXT_swap_control_tear` extensions also accepts _negative_ swap
-// intervals, which allows the driver to swap immediately even if a frame
-// arrives a little bit late.  You can check for these extensions with
-// @ref glfwExtensionSupported.
-// A context must be current on the calling thread.  Calling this function
-// without a current context will cause a
-// @ref GLFW_NO_CURRENT_CONTEXT
-// error.
-// This function does not apply to Vulkan.  If you are rendering with Vulkan,
-// see the present mode of your swapchain instead.
-//
-// @param interval The minimum number of screen updates to wait for
-// until the buffers are swapped by
-// @ref glfwSwapBuffers.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_NO_CURRENT_CONTEXT
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark This function is not called during context creation, leaving the
-// swap interval set to whatever is the default for that API.  This is done
-// because some swap interval extensions used by GLFW do not allow the swap
-// interval to be reset to zero once it has been set to a non-zero value.
-//
-// @remark Some GPU drivers do not honor the requested swap interval, either
-// because of a user setting that overrides the application's request or due to
-// bugs in the driver.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref buffer_swap
-//
-// @sa
-// @ref glfwSwapBuffers
-//
-// @since Added in version 1.0.
-func SwapInterval(interval int32) {
-	gengort.CCall1(__imp_glfwSwapInterval.Addr(), gengort.MarshallSyscall(interval))
+func (s *DecodedInstructionRawImmValue_) SetS(v I64) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
-
-var __imp_glfwExtensionSupported gengort.PreloadProc
 
-// @brief Returns whether the specified extension is available.
-// This function returns whether the specified
-// [API extension](
-// @ref context_glext)
-// is supported by the current OpenGL or
-// OpenGL ES context.  It searches both for client API extension and context
-// creation API extensions.
-// A context must be current on the calling thread.  Calling this function
-// without a current context will cause a
-// @ref GLFW_NO_CURRENT_CONTEXT
-// error.
-// As this functions retrieves and searches one or more extension strings each
-// call, it is recommended that you cache its results if it is going to be used
-// frequently.  The extension strings will not change during the lifetime of
-// a context, so there is no danger in doing this.
-// This function does not apply to Vulkan.  If you are using Vulkan, see
-// @ref glfwGetRequiredInstanceExtensions,
-// `vkEnumerateInstanceExtensionProperties`
-// and `vkEnumerateDeviceExtensionProperties` instead.
-//
-// @param extension The ASCII encoded name of the extension.
-//
-// @return `GLFW_TRUE` if the extension is available, or `GLFW_FALSE`
-// otherwise.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_NO_CURRENT_CONTEXT,
-//
-// @ref GLFW_INVALID_VALUE
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref context_glext
-//
-// @sa
-// @ref glfwGetProcAddress
-//
-// @since Added in version 1.0.
-func ExtensionSupported(extension *byte) int32 {
-	__res := gengort.CCall1(__imp_glfwExtensionSupported.Addr(), gengort.MarshallSyscall(extension))
-	return gengort.UnmarshallSyscall[int32](__res)
+// The unsigned immediate value.
+func (s EncoderOperandImm_) U() U64 {
+	return gengort.ReadBitcast[U64](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
 
-var __imp_glfwGetProcAddress gengort.PreloadProc
-
-// @brief Returns the address of the specified function for the current
-// context.
-// This function returns the address of the specified OpenGL or OpenGL ES
-// [core or extension function](
-// @ref context_glext),
-// if it is supported
-// by the current context.
-// A context must be current on the calling thread.  Calling this function
-// without a current context will cause a
-// @ref GLFW_NO_CURRENT_CONTEXT
-// error.
-// This function does not apply to Vulkan.  If you are rendering with Vulkan,
-// see
-// @ref glfwGetInstanceProcAddress,
-// `vkGetInstanceProcAddr` and
-// `vkGetDeviceProcAddr` instead.
-//
-// @param procname The ASCII encoded name of the function.
-//
-// @return The address of the function, or `NULL` if an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED,
-//
-// @ref GLFW_NO_CURRENT_CONTEXT
-// and
-// @ref GLFW_PLATFORM_ERROR.
-//
-// @remark The address of a given function is not guaranteed to be the same
-// between contexts.
-//
-// @remark This function may return a non-`NULL` address despite the
-// associated version or extension not being available.  Always check the
-// context version or extension string first.
-//
-// @pointer
-// _lifetime The returned function pointer is valid until the context
-// is destroyed or the library is terminated.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref context_glext
-//
-// @sa
-// @ref glfwExtensionSupported
-//
-// @since Added in version 1.0.
-func GetProcAddress(procname *byte) Glproc {
-	__res := gengort.CCall1(__imp_glfwGetProcAddress.Addr(), gengort.MarshallSyscall(procname))
-	return gengort.UnmarshallSyscall[Glproc](__res)
+// The unsigned immediate value.
+func (s *EncoderOperandImm_) SetU(v U64) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
 
-var __imp_glfwVulkanSupported gengort.PreloadProc
-
-// @brief Returns whether the Vulkan loader and an ICD have been found.
-// This function returns whether the Vulkan loader and any minimally functional
-// ICD have been found.
-// The availability of a Vulkan loader and even an ICD does not by itself guarantee that
-// surface creation or even instance creation is possible.  Call
-// @ref glfwGetRequiredInstanceExtensions
-// to check whether the extensions necessary for Vulkan
-// surface creation are available and
-// @ref glfwGetPhysicalDevicePresentationSupport
-// to
-// check whether a queue family of a physical device supports image presentation.
-//
-// @return `GLFW_TRUE` if Vulkan is minimally available, or `GLFW_FALSE`
-// otherwise.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref vulkan_support
-//
-// @since Added in version 3.2.
-func VulkanSupported() int32 {
-	__res := gengort.CCall0(__imp_glfwVulkanSupported.Addr())
-	return gengort.UnmarshallSyscall[int32](__res)
+// The signed immediate value.
+func (s EncoderOperandImm_) S() I64 {
+	return gengort.ReadBitcast[I64](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-
-var __imp_glfwGetRequiredInstanceExtensions gengort.PreloadProc
 
-// @brief Returns the Vulkan instance extensions required by GLFW.
-// This function returns an array of names of Vulkan instance extensions required
-// by GLFW for creating Vulkan surfaces for GLFW windows.  If successful, the
-// list will always contain `VK_KHR_surface`, so if you don't require any
-// additional extensions you can pass this list directly to the
-// `VkInstanceCreateInfo` struct.
-// If Vulkan is not available on the machine, this function returns `NULL` and
-// generates a
-// @ref GLFW_API_UNAVAILABLE
-// error.  Call
-// @ref glfwVulkanSupported
-// to check whether Vulkan is at least minimally available.
-// If Vulkan is available but no set of extensions allowing window surface
-// creation was found, this function returns `NULL`.  You may still use Vulkan
-// for off-screen rendering and compute work.
-//
-// @param count Where to store the number of extensions in the returned
-// array.  This is set to zero if an error occurred.
-//
-// @return An array of ASCII encoded extension names, or `NULL` if an
-// [error](
-// @ref error_handling)
-// occurred.
-//
-// @errors
-// Possible errors include
-// @ref GLFW_NOT_INITIALIZED
-// and
-// @ref GLFW_API_UNAVAILABLE.
-//
-// @remark Additional extensions may be required by future versions of GLFW.
-// You should check if any extensions you wish to enable are already in the
-// returned array, as it is an error to specify an extension more than once in
-// the `VkInstanceCreateInfo` struct.
-//
-// @pointer
-// _lifetime The returned array is allocated and freed by GLFW.  You
-// should not free it yourself.  It is guaranteed to be valid only until the
-// library is terminated.
-//
-// @thread
-// _safety This function may be called from any thread.
-//
-// @sa
-// @ref vulkan_ext
-//
-// @sa
-// @ref glfwCreateWindowSurface
-//
-// @since Added in version 3.2.
-func GetRequiredInstanceExtensions(count *uint32) **byte {
-	__res := gengort.CCall1(__imp_glfwGetRequiredInstanceExtensions.Addr(), gengort.MarshallSyscall(count))
-	return gengort.UnmarshallSyscall[**byte](__res)
+// The signed immediate value.
+func (s *EncoderOperandImm_) SetS(v I64) {
+	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
