@@ -1,0 +1,11 @@
+build/
+go.sum
+*.pgo
+*.id0
+*.id1
+*.id2
+*.nam
+*.til
+examples/**/*.exe
+examples/**/*.dll
+examples/**/*.so
