@@ -3697,7 +3697,7 @@ type DecodedInstructionRawEvex struct {
 	// instruction, in bytes.
 	Offset U8
 }
-type DecodedInstructionRawMvex struct {
+type DecodedInstructionRawMvex_1 struct {
 	// Extension of the `ModRM.reg` field (inverted).
 	R U8
 	// Extension of the `SIB.index/vidx` field (inverted).
@@ -4335,6 +4335,9 @@ type AccessedFlagsMask = U32
 // Detailed info about the `EVEX` prefix.
 type DecodedInstructionRawEvex = DecodedInstructionRawEvex
 
+// Detailed info about the `MVEX` prefix.
+type DecodedInstructionRawMvex = DecodedInstructionRawMvex_1
+
 // Defines the `ZyanStatus` data type.
 type Status = U32
 
@@ -4646,7 +4649,7 @@ func init() {
 	gengort.Validate((*DecodedInstructionRawXop)(nil), 0x9, 0x1, "R", 0x0, "X", 0x1, "B", 0x2, "MMmmm", 0x3, "W", 0x4, "Vvvv", 0x5, "L", 0x6, "Pp", 0x7, "Offset", 0x8)
 	gengort.Validate((*DecodedInstructionRawVex)(nil), 0xa, 0x1, "R", 0x0, "X", 0x1, "B", 0x2, "MMmmm", 0x3, "W", 0x4, "Vvvv", 0x5, "L", 0x6, "Pp", 0x7, "Offset", 0x8, "Size", 0x9)
 	gengort.Validate((*DecodedInstructionRawEvex)(nil), 0xf, 0x1, "R", 0x0, "X", 0x1, "B", 0x2, "R2", 0x3, "Mmm", 0x4, "W", 0x5, "Vvvv", 0x6, "Pp", 0x7, "Z", 0x8, "L2", 0x9, "L", 0xa, "Br", 0xb, "V2", 0xc, "Aaa", 0xd, "Offset", 0xe)
-	gengort.Validate((*DecodedInstructionRawMvex)(nil), 0xd, 0x1, "R", 0x0, "X", 0x1, "B", 0x2, "R2", 0x3, "Mmmm", 0x4, "W", 0x5, "Vvvv", 0x6, "Pp", 0x7, "E", 0x8, "Sss", 0x9, "V2", 0xa, "Kkk", 0xb, "Offset", 0xc)
+	gengort.Validate((*DecodedInstructionRawMvex_1)(nil), 0xd, 0x1, "R", 0x0, "X", 0x1, "B", 0x2, "R2", 0x3, "Mmmm", 0x4, "W", 0x5, "Vvvv", 0x6, "Pp", 0x7, "E", 0x8, "Sss", 0x9, "V2", 0xa, "Kkk", 0xb, "Offset", 0xc)
 	gengort.Validate((*DecodedInstructionAvx)(nil), 0x24, 0x4, "VectorLength", 0x0, "Mask", 0x4, "Broadcast", 0xc, "Rounding", 0x14, "Swizzle", 0x18, "Conversion", 0x1c, "HasSae", 0x20, "HasEvictionHint", 0x21)
 	gengort.Validate((*DecodedInstructionAvxMask_)(nil), 0x8, 0x4, "Mode", 0x0, "Reg", 0x4)
 	gengort.Validate((*DecodedInstructionAvxBroadcast_)(nil), 0x8, 0x4, "IsStatic", 0x0, "Mode", 0x4)
@@ -7127,10 +7130,10 @@ func (s Anon6217_5) Evex() DecodedInstructionRawEvex {
 func (s *Anon6217_5) SetEvex(v DecodedInstructionRawEvex) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
-func (s Anon6217_5) Mvex() DecodedInstructionRawMvex {
-	return gengort.ReadBitcast[DecodedInstructionRawMvex](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
+func (s Anon6217_5) Mvex() DecodedInstructionRawMvex_1 {
+	return gengort.ReadBitcast[DecodedInstructionRawMvex_1](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
-func (s *Anon6217_5) SetMvex(v DecodedInstructionRawMvex) {
+func (s *Anon6217_5) SetMvex(v DecodedInstructionRawMvex_1) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
 func (s DecodedInstructionRawImmValue_) U() U64 {
