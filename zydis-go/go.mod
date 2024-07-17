@@ -1,12 +1,12 @@
 module github.com/zyantific/zydis-go
 
-go 1.22.1
+go 1.22.5
 
 require (
 	github.com/can1357/gengo v0.2.0
-	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
-	golang.org/x/sys v0.19.0 // indirect
-	golang.org/x/tools v0.1.12 // indirect
+	golang.org/x/mod v0.18.0 // indirect
+	golang.org/x/sys v0.21.0 // indirect
+	golang.org/x/tools v0.22.0 // indirect
 )
 
 require (
@@ -15,6 +15,7 @@ require (
 )
 
 require (
+	github.com/ddkwork/golibrary v0.0.0-20240717084633-72ca3d8ddfec // indirect
 	github.com/ebitengine/purego v0.7.1 // indirect
 	golang.org/x/sync v0.7.0 // indirect
 )
