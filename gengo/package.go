@@ -13,6 +13,7 @@ import (
 	"github.com/can1357/gengo/clang"
 	"github.com/dave/dst"
 	"github.com/dave/dst/decorator"
+	"github.com/ddkwork/golibrary/mylog"
 )
 
 type Package struct {
@@ -41,10 +42,8 @@ func NewPackage(name string, opts ...BaseProviderOption) *Package {
 }
 
 func (p *Package) Transform(module string, opt *clang.Options) error {
-	ast, layouts, err := clang.Parse(opt)
-	if err != nil {
-		return fmt.Errorf("failed to transform %+v: %w", opt.Sources, err)
-	}
+	ast, layouts := mylog.Check3(clang.Parse(opt))
+
 	main := p.Upsert(module)
 	main.EmitFrom(ast, layouts)
 	return nil
@@ -53,17 +52,16 @@ func (p *Package) Transform(module string, opt *clang.Options) error {
 func (p *Package) Fprint(fn func(path string) (io.WriteCloser, error)) error {
 	p.Restorer.Extras = true
 	for k, f := range p.Files {
-		file, err := fn(k + ".go")
-		if err != nil {
-			return err
-		}
+		file := mylog.Check2(fn(k + ".go"))
+
 		p.Restorer.Fprint(file, f)
-		if err := file.Close(); err != nil {
+		if mylog.Check(file.Close()); err != nil {
 			return err
 		}
 	}
 	return nil
 }
+
 func (p *Package) Upsert(module string) Module {
 	f, ok := p.Files[module]
 	if !ok {
@@ -142,12 +140,14 @@ func (stdoutCloser) Close() error {
 	fmt.Println()
 	return nil
 }
+
 func (p *Package) Print() {
 	p.Fprint(func(path string) (io.WriteCloser, error) {
 		fmt.Println("//// ", path)
 		return stdoutCloser{os.Stdout}, nil
 	})
 }
+
 func (p *Package) WriteToDir(dir string) error {
 	os.Mkdir(dir, 0755)
 	return p.Fprint(func(path string) (io.WriteCloser, error) {
@@ -169,17 +169,21 @@ func (m Module) AddType(tc TypeClass, name string, decl dst.Expr) TypeRef {
 func (m Module) Go() (*ast.File, error) {
 	return m.Parent.Restorer.RestoreFile(m.File)
 }
+
 func (m Module) Fprint(w io.Writer) {
 	m.Parent.Restorer.Fprint(w, m.File)
 }
+
 func (m Module) String() string {
 	buf := &bytes.Buffer{}
 	m.Fprint(buf)
 	return buf.String()
 }
+
 func (m Module) Print() {
 	m.Fprint(os.Stdout)
 }
+
 func (m Module) GetInitFunc() *dst.FuncDecl {
 	for _, decl := range m.Decls {
 		if f, ok := decl.(*dst.FuncDecl); ok && f.Name.Name == "init" {
@@ -188,6 +192,7 @@ func (m Module) GetInitFunc() *dst.FuncDecl {
 	}
 	return nil
 }
+
 func (m Module) AddInitFunc() *dst.FuncDecl {
 	i := m.GetInitFunc()
 	if i == nil {
@@ -209,6 +214,7 @@ func (m Module) AddInitFunc() *dst.FuncDecl {
 	}
 	return i
 }
+
 func (m Module) OnInit(stmts ...dst.Stmt) {
 	f := m.AddInitFunc()
 	f.Body.List = append(f.Body.List, stmts...)

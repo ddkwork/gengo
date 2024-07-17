@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"sync"
 	"sync/atomic"
+
+	"github.com/ddkwork/golibrary/mylog"
 )
 
 type LoadedLibrary interface {
@@ -34,6 +36,7 @@ func (l *Library) Assign(lib LoadedLibrary) {
 	l.cache = lib
 	l.done.Store(true)
 }
+
 func (l *Library) LoadFrom(path string) (LoadedLibrary, error) {
 	if l.done.Load() {
 		return l.cache, nil
@@ -46,42 +49,42 @@ func (l *Library) LoadFrom(path string) (LoadedLibrary, error) {
 		return l.cache, nil
 	}
 
-	loaded, err := LoadLibrary(path)
-	if err != nil {
-		return nil, err
-	}
+	loaded := mylog.Check2(LoadLibrary(path))
+
 	l.cache = loaded
 	l.done.Store(true)
 	return loaded, nil
 }
+
 func (l *Library) LoadEmbed(data []byte) (LoadedLibrary, error) {
-	loaded, err := LoadLibraryEmbed(data)
-	if err != nil {
-		return nil, err
-	}
+	loaded := mylog.Check2(LoadLibraryEmbed(data))
+
 	l.cache = loaded
 	l.done.Store(true)
 	return loaded, nil
 }
+
 func (l *Library) Get() (LoadedLibrary, error) {
 	return l.LoadFrom(l.Name)
 }
+
 func (l *Library) Import(name string) Proc {
 	return Proc{
 		library: l,
 		name:    name,
 	}
 }
+
 func (l *Library) ImportNow(name string) PreloadProc {
 	i := l.Import(name)
 	return PreloadProc(i.Addr())
 }
 
 var getTmpDir = sync.OnceValue(func() string {
-	if cache, err := os.UserCacheDir(); err == nil {
+	if cache := mylog.Check2(os.UserCacheDir()); err == nil {
 		return cache + string(os.PathSeparator)
 	}
-	if exec, err := os.Executable(); err == nil {
+	if exec := mylog.Check2(os.Executable()); err == nil {
 		return filepath.Dir(exec) + string(os.PathSeparator)
 	}
 	return os.TempDir() + string(os.PathSeparator)

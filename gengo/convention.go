@@ -11,15 +11,19 @@ const (
 	ConventionPascalCase                       // PascalCase
 )
 
-const upperRunes = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-const lowerRunes = "abcdefghijklmnopqrstuvwxyz"
+const (
+	upperRunes = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	lowerRunes = "abcdefghijklmnopqrstuvwxyz"
+)
 
 func isupper(c byte) bool {
 	return c >= 'A' && c <= 'Z'
 }
+
 func islower(c byte) bool {
 	return c >= 'a' && c <= 'z'
 }
+
 func isAllLower(s string) bool {
 	for i := 0; i < len(s); i++ {
 		if isupper(s[i]) {
@@ -28,6 +32,7 @@ func isAllLower(s string) bool {
 	}
 	return true
 }
+
 func isAllUpper(s string) bool {
 	for i := 0; i < len(s); i++ {
 		if islower(s[i]) {
@@ -100,6 +105,7 @@ func toPascalCase(s string, conv NameConvention) string {
 	}
 	return toCapital(s[:splitFrom]) + s[splitFrom:]
 }
+
 func toCamelCase(s string, conv NameConvention) string {
 	// camelCase -> camelCase
 	if conv == ConventionCamelCase {
@@ -125,6 +131,7 @@ func toCamelCase(s string, conv NameConvention) string {
 	}
 	return strings.ToLower(s[:splitFrom]) + s[splitFrom:]
 }
+
 func toSnakeCase(s string, conv NameConvention) string {
 	// snake_case -> snake_case
 	if conv == ConventionSnakeCase {
@@ -156,6 +163,7 @@ func toSnakeCase(s string, conv NameConvention) string {
 	}
 	return builder.String()
 }
+
 func toConstCase(s string, conv NameConvention) string {
 	// CONST_CASE -> CONST_CASE
 	if conv == ConventionConstCase {

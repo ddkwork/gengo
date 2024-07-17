@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/ddkwork/golibrary/mylog"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -18,7 +19,7 @@ type Options struct {
 
 func (o *Options) ClangPath() string {
 	if o.ToolkitPath != "" {
-		if stat, err := os.Stat(o.ToolkitPath); err == nil && stat.IsDir() {
+		if stat := mylog.Check2(os.Stat(o.ToolkitPath)); err == nil && stat.IsDir() {
 			return filepath.Join(o.ToolkitPath, "clang")
 		} else {
 			return o.ToolkitPath
@@ -26,16 +27,15 @@ func (o *Options) ClangPath() string {
 	}
 	return "clang"
 }
+
 func (o *Options) ClangCommand(opt ...string) ([]byte, error) {
 	cmd := exec.Command(o.ClangPath(), opt...)
 	cmd.Args = append(cmd.Args, o.AdditionalParams...)
 	cmd.Args = append(cmd.Args, o.Sources...)
 	buf := &bytes.Buffer{}
 	cmd.Stdout = buf
-	err := cmd.Run()
-	if err != nil {
-		return nil, fmt.Errorf("failed to run clang: %w", err)
-	}
+	mylog.Check(cmd.Run())
+
 	return buf.Bytes(), nil
 }
 
@@ -78,7 +78,7 @@ func Parse(opt *Options) (ast Node, layout *LayoutMap, err error) {
 		layout, e = ParseLayoutMap(res)
 		return e
 	})
-	if err := errg.Wait(); err != nil {
+	if mylog.Check(errg.Wait()); err != nil {
 		return nil, nil, err
 	}
 	return ast, layout, nil

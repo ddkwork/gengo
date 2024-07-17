@@ -19,6 +19,7 @@ func (d *deferred) Go() {
 		f()
 	}
 }
+
 func (d *deferred) Do(f func()) {
 	*d = append(*d, f)
 }

@@ -3,6 +3,7 @@ package zydis
 
 import (
 	"unsafe"
+
 	"github.com/can1357/gengo/gengort"
 )
 
@@ -4271,24 +4272,26 @@ type DisassembledInstruction struct {
 	// Guaranteed to be zero-terminated.
 	Text [96]byte
 }
-type _Int128T = any
-type _Uint128T = any
-type __NSConstantString = any
-type SizeT = uint64
-type _BuiltinMsVaList = *byte
-type _BuiltinVaList = *byte
-type U8 = uint8
-type U16 = uint16
-type U32 = uint32
-type U64 = uint64
-type I8 = int8
-type I16 = int16
-type I32 = int32
-type I64 = int64
-type USize = uint64
-type ISize = int64
-type UPointer = uint64
-type IPointer = int64
+type (
+	_Int128T           = any
+	_Uint128T          = any
+	__NSConstantString = any
+	SizeT              = uint64
+	_BuiltinMsVaList   = *byte
+	_BuiltinVaList     = *byte
+	U8                 = uint8
+	U16                = uint16
+	U32                = uint32
+	U64                = uint64
+	I8                 = int8
+	I16                = int16
+	I32                = int32
+	I64                = int64
+	USize              = uint64
+	ISize              = int64
+	UPointer           = uint64
+	IPointer           = int64
+)
 
 // Defines the `ZyanVoidPointer` data-type.
 type VoidPointer = unsafe.Pointer
@@ -4333,7 +4336,7 @@ type OperandAttributes = U8
 type AccessedFlagsMask = U32
 
 // Detailed info about the `EVEX` prefix.
-//type DecodedInstructionRawEvex = DecodedInstructionRawEvex
+// type DecodedInstructionRawEvex = DecodedInstructionRawEvex
 
 // Defines the `ZyanStatus` data type.
 type Status = U32
@@ -4500,7 +4503,7 @@ type FormatterDecoratorFunc = unsafe.Pointer
 
 var __imp_ZydisCategoryGetString gengort.PreloadProc
 
-//  Gengo init function.
+// Gengo init function.
 func init() {
 	__imp_ZydisCategoryGetString = GengoLibrary.ImportNow("ZydisCategoryGetString")
 	__imp_ZydisISASetGetString = GengoLibrary.ImportNow("ZydisISASetGetString")
@@ -7067,81 +7070,107 @@ func (s ShortString) Size() U8 {
 func (s *ShortString) SetSize(v U8) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 8), v)
 }
+
 func (s DecodedOperandImmValue_) U() U64 {
 	return gengort.ReadBitcast[U64](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
+
 func (s *DecodedOperandImmValue_) SetU(v U64) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
+
 func (s DecodedOperandImmValue_) S() I64 {
 	return gengort.ReadBitcast[I64](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
+
 func (s *DecodedOperandImmValue_) SetS(v I64) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
+
 func (s Anon5338_5) Reg() DecodedOperandReg {
 	return gengort.ReadBitcast[DecodedOperandReg](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
+
 func (s *Anon5338_5) SetReg(v DecodedOperandReg) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
+
 func (s Anon5338_5) Mem() DecodedOperandMem {
 	return gengort.ReadBitcast[DecodedOperandMem](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
+
 func (s *Anon5338_5) SetMem(v DecodedOperandMem) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
+
 func (s Anon5338_5) Ptr() DecodedOperandPtr {
 	return gengort.ReadBitcast[DecodedOperandPtr](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
+
 func (s *Anon5338_5) SetPtr(v DecodedOperandPtr) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
+
 func (s Anon5338_5) Imm() DecodedOperandImm {
 	return gengort.ReadBitcast[DecodedOperandImm](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
+
 func (s *Anon5338_5) SetImm(v DecodedOperandImm) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
+
 func (s Anon6217_5) Rex() DecodedInstructionRawRex {
 	return gengort.ReadBitcast[DecodedInstructionRawRex](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
+
 func (s *Anon6217_5) SetRex(v DecodedInstructionRawRex) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
+
 func (s Anon6217_5) Xop() DecodedInstructionRawXop {
 	return gengort.ReadBitcast[DecodedInstructionRawXop](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
+
 func (s *Anon6217_5) SetXop(v DecodedInstructionRawXop) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
+
 func (s Anon6217_5) Vex() DecodedInstructionRawVex {
 	return gengort.ReadBitcast[DecodedInstructionRawVex](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
+
 func (s *Anon6217_5) SetVex(v DecodedInstructionRawVex) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
+
 func (s Anon6217_5) Evex() DecodedInstructionRawEvex {
 	return gengort.ReadBitcast[DecodedInstructionRawEvex](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
+
 func (s *Anon6217_5) SetEvex(v DecodedInstructionRawEvex) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
+
 func (s Anon6217_5) Mvex() DecodedInstructionRawMvex {
 	return gengort.ReadBitcast[DecodedInstructionRawMvex](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
+
 func (s *Anon6217_5) SetMvex(v DecodedInstructionRawMvex) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
+
 func (s DecodedInstructionRawImmValue_) U() U64 {
 	return gengort.ReadBitcast[U64](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
+
 func (s *DecodedInstructionRawImmValue_) SetU(v U64) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }
+
 func (s DecodedInstructionRawImmValue_) S() I64 {
 	return gengort.ReadBitcast[I64](unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0))
 }
+
 func (s *DecodedInstructionRawImmValue_) SetS(v I64) {
 	gengort.WriteBitcast(unsafe.Add(unsafe.Pointer(unsafe.SliceData(s.Raw[:])), 0), v)
 }

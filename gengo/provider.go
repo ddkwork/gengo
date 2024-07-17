@@ -8,6 +8,7 @@ import (
 
 	"github.com/can1357/gengo/clang"
 	"github.com/dave/dst"
+	"github.com/ddkwork/golibrary/mylog"
 )
 
 type TypeRef struct {
@@ -197,11 +198,13 @@ func WithRemovePrefix(prefixes ...string) BaseProviderOption {
 		p.RemovedPrefixes = append(p.RemovedPrefixes, prefixes...)
 	}
 }
+
 func WithInferredMethods(rules []MethodInferenceRule) BaseProviderOption {
 	return func(p *BaseProvider) {
 		p.InferredMethods = append(p.InferredMethods, rules...)
 	}
 }
+
 func WithForcedSynthetic(names ...string) BaseProviderOption {
 	return func(p *BaseProvider) {
 		for _, name := range names {
@@ -247,40 +250,49 @@ func (p *BaseProvider) removePrefixes(name string) string {
 	}
 	return name
 }
+
 func (p *BaseProvider) NameGetter(name string) string {
 	return name
 }
+
 func (p *BaseProvider) NameSetter(name string) string {
 	return "Set" + name
 }
+
 func (p *BaseProvider) NameField(name string, recordName string) string {
 	name = p.removePrefixes(name)
 	return ConvertCase(name, ConventionPascalCase)
 }
+
 func (p *BaseProvider) NameFunc(name string) string {
 	name = p.removePrefixes(name)
 	return ConvertCase(name, ConventionPascalCase)
 }
+
 func (p *BaseProvider) NameType(name string) string {
 	name = p.removePrefixes(name)
 	return ConvertCase(name, ConventionPascalCase)
 }
+
 func (p *BaseProvider) NameValue(name string) string {
 	name = p.removePrefixes(name)
 	return ConvertCase(name, ConventionConstCase)
 }
+
 func (p *BaseProvider) NameArg(name string, argType, funcName string) string {
 	if _, ok := reservedIdentifiers[name]; ok {
 		return "_" + name
 	}
 	return name
 }
+
 func (p *BaseProvider) ForceSynthetic(name string) bool {
 	if _, ok := p.ForcedSynthetic[name]; ok {
 		return true
 	}
 	return false
 }
+
 func (p *BaseProvider) ConvertQualType(q string) dst.Expr {
 	// Dumb qualifiers.
 	q = strings.TrimSpace(q)
@@ -312,11 +324,8 @@ func (p *BaseProvider) ConvertQualType(q string) dst.Expr {
 		}
 		before := q[:lastBracker]
 		after := q[lastBracker+1:]
-		n, err := strconv.Atoi(after)
-		if err != nil {
-			fmt.Printf("[WARN] Invalid array size: %s (%s)\n", q, err)
-			return BuiltinAny.Ref()
-		}
+		n := mylog.Check2(strconv.Atoi(after))
+
 		return &dst.ArrayType{
 			Len: dst.NewIdent(strconv.Itoa(n)),
 			Elt: p.ConvertQualType(before),
@@ -340,6 +349,7 @@ func (p *BaseProvider) ConvertQualType(q string) dst.Expr {
 	fmt.Printf("[WARN] Unknown type: %s\n", q)
 	return BuiltinAny.Ref()
 }
+
 func (p *BaseProvider) ConvertTypeExpr(n clang.TypeNode) dst.Expr {
 	switch n := n.(type) {
 	case *clang.BuiltinType:
@@ -386,11 +396,12 @@ func (p *BaseProvider) ConvertTypeExpr(n clang.TypeNode) dst.Expr {
 	case *clang.ElaboratedType:
 		return p.ConvertQualType(n.Type.QualType)
 	default:
-		//case *clang.FunctionProtoType:
-		//case *clang.ParenType:
+		// case *clang.FunctionProtoType:
+		// case *clang.ParenType:
 		return nil
 	}
 }
+
 func (p *BaseProvider) AddType(tc TypeClass, name string, decl dst.Expr) TypeRef {
 	ident := &TrackedIdentifier{Name: name}
 	gen := &dst.GenDecl{
@@ -419,10 +430,12 @@ func (p *BaseProvider) AddType(tc TypeClass, name string, decl dst.Expr) TypeRef
 	}
 	return tr
 }
+
 func (p *BaseProvider) RemapType(name string, tr TypeRef) {
 	name = normalizeAnonName(name)
 	p.Types[name] = tr
 }
+
 func (p *BaseProvider) FindType(name string) (TypeRef, bool) {
 	for _, v := range p.Types {
 		if name == v.String() {
@@ -431,6 +444,7 @@ func (p *BaseProvider) FindType(name string) (TypeRef, bool) {
 	}
 	return TypeRef{}, false
 }
+
 func (p *BaseProvider) InferMethod(name string) (rcv string, newName string) {
 	for _, rule := range p.InferredMethods {
 		if strings.HasPrefix(name, rule.Name) {

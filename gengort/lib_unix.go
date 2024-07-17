@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/ddkwork/golibrary/mylog"
 	"github.com/ebitengine/purego"
 )
 
@@ -17,15 +18,13 @@ type solib struct {
 }
 
 func (w solib) Lookup(name string) uintptr {
-	addr, err := purego.Dlsym(w.Handle, name)
-	if err != nil {
-		return 0
-	}
+	addr := mylog.Check2(purego.Dlsym(w.Handle, name))
+
 	return addr
 }
 
 func LoadLibrary(name string) (LoadedLibrary, error) {
-	h, err := purego.Dlopen(name, purego.RTLD_NOW|purego.RTLD_LOCAL)
+	h := mylog.Check2(purego.Dlopen(name, purego.RTLD_NOW|purego.RTLD_LOCAL))
 	if err == nil {
 		return solib{Handle: h}, nil
 	}
@@ -39,20 +38,20 @@ func LoadLibrary(name string) (LoadedLibrary, error) {
 }
 
 func FindLibrary(name string) (LoadedLibrary, error) {
-	lib, err := LoadLibrary(name)
+	lib := mylog.Check2(LoadLibrary(name))
 	if err == nil {
 		return lib, nil
 	}
 	org := err
 	if !strings.HasSuffix(name, ".so") {
 		name += ".so"
-		if lib, err = LoadLibrary(name); err == nil {
+		if lib = mylog.Check2(LoadLibrary(name)); err == nil {
 			return lib, nil
 		}
 	}
 	if !strings.HasPrefix(name, "lib") {
 		name = "lib" + name
-		if lib, err = LoadLibrary(name); err == nil {
+		if lib = mylog.Check2(LoadLibrary(name)); err == nil {
 			return lib, nil
 		}
 	}
@@ -64,13 +63,10 @@ func LoadLibraryEmbed(data []byte) (LoadedLibrary, error) {
 	hash := sha1.Sum(data)
 	name := "." + hex.EncodeToString(hash[:4]) + ".gengo.so"
 	path := cache + name
-	if stat, err := os.Stat(path); err != nil || stat.Size() != int64(len(data)) {
+	if stat := mylog.Check2(os.Stat(path)); err != nil || stat.Size() != int64(len(data)) {
 		os.MkdirAll(cache, 0755)
-		err = os.WriteFile(path, data, 0755)
-		if err != nil {
-			fmt.Println("write file error: ", err)
-			return nil, err
-		}
+		mylog.Check(os.WriteFile(path, data, 0755))
+
 	}
 	return LoadLibrary(path)
 }

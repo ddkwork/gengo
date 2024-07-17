@@ -9,6 +9,7 @@ import (
 	"strings"
 	"unsafe"
 
+	"github.com/ddkwork/golibrary/mylog"
 	"github.com/valyala/fastjson"
 )
 
@@ -82,6 +83,7 @@ func First[T Node](n Node) (res T) {
 	}
 	return
 }
+
 func All[T Node](n Node) (res []T) {
 	if n == nil {
 		return
@@ -93,6 +95,7 @@ func All[T Node](n Node) (res []T) {
 	}
 	return
 }
+
 func Visit[T Node](n Node, f func(T) bool) {
 	if n == nil {
 		return
@@ -132,34 +135,38 @@ func (n *baseNode) unmarshal(rt *refTracker, data *fastjson.Value) (err error) {
 	arr := data.GetArray("inner")
 	n.Inner = make([]Node, len(arr))
 	for i, v := range arr {
-		n.Inner[i], err = unmarshalNode(rt, v)
-		if err != nil {
-			return err
-		}
+		n.Inner[i] = mylog.Check2(unmarshalNode(rt, v))
 	}
 	return nil
 }
+
 func (n *baseNode) ID() string {
 	return n.NodeID
 }
+
 func (n *baseNode) Kind() string {
 	return n.NodeKind
 }
+
 func (n *baseNode) Location() *Location {
 	return n.Loc
 }
+
 func (n *baseNode) Children() []Node {
 	return n.Inner
 }
+
 func (n *baseNode) SrcRange() *SourceRange {
 	return n.Range
 }
+
 func (n *baseNode) At(i int) Node {
 	if i < 0 || i >= len(n.Inner) {
 		return nil
 	}
 	return n.Inner[i]
 }
+
 func (n *baseNode) Base() *baseNode {
 	return n
 }
@@ -206,7 +213,7 @@ func (n *NodeDecl) UnmarshalValue(rt *refTracker, data *fastjson.Value) (err err
 	n.ID = string(data.GetStringBytes("id"))
 	if v := data.Get("type"); v != nil {
 		n.Type = &Type{}
-		err = n.Type.UnmarshalValue(v)
+		mylog.Check(n.Type.UnmarshalValue(v))
 	}
 	rt.refs[n.ID] = append(rt.refs[n.ID], n)
 	return
@@ -263,6 +270,7 @@ type baseValueNode struct {
 func (n *baseValueNode) Type() Type {
 	return n.ValueType
 }
+
 func (n *baseValueNode) Category() string {
 	return n.ValueCategory
 }
@@ -417,9 +425,11 @@ type baseTypeNode struct {
 func (n *baseTypeNode) QualifiedType() string {
 	return n.Type.QualType
 }
+
 func (n *baseTypeNode) TypeAliasDeclID() string {
 	return n.Type.TypeAliasDeclId
 }
+
 func (n *baseTypeNode) DesugaredQualifiedType() string {
 	s := n.Type.DesugaredQualType
 	if s == nil {
@@ -536,10 +546,8 @@ func makeUnmarshallerFor(ty reflect.Type) func(rt *refTracker, val *fastjson.Val
 	}
 	if ty == reflect.TypeFor[Node]() {
 		return func(rt *refTracker, val *fastjson.Value, out unsafe.Pointer) error {
-			node, err := unmarshalNode(rt, val)
-			if err != nil {
-				return err
-			}
+			node := mylog.Check2(unmarshalNode(rt, val))
+
 			*(*Node)(out) = node
 			return nil
 		}
@@ -614,7 +622,7 @@ func makeUnmarshallerFor(ty reflect.Type) func(rt *refTracker, val *fastjson.Val
 		}
 		return func(rt *refTracker, val *fastjson.Value, out unsafe.Pointer) error {
 			for _, f := range unmarshalSteps {
-				if err := f(rt, val, out); err != nil {
+				if mylog.Check(f(rt, val, out)); err != nil {
 					return err
 				}
 			}
@@ -634,10 +642,8 @@ func RegisterNode[T Node]() {
 	unmarshaller := makeUnmarshallerFor(ty)
 	NodeKinds[ty.Name()] = func(rt *refTracker, val *fastjson.Value) (Node, error) {
 		ptr := reflect.New(ty)
-		err := unmarshaller(rt, val, unsafe.Pointer(ptr.Pointer()))
-		if err != nil {
-			return nil, err
-		}
+		mylog.Check(unmarshaller(rt, val, unsafe.Pointer(ptr.Pointer())))
+
 		node := ptr.Interface().(Node)
 		rt.defs[node.ID()] = node
 		return node, nil
@@ -660,16 +666,15 @@ func unmarshalNode(rt *refTracker, data *fastjson.Value) (Node, error) {
 		return ty(rt, data)
 	}
 }
+
 func ParseAST(data []byte) (node Node, err error) {
-	iter, err := fastjson.ParseBytes(data)
-	if err != nil {
-		return nil, err
-	}
+	iter := mylog.Check2(fastjson.ParseBytes(data))
+
 	rt := &refTracker{
 		refs: map[string][]*NodeDecl{},
 		defs: map[string]Node{},
 	}
-	node, err = unmarshalNode(rt, iter)
+	node = mylog.Check2(unmarshalNode(rt, iter))
 	for id, def := range rt.defs {
 		for _, ref := range rt.refs[id] {
 			ref.Ref = def
@@ -684,6 +689,7 @@ func Fprint(w io.Writer, n Node) error {
 	enc.SetIndent("", "  ")
 	return enc.Encode(n)
 }
+
 func Print(n Node) error {
 	return Fprint(io.Writer(os.Stdout), n)
 }

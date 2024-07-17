@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/ddkwork/golibrary/mylog"
 )
 
 type layout struct {
@@ -18,12 +20,14 @@ type layout struct {
 func (n layout) UnmarshalString(data string) error {
 	return nil
 }
+
 func (n *layout) tostring(wr *strings.Builder, pad string) {
 	fmt.Fprintf(wr, "%s %s %s @ +0x%x\n", pad, n.Type, n.Name, n.Offset)
 	for _, field := range n.Fields {
 		field.tostring(wr, "  "+pad)
 	}
 }
+
 func (n *layout) String() string {
 	wr := &strings.Builder{}
 	n.tostring(wr, "-")
@@ -60,8 +64,9 @@ type RecordLayout struct {
 }
 
 func (r *RecordLayout) UnmarshalString(data string) error {
-	//println(data)
-	err := errors.New("improperly terminated layout")
+	mylog.
+		// println(data)
+		Check(errors.New("improperly terminated layout"))
 	first := true
 	for _, line := range strings.Split(data, "\n") {
 		before, after, found := strings.Cut(line, "|")
@@ -73,10 +78,8 @@ func (r *RecordLayout) UnmarshalString(data string) error {
 		before = strings.TrimSpace(before)
 		if before == "" {
 			after = strings.TrimSpace(after)
-			_, err = fmt.Sscanf(after, "[sizeof=%d, align=%d", &r.Size, &r.Align)
-			if err != nil {
-				err = fmt.Errorf("invalid size and align: %w", err)
-			}
+			_ = mylog.Check2(fmt.Sscanf(after, "[sizeof=%d, align=%d", &r.Size, &r.Align))
+
 			break
 		}
 
@@ -84,17 +87,10 @@ func (r *RecordLayout) UnmarshalString(data string) error {
 		offset := 0
 		if strings.Contains(before, ":") {
 			split := strings.Split(before, ":")
-			offset, err = strconv.Atoi(strings.TrimSpace(split[0]))
-			if err != nil {
-				println(data)
-				return err
-			}
+			offset = mylog.Check2(strconv.Atoi(strings.TrimSpace(split[0])))
+
 		} else {
-			offset, err = strconv.Atoi(strings.TrimSpace(before))
-			if err != nil {
-				println(data)
-				return err
-			}
+			offset = mylog.Check2(strconv.Atoi(strings.TrimSpace(before)))
 		}
 
 		// Determine indentation level
@@ -133,9 +129,6 @@ func (r *RecordLayout) UnmarshalString(data string) error {
 			})
 		}
 	}
-	if err != nil {
-		return err
-	}
 
 	// Group fields
 	r.regroup()
@@ -159,7 +152,7 @@ func (l *LayoutMap) UnmarshalString(data string) error {
 
 	for _, part := range layout {
 		record := &RecordLayout{}
-		if err := record.UnmarshalString(part); err != nil {
+		if mylog.Check(record.UnmarshalString(part)); err != nil {
 			return err
 		}
 		l.Records = append(l.Records, record)

@@ -18,9 +18,11 @@ func (t *TrackedIdentifier) Ref() *dst.Ident {
 	t.Refs = append(t.Refs, i)
 	return i
 }
+
 func (t *TrackedIdentifier) String() string {
 	return t.Name
 }
+
 func (t *TrackedIdentifier) Rename(k string) {
 	t.Name = k
 	for _, r := range t.Refs {
@@ -33,9 +35,11 @@ type RelaxedIdentifier string
 func (r RelaxedIdentifier) Ref() *dst.Ident {
 	return dst.NewIdent(string(r))
 }
+
 func (r RelaxedIdentifier) String() string {
 	return string(r)
 }
+
 func (r RelaxedIdentifier) Rename(k string) {
 	panic("cannot rename a relaxed identifier")
 }

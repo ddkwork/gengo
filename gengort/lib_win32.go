@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"os"
 
+	"github.com/ddkwork/golibrary/mylog"
 	"golang.org/x/sys/windows"
 )
 
@@ -15,18 +16,14 @@ type windll struct {
 }
 
 func (w windll) Lookup(name string) uintptr {
-	proc, err := w.dll.FindProc(name)
-	if err != nil {
-		return 0
-	}
+	proc := mylog.Check2(w.dll.FindProc(name))
+
 	return proc.Addr()
 }
 
 func LoadLibrary(name string) (LoadedLibrary, error) {
-	dll, err := windows.LoadDLL(name)
-	if err != nil {
-		return nil, err
-	}
+	dll := mylog.Check2(windows.LoadDLL(name))
+
 	return windll{dll: dll}, nil
 }
 
@@ -39,12 +36,10 @@ func LoadLibraryEmbed(data []byte) (LoadedLibrary, error) {
 	hash := sha1.Sum(data)
 	name := "." + hex.EncodeToString(hash[:4]) + ".gengo.dll"
 	path := cache + name
-	if stat, err := os.Stat(path); err != nil || stat.Size() != int64(len(data)) {
+	if stat := mylog.Check2(os.Stat(path)); err != nil || stat.Size() != int64(len(data)) {
 		os.MkdirAll(cache, 0755)
-		err = os.WriteFile(path, data, 0755)
-		if err != nil {
-			return nil, err
-		}
+		mylog.Check(os.WriteFile(path, data, 0755))
+
 	}
 	return LoadLibrary(path)
 }

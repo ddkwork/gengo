@@ -2,6 +2,8 @@ package gengort
 
 import (
 	"sync/atomic"
+
+	"github.com/ddkwork/golibrary/mylog"
 )
 
 const INVALID_PROC = ^uintptr(0)
@@ -16,10 +18,7 @@ type Proc struct {
 func (lp *Proc) addrSlow() uintptr {
 	proc := lp.cache.Load()
 	if proc == 0 {
-		lib, err := lp.library.Get()
-		if err != nil {
-			panic("failed to load library: " + err.Error())
-		}
+		lib := mylog.Check2(lp.library.Get())
 
 		proc = lib.Lookup(lp.name)
 		if proc == 0 {

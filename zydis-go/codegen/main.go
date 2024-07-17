@@ -5,6 +5,7 @@ import (
 
 	"github.com/can1357/gengo/clang"
 	"github.com/can1357/gengo/gengo"
+	"github.com/ddkwork/golibrary/mylog"
 )
 
 type zydisProvider struct {
@@ -52,18 +53,15 @@ func main() {
 		),
 	}
 	pkg := gengo.NewPackageWithProvider("zydis", prov)
-	err := pkg.Transform("zydis", &clang.Options{
+	mylog.Check(pkg.Transform("zydis", &clang.Options{
 		Sources: []string{"zydis.h"},
 		AdditionalParams: []string{
 			"-DZYAN_NO_LIBC",
 			"-DZYAN_STATIC_ASSERT",
 		},
-	})
-	if err != nil {
-		log.Fatalf("Failed to transform: %v", err)
-	}
+	}))
 
-	if err := pkg.WriteToDir("../"); err != nil {
+	if mylog.Check(pkg.WriteToDir("../")); err != nil {
 		log.Fatalf("Failed to write the directory: %v", err)
 	}
 }
