@@ -81,10 +81,10 @@ func (l *Library) ImportNow(name string) PreloadProc {
 }
 
 var getTmpDir = sync.OnceValue(func() string {
-	if cache := mylog.Check2(os.UserCacheDir()); err == nil {
+	if cache, e := os.UserCacheDir(); e == nil {
 		return cache + string(os.PathSeparator)
 	}
-	if exec := mylog.Check2(os.Executable()); err == nil {
+	if exec, e := os.Executable(); e == nil {
 		return filepath.Dir(exec) + string(os.PathSeparator)
 	}
 	return os.TempDir() + string(os.PathSeparator)
